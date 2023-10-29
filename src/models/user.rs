@@ -5,7 +5,7 @@ use bcrypt::{DEFAULT_COST, hash, verify};
 #[derive(Deserialize, Serialize)]
 struct User {
     #[serde(rename = "_id", skip_serializing_if = "Option::is_none")]
-    pub _id: Option<ObjectId>,
+    pub id: Option<ObjectId>,
     pub first_name: Option<String>,
     pub last_name: Option<String>,
     pub email_address: String,
@@ -20,7 +20,7 @@ impl User {
         let password_hash = hash(password, DEFAULT_COST);
 
         return User {
-            _id: None,
+            id: None,
             first_name,
             last_name,
             email_address: normalized_email,

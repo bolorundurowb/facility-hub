@@ -1,12 +1,13 @@
 mod controllers;
 mod models;
 mod repository;
+mod utilities;
 
 use actix_web::{App, HttpServer};
 use actix_web::web::Data;
 use dotenv::dotenv;
 use repository::mongodb_repo::MongoDBRepo;
-use crate::controllers::auth_ctrl::register;
+use crate::controllers::auth_ctrl::{login, register};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -22,6 +23,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(move || {
         App::new()
             .app_data(db_data.clone())
+            .service(login)
             .service(register)
     })
         .bind(("127.0.0.1", port))?

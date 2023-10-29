@@ -9,6 +9,9 @@ use crate::{repository::mongodb_repo::MongoDBRepo};
 use crate::models::data::user_model::User;
 use crate::models::request::login_req_model::LoginReq;
 use crate::models::request::register_req_model::RegisterReq;
+use crate::models::response::auth_res_model::AuthRes;
+use crate::models::response::user_res_model::UserRes;
+use crate::utilities::auth_utils::generate_auth_token;
 
 #[post("/auth/login")]
 pub async fn login(db_client: web::Data<MongoDBRepo>, payload: Json<LoginReq>) -> HttpResponse {
@@ -23,7 +26,10 @@ pub async fn login(db_client: web::Data<MongoDBRepo>, payload: Json<LoginReq>) -
             return match user_response {
                 Some(user) => {
                     if user.validate_password(payload.password.to_owned()) {
-                        return HttpResponse::Ok().json(user);
+                        return HttpResponse::Ok().json(AuthRes {
+                            token: generate_auth_token(user.id.unwrap()),
+                            user: UserRes::map_from_data_model(user)
+                        });
                     }
 
                     return HttpResponse::BadRequest().body("Invalid password");

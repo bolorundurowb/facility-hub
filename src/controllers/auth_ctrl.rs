@@ -22,7 +22,7 @@ pub async fn login(db_client: web::Data<MongoDBRepo>, payload: Json<LoginReq>) -
         Ok(user_response) => {
             return match user_response {
                 Some(user) => {
-                    if user.validate_password(payload.password) {
+                    if user.validate_password(payload.password.to_owned()) {
                         return HttpResponse::Ok().json(user);
                     }
 

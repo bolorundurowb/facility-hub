@@ -1,3 +1,30 @@
-fn main() {
-    println!("Hello, world!");
+mod controllers;
+mod models;
+mod repository;
+
+use actix_web::{App, HttpServer};
+use actix_web::web::Data;
+use dotenv::dotenv;
+use repository::mongodb_repo::MongoDBRepo;
+use crate::controllers::auth_ctrl::register;
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    dotenv().ok();
+
+    let port = dotenv::var("PORT")
+        .unwrap_or("9876".to_string())
+        .parse::<i32>()
+        .unwrap();
+    let db = MongoDBRepo::init().await;
+    let db_data = Data::new(db);
+
+    HttpServer::new(move || {
+        App::new()
+            .app_data(db_data.clone())
+            .service(register)
+    })
+        .bind(("127.0.0.1", port))?
+        .run()
+        .await
 }

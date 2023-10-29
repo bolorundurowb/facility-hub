@@ -1,18 +1,10 @@
-use std::env;
-
 extern crate dotenv;
 
-use dotenv::dotenv;
-
-use mongodb::{
-    bson::{extjson::de::Error},
-    results::{InsertOneResult},
-    sync::{Client, Collection},
-};
-use crate::models::user_model::User;
+use mongodb::{Client, Collection};
+use crate::models::data::user_model::User;
 
 pub struct MongoDBRepo {
-    users: Collection<User>,
+    pub users: Collection<User>,
 }
 
 impl MongoDBRepo {

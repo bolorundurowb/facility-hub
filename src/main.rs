@@ -14,7 +14,7 @@ async fn main() -> std::io::Result<()> {
 
     let port = dotenv::var("PORT")
         .unwrap_or("9876".to_string())
-        .parse::<i32>()
+        .parse::<u16>()
         .unwrap();
     let db = MongoDBRepo::init().await;
     let db_data = Data::new(db);

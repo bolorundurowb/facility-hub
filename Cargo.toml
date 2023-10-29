@@ -9,8 +9,7 @@ edition = "2021"
 actix-web = "4.4.0"
 bcrypt = "0.15.0"
 dotenv = "0.15.0"
-mongodb = "2.7.0"
 futures = "0.3.23"
-env_logger = "0.10.0"
-chrono = { version = "0.4.22", features = ["serde"] }
 jsonwebtoken = "=7.2"
+mongodb = "2.7.0"
+serde = { version = "1.0.190", features = [] }

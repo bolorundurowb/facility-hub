@@ -1,3 +1,5 @@
+use serde::{Deserialize, Serialize};
+
 #[derive(Deserialize, Serialize)]
 pub struct RegisterReq {
     pub first_name: Option<String>,

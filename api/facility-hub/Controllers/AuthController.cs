@@ -27,14 +27,31 @@ public class AuthController : ApiController
         var user = await _userService.FindByEmail(req.EmailAddress);
 
         if (user == null)
-            return NotFound("Admin account not found");
+            return NotFound("Invalid email address or password");
 
         if (!user.VerifyPassword(req.Password))
-            return BadRequest("Incorrect password");
+            return BadRequest("Invalid email address or password");
 
         var (token, expiry) = GenerateToken(user);
 
         return Ok(new AuthRes(token, expiry, Mapper.Map<UserRes>(user)));
+    }
+    
+    [AllowAnonymous]
+    [HttpPost("register")]
+    [ProducesResponseType(typeof(AuthRes), 201)]
+    [ProducesResponseType(typeof(GenericRes), 400)]
+    public async Task<IActionResult> Register([FromBody] RegisterReq req)
+    {
+        var user = await _userService.FindByEmail(req.EmailAddress);
+
+        if (user != null)
+            return Conflict("User account already exists");
+
+        user = await _userService.Create(req.FirstName, req.LastName, req.EmailAddress, req.Password);
+        var (token, expiry) = GenerateToken(user);
+
+        return Created(new AuthRes(token, expiry, Mapper.Map<UserRes>(user)));
     }
     
     private (string, DateTime) GenerateToken(User user)

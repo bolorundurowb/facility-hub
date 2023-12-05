@@ -16,4 +16,13 @@ public class UserService : IUserService
         return _dbContext.Users
             .FirstOrDefaultAsync(x => x.EmailAddress == normalizedEmailAddress);
     }
+
+    public async Task<User> Create(string? firstName, string? lastName, string emailAddress, string password)
+    {
+        var user = new User(emailAddress, password, firstName, lastName);
+        await _dbContext.Users.AddAsync(user);
+        await _dbContext.SaveChangesAsync();
+
+        return user;
+    }
 }

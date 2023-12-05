@@ -9,6 +9,8 @@ public class FacilityHubDbContext : DbContext
 
     public DbSet<Facility> Facilities => Set<Facility>();
 
+    public DbSet<Issue> Issues => Set<Issue>();
+
     public FacilityHubDbContext(DbContextOptions<FacilityHubDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -18,6 +20,10 @@ public class FacilityHubDbContext : DbContext
             .HasDefaultValueSql("(UUID())");
         
         modelBuilder.Entity<Facility>()
+            .Property(x => x.Id)
+            .HasDefaultValueSql("(UUID())");
+        
+        modelBuilder.Entity<Issue>()
             .Property(x => x.Id)
             .HasDefaultValueSql("(UUID())");
             

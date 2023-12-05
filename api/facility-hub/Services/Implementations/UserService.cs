@@ -17,6 +17,12 @@ public class UserService : IUserService
             .FirstOrDefaultAsync(x => x.EmailAddress == normalizedEmailAddress);
     }
 
+    public Task<User?> FindById(Guid userId)
+    {
+        return _dbContext.Users
+            .FirstOrDefaultAsync(x => x.Id == userId);
+    }
+
     public async Task<User> Create(string? firstName, string? lastName, string emailAddress, string password)
     {
         var user = new User(emailAddress, password, firstName, lastName);

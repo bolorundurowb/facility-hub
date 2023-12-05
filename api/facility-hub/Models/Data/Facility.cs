@@ -15,6 +15,8 @@ public class Facility : Entity
 
     public User? Owner { get; set; }
 
+    public List<Issue> Issues { get; set; }
+
     public DateTimeOffset CreatedAt { get; set; }
 
 #pragma warning disable CS8618
@@ -26,6 +28,7 @@ public class Facility : Entity
         Name = name;
         Address = address;
         CreatedAt = DateTimeOffset.Now;
+        Issues = new List<Issue>();
         Managers = new List<User> { creator };
 
         if (location is not null)

@@ -51,20 +51,24 @@ public class Startup
             options.EnableAnnotations();
             var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
             var xmlPath = Path.Combine(baseDirectory, "facility-hub.xml");
-            
+
             options.IncludeXmlComments(xmlPath);
         });
 
         services.AddDbContext<FacilityHubDbContext>(
             dbContextOptions => dbContextOptions
-                .UseMySql(Config.DbUrl, new MySqlServerVersion(Version.Parse("8.2.0")))
+                .UseMySql(
+                    Config.DbUrl,
+                    new MySqlServerVersion(Version.Parse("8.2.0")),
+                    opts => opts.UseNetTopologySuite()
+                )
 #if DEBUG
                 .LogTo(Console.WriteLine, LogLevel.Information)
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
 #endif
         );
-        
+
         var config = TypeAdapterConfig.GlobalSettings;
         config.Scan(Assembly.GetExecutingAssembly());
         services.AddSingleton(config);

@@ -14,19 +14,23 @@ public class User
 
     public DateTimeOffset JoinedAt { get; set; }
 
+#pragma warning disable CS8618
+    private User() { }
+#pragma warning restore CS8618
+
     public User(string emailAddress, string password, string? firstName = null, string? lastName = null)
     {
         FirstName = firstName;
         LastName = lastName;
         EmailAddress = emailAddress.Trim().ToLowerInvariant();
         JoinedAt = DateTimeOffset.Now;
-        SetPassword(password);
+        PasswordHash = HashText(password);
     }
 
-    public void SetPassword(string password)
+    public string HashText(string password)
     {
         var salt = BCrypt.Net.BCrypt.GenerateSalt();
-        PasswordHash = BCrypt.Net.BCrypt.HashPassword(password, salt);
+        return BCrypt.Net.BCrypt.HashPassword(password, salt);
     }
 
     public bool VerifyPassword(string password) =>

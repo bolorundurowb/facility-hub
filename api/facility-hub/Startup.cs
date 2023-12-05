@@ -2,7 +2,6 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using dotenv.net;
-using FacilityHub.Data;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,13 +18,6 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        if (_environment.IsDevelopment())
-            DotEnv.Fluent()
-                .WithDefaultEncoding()
-                .WithProbeForEnv()
-                .WithExceptions()
-                .Load();
-
         services.AddCors();
         services.AddRouting(option => option.LowercaseUrls = true);
         services.AddControllers()

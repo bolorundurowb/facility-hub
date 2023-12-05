@@ -3,10 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FacilityHub;
 
-#pragma warning disable CS8618
-public class FacilityHubDbContext :DbContext
+public class FacilityHubDbContext : DbContext
 {
-    public DbSet<User> Users { get; private set; }
-    
+    public DbSet<User> Users => Set<User>();
+
     public FacilityHubDbContext(DbContextOptions<FacilityHubDbContext> options) : base(options) { }
 }

@@ -5,6 +5,8 @@ using FacilityHub.Services.Implementations;
 using FacilityHub.Services.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -49,7 +51,7 @@ public class Startup
             options.EnableAnnotations();
             var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
             var xmlPath = Path.Combine(baseDirectory, "facility-hub.xml");
-
+            
             options.IncludeXmlComments(xmlPath);
         });
 
@@ -62,6 +64,11 @@ public class Startup
                 .EnableDetailedErrors()
 #endif
         );
+        
+        var config = TypeAdapterConfig.GlobalSettings;
+        config.Scan(Assembly.GetExecutingAssembly());
+        services.AddSingleton(config);
+        services.AddScoped<IMapper, ServiceMapper>();
 
         services.AddScoped<IUserService, UserService>();
     }
@@ -71,6 +78,8 @@ public class Startup
         if (_environment.IsDevelopment())
             app.UseDeveloperExceptionPage();
 
+        app.UsePathBase("/");
+
         app.UseCors(options => options
             .AllowAnyHeader()
             .AllowAnyMethod()
@@ -79,8 +88,6 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
-
-        app.UseSentryTracing();
 
         app.UseAuthentication();
         app.UseAuthorization();

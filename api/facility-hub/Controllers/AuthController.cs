@@ -27,10 +27,10 @@ public class AuthController : ApiController
         var user = await _userService.FindByEmail(req.EmailAddress);
 
         if (user == null)
-            return NotFound("Admin account not found.");
+            return NotFound("Admin account not found");
 
         if (!user.VerifyPassword(req.Password))
-            return BadRequest("Incorrect password.");
+            return BadRequest("Incorrect password");
 
         var (token, expiry) = GenerateToken(user);
 

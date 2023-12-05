@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using FacilityHub.Services.Implementations;
+using FacilityHub.Services.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -60,6 +62,8 @@ public class Startup
                 .EnableDetailedErrors()
 #endif
         );
+
+        services.AddScoped<IUserService, UserService>();
     }
 
     public void Configure(IApplicationBuilder app)

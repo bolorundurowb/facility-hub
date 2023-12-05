@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
-using dotenv.net;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -54,7 +53,7 @@ public class Startup
 
         services.AddDbContext<FacilityHubDbContext>(
             dbContextOptions => dbContextOptions
-                .UseMySQL(Config.DbUrl)
+                .UseMySql(Config.DbUrl, new MySqlServerVersion(Version.Parse("8.2.0")))
 #if DEBUG
                 .LogTo(Console.WriteLine, LogLevel.Information)
                 .EnableSensitiveDataLogging()

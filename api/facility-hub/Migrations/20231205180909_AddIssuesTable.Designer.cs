@@ -3,6 +3,7 @@ using System;
 using FacilityHub;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 
@@ -11,9 +12,11 @@ using NetTopologySuite.Geometries;
 namespace FacilityHub.Migrations
 {
     [DbContext(typeof(FacilityHubDbContext))]
-    partial class FacilityHubDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231205180909_AddIssuesTable")]
+    partial class AddIssuesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

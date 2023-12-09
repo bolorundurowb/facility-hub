@@ -82,8 +82,6 @@ public class Startup
         if (_environment.IsDevelopment())
             app.UseDeveloperExceptionPage();
 
-        app.UsePathBase("/");
-
         app.UseCors(options => options
             .AllowAnyHeader()
             .AllowAnyMethod()

@@ -57,9 +57,8 @@ public class Startup
 
         services.AddDbContext<FacilityHubDbContext>(
             dbContextOptions => dbContextOptions
-                .UseMySql(
+                .UseNpgsql(
                     Config.DbUrl,
-                    new MySqlServerVersion(Version.Parse("8.2.0")),
                     opts => opts.UseNetTopologySuite()
                 )
 #if DEBUG

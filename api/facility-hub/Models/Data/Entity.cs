@@ -6,7 +6,6 @@ namespace FacilityHub.Models.Data;
 public abstract class Entity
 {
     [Key]
-    [StringLength(40)]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public Guid Id { get; set; }
 }

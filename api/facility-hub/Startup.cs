@@ -10,6 +10,7 @@ using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using PostgresConnString.NET;
 
 namespace FacilityHub;
 
@@ -58,7 +59,7 @@ public class Startup
         services.AddDbContext<FacilityHubDbContext>(
             dbContextOptions => dbContextOptions
                 .UseNpgsql(
-                    Config.DbUrl,
+                    ConnectionDetails.Parse(Config.DbUrl).ToNpgsqlConnectionString(),
                     opts => opts.UseNetTopologySuite()
                 )
 #if DEBUG

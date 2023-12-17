@@ -74,6 +74,7 @@ public class Startup
         services.AddSingleton(config);
         services.AddScoped<IMapper, ServiceMapper>();
 
+        services.AddScoped<IFacilityService, FacilityService>();
         services.AddScoped<IUserService, UserService>();
     }
 

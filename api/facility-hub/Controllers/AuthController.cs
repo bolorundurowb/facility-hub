@@ -16,8 +16,8 @@ public class AuthController : ApiController
 {
     private readonly IUserService _userService;
 
-    public AuthController(IMapper mapper, IUserService userService): base(mapper) => _userService = userService;
-    
+    public AuthController(IMapper mapper, IUserService userService) : base(mapper) => _userService = userService;
+
     [AllowAnonymous]
     [HttpPost("login")]
     [ProducesResponseType(typeof(AuthRes), 200)]
@@ -36,7 +36,7 @@ public class AuthController : ApiController
 
         return Ok(new AuthRes(token, expiry, Mapper.Map<UserRes>(user)));
     }
-    
+
     [AllowAnonymous]
     [HttpPost("register")]
     [ProducesResponseType(typeof(AuthRes), 201)]
@@ -53,7 +53,7 @@ public class AuthController : ApiController
 
         return Created(new AuthRes(token, expiry, Mapper.Map<UserRes>(user)));
     }
-    
+
     private (string, DateTime) GenerateToken(User user)
     {
         var claims = new List<Claim>

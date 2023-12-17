@@ -16,19 +16,19 @@ public class FacilityHubDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresExtension("uuid-ossp");
-        
+
         modelBuilder.Entity<User>()
             .Property(x => x.Id)
             .HasDefaultValueSql("uuid_generate_v4()");
-        
+
         modelBuilder.Entity<Facility>()
             .Property(x => x.Id)
             .HasDefaultValueSql("uuid_generate_v4()");
-        
+
         modelBuilder.Entity<Issue>()
             .Property(x => x.Id)
             .HasDefaultValueSql("uuid_generate_v4()");
-            
+
         base.OnModelCreating(modelBuilder);
     }
 }

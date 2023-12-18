@@ -30,6 +30,11 @@
 							"oidc-client"
 						],
 						"assets": [
+              {
+                "glob": "**/*",
+                "input": "node_modules/@salesforce-ux/design-system/assets/",
+                "output": "/assets"
+              },
 							"src/assets"
 						],
 						"styles": [

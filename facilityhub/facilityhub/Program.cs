@@ -1,27 +1,32 @@
-var builder = WebApplication.CreateBuilder(args);
+using dotenv.net;
+using Sentry;
 
-// Add services to the container.
+namespace FacilityHub;
 
-builder.Services.AddControllersWithViews();
-
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+public class Program
 {
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    public static async Task Main(string[] args)
+    {
+        await Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                DotEnv.Fluent()
+                    .WithDefaultEncoding()
+                    .WithProbeForEnv()
+                    .WithoutExceptions()
+                    .Load();
+
+                webBuilder.UseSentry(opts =>
+                {
+                    opts.Dsn = Environment.GetEnvironmentVariable("SENTRY_DSN");
+                    opts.Debug = true;
+                    opts.DiagnosticLevel = SentryLevel.Info;
+                    opts.TracesSampleRate = 1.0;
+                });
+                webBuilder.UseStartup<Startup>();
+            })
+            .Build()
+            .RunAsync();
+        ;
+    }
 }
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseRouting();
-
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
-
-app.MapFallbackToFile("index.html");
-
-app.Run();

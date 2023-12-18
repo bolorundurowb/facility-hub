@@ -15,8 +15,8 @@ public class FacilityService : IFacilityService
     {
         return _dbContext.Facilities
             .AsNoTracking()
-            .Where(x => x.Owner.Id == userId || x.Managers.Any(y => y.Id == userId))
-            .Select(x => new FacilitySummaryDto())
+            .Where(x => x.Owner!.Id == userId || x.Managers.Any(y => y.Id == userId))
+            .Select(x => new FacilitySummaryDto(x.Id, x.Name, x.Address))
             .ToListAsync();
     }
 

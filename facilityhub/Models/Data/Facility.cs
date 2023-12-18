@@ -7,7 +7,7 @@ public class Facility : Entity
 {
     public string Name { get; set; }
 
-    public string? Address { get; set; }
+    public string Address { get; set; }
 
     public Point? Location { get; set; }
 
@@ -23,7 +23,7 @@ public class Facility : Entity
     private Facility() { }
 #pragma warning restore CS8618
 
-    public Facility(string name, User creator, string? address, LocationDto? location)
+    public Facility(string name, User creator, string address, LocationDto? location)
     {
         Name = name;
         Address = address;

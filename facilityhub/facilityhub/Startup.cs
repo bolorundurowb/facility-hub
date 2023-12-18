@@ -51,7 +51,7 @@ public class Startup
         {
             options.EnableAnnotations();
             var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            var xmlPath = Path.Combine(baseDirectory, "facility-hub.xml");
+            var xmlPath = Path.Combine(baseDirectory, "facilityhub.xml");
 
             options.IncludeXmlComments(xmlPath);
         });
@@ -95,11 +95,14 @@ public class Startup
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.MapControllerRoute(
-            name: "default",
-            pattern: "{controller}/{action=Index}/{id?}");
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllerRoute(
+                name: "default",
+                pattern: "{controller}/{action=Index}/{id?}");
 
-        app.MapFallbackToFile("index.html");
+            endpoints.MapFallbackToFile("index.html");
+        });
 
         app.UseSwagger();
         app.UseSwaggerUI();

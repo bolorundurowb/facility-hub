@@ -1,4 +1,6 @@
-﻿namespace FacilityHub.Models.Request;
+﻿using FacilityHub.Models.DTOs;
+
+namespace FacilityHub.Models.Request;
 
 public class CreateFacilityReq
 {
@@ -6,5 +8,5 @@ public class CreateFacilityReq
 
     public string Address { get; set; } = null!;
 
-    public LocationReq? Location { get; set; }
+    public LocationDto? Location { get; set; }
 }

@@ -40,6 +40,12 @@
   },
   "overrides": {
     "autoprefixer": "10.4.5",
-    "webpack": "5.81.0"
+    "webpack": "5.81.0",
+    "ng-lightning": {
+      "@angular/cdk": "$@angular/cdk",
+      "@angular/common": "$@angular/common",
+      "@angular/core": "$@angular/core",
+      "@angular/forms": "$@angular/forms"
+    }
   }
 }

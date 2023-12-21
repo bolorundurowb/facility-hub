@@ -14,7 +14,7 @@ public class CreateFacilityReqValidator : AbstractValidator<CreateFacilityReq>
             .NotEmpty().WithMessage("Address cannot be empty");
 
         RuleFor(req => req.Location)
-            .SetValidator(new LocationDtoValidator()!) 
+            .SetValidator(new LocationDtoValidator()!)
             .When(req => req.Location != null);
     }
 }

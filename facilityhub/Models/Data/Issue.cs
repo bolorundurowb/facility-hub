@@ -2,7 +2,7 @@
 
 public class Issue : Entity
 {
-    public User FiledBy { get; set; }
+    public Tenant FiledBy { get; set; }
 
     public DateTimeOffset FiledAt { get; set; }
 
@@ -10,7 +10,7 @@ public class Issue : Entity
     private Issue() { }
 #pragma warning restore CS8618
 
-    public Issue(User filedBy)
+    public Issue(Tenant filedBy)
     {
         FiledBy = filedBy;
         FiledAt = DateTimeOffset.Now;

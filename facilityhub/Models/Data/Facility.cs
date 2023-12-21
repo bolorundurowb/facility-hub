@@ -15,6 +15,8 @@ public class Facility : Entity
 
     public User? Owner { get; set; }
 
+    public Tenant? Tenant { get; set; }
+
     public List<Issue> Issues { get; set; }
 
     public DateTimeOffset CreatedAt { get; set; }

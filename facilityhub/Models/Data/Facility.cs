@@ -17,9 +17,9 @@ public class Facility : Entity
 
     public Tenant? Tenant { get; set; }
 
-    public List<Document> Documents { get; set; }
+    public List<Document> Documents { get; set; } = new();
 
-    public List<Issue> Issues { get; set; }
+    public List<Issue> Issues { get; set; } = new();
 
     public DateTimeOffset CreatedAt { get; set; }
 
@@ -32,7 +32,6 @@ public class Facility : Entity
         Name = name;
         Address = address;
         CreatedAt = DateTimeOffset.Now;
-        Issues = new List<Issue>();
         Managers = new List<User> { creator };
 
         if (location is not null)

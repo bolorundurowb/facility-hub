@@ -77,6 +77,7 @@ public class Startup
 
         services.AddScoped<IFacilityService, FacilityService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IMediaHandlerService, CloudinaryService>();
     }
 
     public void Configure(IApplicationBuilder app)

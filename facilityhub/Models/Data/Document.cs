@@ -20,6 +20,10 @@ public class Document : Entity
 
     public DateTimeOffset CreatedAt { get; private set; }
 
+#pragma warning disable CS8618
+    private Document() { }
+#pragma warning restore CS8618
+
     public Document(User createdBy, string fileName, long fileSize, string url, string fileExt, string mimeType)
     {
         FileName = fileName;

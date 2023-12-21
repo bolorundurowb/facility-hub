@@ -8,8 +8,6 @@ public abstract class BaseEntityConfiguration<T> : IEntityTypeConfiguration<T> w
 {
     public virtual void Configure(EntityTypeBuilder<T> builder)
     {
-        builder.ToTable(typeof(T).Name.ToLowerInvariant());
-
         builder.Property(x => x.Id)
             .HasDefaultValueSql("uuid_generate_v4()");
     }

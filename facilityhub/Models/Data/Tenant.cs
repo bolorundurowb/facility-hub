@@ -4,6 +4,8 @@ public class Tenant : Entity
 {
     public User User { get; private set; }
 
+    public List<Document> Documents { get; set; }
+
     public List<TenancyHistory> History { get; private set; }
 
     public User CreatedBy { get; private set; }

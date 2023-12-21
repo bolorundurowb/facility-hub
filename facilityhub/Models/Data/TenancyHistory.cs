@@ -8,6 +8,8 @@ public class TenancyHistory
 
     public DateTimeOffset PaidAt { get; private set; }
 
+    public DateTimeOffset CreatedAt { get; private set; }
+
 #pragma warning disable CS8618
     private TenancyHistory() { }
 #pragma warning restore CS8618
@@ -17,5 +19,6 @@ public class TenancyHistory
         PeriodStart = periodStart;
         PeriodEnd = periodEnd;
         PaidAt = paidAt;
+        CreatedAt = DateTimeOffset.Now;
     }
 }

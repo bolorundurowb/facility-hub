@@ -29,6 +29,14 @@ public class FacilityHubDbContext : DbContext
             .Property(x => x.Id)
             .HasDefaultValueSql("uuid_generate_v4()");
 
+        modelBuilder.Entity<Tenant>()
+            .Property(x => x.Id)
+            .HasDefaultValueSql("uuid_generate_v4()");
+
+        modelBuilder.Entity<Tenant>()
+            .Property(x => x.History)
+            .HasColumnType("jsonb");
+
         base.OnModelCreating(modelBuilder);
     }
 }

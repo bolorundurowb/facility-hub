@@ -8,10 +8,13 @@ import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import {NglModule} from "ng-lightning";
+import {AppRoutingModule} from "./app-routing.module";
+import {AuthComponent} from "./auth/auth.component";
 
 @NgModule({
   declarations: [
     AppComponent,
+    AuthComponent,
     NavMenuComponent,
     HomeComponent,
   ],
@@ -20,9 +23,7 @@ import {NglModule} from "ng-lightning";
     HttpClientModule,
     FormsModule,
     NglModule,
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-    ])
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

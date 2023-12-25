@@ -1,9 +1,15 @@
 import {NgModule} from "@angular/core";
 import {LoginComponent} from "./login/login.component";
 import {AuthRoutingModule} from "./auth-routing.module";
-import {NglButtonsModule, NglInputModule} from "ng-lightning";
 import {RegisterComponent} from "./register/register.component";
 import { FormsModule } from "@angular/forms";
+import {
+  ButtonDirective,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  FormTextDirective
+} from '@coreui/angular';
 
 @NgModule({
   declarations: [
@@ -12,9 +18,12 @@ import { FormsModule } from "@angular/forms";
   ],
   imports: [
     AuthRoutingModule,
-    NglInputModule,
-    NglButtonsModule,
-    FormsModule
+    ButtonDirective,
+    FormsModule,
+    FormControlDirective,
+    FormLabelDirective,
+    FormTextDirective,
+    FormDirective
   ]
 })
 export class AuthModule {}

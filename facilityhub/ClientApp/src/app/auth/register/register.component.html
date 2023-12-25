@@ -1,33 +1,38 @@
 <h2 class="header">REGISTER</h2>
-<div class="entry">
-  <ngl-input label="First Name" >
-    <input ngl type="text" placeholder="e.g John" [(ngModel)]="payload.firstName">
-  </ngl-input>
-</div>
-<div class="entry">
-  <ngl-input label="Last Name" >
-    <input ngl type="text" placeholder="e.g Smith" [(ngModel)]="payload.lastName">
-  </ngl-input>
-</div>
-<div class="entry">
-  <ngl-input label="Email address" >
-    <input ngl type="email" required  placeholder="e.g example@email.com" [(ngModel)]="payload.emailAddress">
-  </ngl-input>
-</div>
-<div class="entry">
-  <ngl-input label="Password" >
-    <input ngl type="password" required [(ngModel)]="payload.password">
-  </ngl-input>
-</div>
-<div class="entry">
-  <ngl-input label="Confirm Password" >
-    <input ngl type="password" required [(ngModel)]="payload.confirmPassword">
-  </ngl-input>
-</div>
-<a routerLink="/auth/login">Already have an account? Sign in!</a>
-<div class="action">
-  <button type="button" nglButton variant="brand"
-          [iconName]="isBusy ? 'utility:spinner' : ''"
-          [disabled]="isBusy"
-  (click)="register()">Register</button>
-</div>
+<form cForm>
+  <div class="mb-3">
+    <label cLabel for="firstName">First Name</label>
+    <input cFormControl id="firstName" type="text">
+  </div>
+  <div class="mb-3">
+    <label cLabel for="lastName">Last Name</label>
+    <input cFormControl id="lastName" type="text">
+  </div>
+  <div class="mb-3">
+    <label cLabel for="emailAddress">Email Address</label>
+    <input cFormControl id="emailAddress" type="email">
+    <div cFormText>
+      We'll never share your email with anyone else
+    </div>
+  </div>
+  <div class="mb-3">
+    <label cLabel for="password">Password</label>
+    <input cFormControl id="password" type="password">
+    <span cFormText>
+      Your password must be 8-20 characters long, contain letters and numbers, and must not
+      contain spaces, special characters, or emoji.
+    </span>
+  </div>
+  <div class="mb-3">
+    <label cLabel for="confirmPassword">Confirm Password</label>
+    <input cFormControl id="confirmPassword" type="password">
+  </div>
+  <a routerLink="/auth/login">Already have an account? Sign in!</a>
+  <div class="action">
+    <button cButton
+            color="primary"
+            [disabled]="isBusy"
+            (click)="register()">Register
+    </button>
+  </div>
+</form>

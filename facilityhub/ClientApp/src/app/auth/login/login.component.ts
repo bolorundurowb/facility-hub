@@ -1,25 +1,13 @@
 import { Component } from "@angular/core";
+import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: 'fh-auth-login',
   templateUrl: './login.component.html',
-  styles: `
-    .header {
-      text-align: center;
-      margin-top: 0.5rem;
-      margin-bottom: 0.75rem;
-      font-size: 1.5rem;
-    }
-
-    .entry {
-      margin-bottom: 1rem;
-    }
-
-    .action {
-      text-align: right;
-    }
-  `
+  styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-
+  constructor(private title: Title) {
+    title.setTitle('Sign In | Facility Hub');
+  }
 }

@@ -35,6 +35,9 @@
                 "input": "node_modules/@salesforce-ux/design-system/assets/",
                 "output": "/assets"
               },
+							"src/favicon.ico",
+							"src/favicon-16x16.png",
+							"src/favicon-32x32.png",
 							"src/assets"
 						],
 						"styles": [

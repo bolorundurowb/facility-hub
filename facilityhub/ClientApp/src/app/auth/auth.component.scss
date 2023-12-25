@@ -1,0 +1,29 @@
+$base-color: #93B9E8;
+
+$lighter-color: lighten($base-color, 20%);
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  .box {
+    background-color: $lighter-color;
+    border-radius: 0.5rem;
+    padding: 0.5rem 2rem 1.5rem;
+    max-width: 400px;
+    width: 100%;
+    border: 2px solid $base-color;
+
+    .logo {
+      text-align: center;
+
+      img {
+        height: 15rem;
+        margin-top: -3rem;
+        margin-bottom: -3rem;
+      }
+    }
+  }
+}

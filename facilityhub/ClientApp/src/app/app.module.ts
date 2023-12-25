@@ -8,6 +8,7 @@ import { HomeComponent } from './home/home.component';
 import { NglModule } from "ng-lightning";
 import { AppRoutingModule } from "./app-routing.module";
 import { AuthComponent } from "./auth/auth.component";
+import { NgOptimizedImage } from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { AuthComponent } from "./auth/auth.component";
     FormsModule,
     NglModule,
     AppRoutingModule,
+    NgOptimizedImage,
   ],
   providers: [],
   bootstrap: [AppComponent]

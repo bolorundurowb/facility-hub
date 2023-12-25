@@ -7,7 +7,7 @@ import { Title } from "@angular/platform-browser";
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  constructor(private title: Title) {
+  constructor(title: Title) {
     title.setTitle('Sign In | Facility Hub');
   }
 }

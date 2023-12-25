@@ -1,11 +1,11 @@
-import {Component} from "@angular/core";
+import { Component } from "@angular/core";
 
 @Component({
   selector: 'fh-auth',
   template: `
     <div class="container">
       <div class="box">
-          <router-outlet></router-outlet>
+        <router-outlet></router-outlet>
       </div>
     </div>
   `,
@@ -27,4 +27,5 @@ import {Component} from "@angular/core";
     }
   `
 })
-export class AuthComponent {}
+export class AuthComponent {
+}

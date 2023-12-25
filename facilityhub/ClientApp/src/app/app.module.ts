@@ -2,20 +2,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import {NglModule} from "ng-lightning";
-import {AppRoutingModule} from "./app-routing.module";
-import {AuthComponent} from "./auth/auth.component";
+import { NglModule } from "ng-lightning";
+import { AppRoutingModule } from "./app-routing.module";
+import { AuthComponent } from "./auth/auth.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     AuthComponent,
-    NavMenuComponent,
     HomeComponent,
   ],
   imports: [
@@ -28,4 +25,5 @@ import {AuthComponent} from "./auth/auth.component";
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

@@ -1,31 +1,39 @@
 <h2 class="header">REGISTER</h2>
 <form cForm>
+  <c-alert
+    fade
+    dismissible
+    color="danger"
+    [(visible)]="hasError">
+    {{errorMessage}}
+  </c-alert>
+
   <div class="mb-3">
-    <label cLabel for="firstName">First Name</label>
-    <input cFormControl id="firstName" type="text" [(ngModel)]="payload.firstName">
+    <label cLabel>First Name</label>
+    <input cFormControl name="firstName" type="text" [(ngModel)]="payload.firstName">
   </div>
   <div class="mb-3">
-    <label cLabel for="lastName">Last Name</label>
-    <input cFormControl id="lastName" type="text" [(ngModel)]="payload.lastName">
+    <label cLabel>Last Name</label>
+    <input cFormControl name="lastName" type="text" [(ngModel)]="payload.lastName">
   </div>
   <div class="mb-3">
-    <label cLabel for="emailAddress">Email Address</label>
-    <input cFormControl id="emailAddress" type="email" [(ngModel)]="payload.emailAddress">
+    <label cLabel>Email Address</label>
+    <input cFormControl name="emailAddress" type="email" [(ngModel)]="payload.emailAddress">
     <div cFormText>
       We'll never share your email with anyone else
     </div>
   </div>
   <div class="mb-3">
-    <label cLabel for="password">Password</label>
-    <input cFormControl id="password" type="password" [(ngModel)]="payload.password">
+    <label cLabel>Password</label>
+    <input cFormControl name="password" type="password" [(ngModel)]="payload.password">
     <span cFormText>
       Your password must be 8-20 characters long, contain letters and numbers, and must not
       contain spaces, special characters, or emoji.
     </span>
   </div>
   <div class="mb-3">
-    <label cLabel for="confirmPassword">Confirm Password</label>
-    <input cFormControl id="confirmPassword" type="password" [(ngModel)]="payload.confirmPassword">
+    <label cLabel>Confirm Password</label>
+    <input cFormControl name="confirmPassword" type="password" [(ngModel)]="payload.confirmPassword">
   </div>
   <a routerLink="/auth/login">Already have an account? Sign in!</a>
   <div class="action">

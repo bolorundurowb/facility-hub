@@ -4,6 +4,7 @@ import {AuthRoutingModule} from "./auth-routing.module";
 import {RegisterComponent} from "./register/register.component";
 import { FormsModule } from "@angular/forms";
 import {
+  AlertComponent,
   ButtonDirective,
   FormControlDirective,
   FormDirective,
@@ -23,7 +24,8 @@ import {
     FormControlDirective,
     FormLabelDirective,
     FormTextDirective,
-    FormDirective
+    FormDirective,
+    AlertComponent
   ]
 })
 export class AuthModule {}

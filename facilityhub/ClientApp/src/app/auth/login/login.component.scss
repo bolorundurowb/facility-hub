@@ -1,15 +1,25 @@
 .header {
   text-align: center;
   margin-top: 0.5rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: -1rem;
   font-size: 1.2rem;
   font-weight: bold;
+  display: block;
+  background-color: transparent;
+  border: none;
 }
 
 .entry {
   margin-bottom: 1rem;
 }
 
+a {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
 .action {
   text-align: right;
+  margin-top: 1rem;
 }

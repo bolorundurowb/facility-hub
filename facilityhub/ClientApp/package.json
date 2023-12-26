@@ -24,8 +24,10 @@
     "@angular/platform-browser-dynamic": "^17.0.7",
     "@angular/platform-server": "^17.0.7",
     "@angular/router": "^17.0.7",
-    "@salesforce-ux/design-system": "^2.22.2",
-    "ng-lightning": "^9.0.0",
+    "@coreui/angular": "^4.7.6",
+    "@coreui/coreui": "^4.3.2",
+    "@coreui/icons": "^3.0.1",
+    "@coreui/icons-angular": "^4.7.6",
     "oidc-client": "^1.11.5",
     "run-script-os": "^1.1.6",
     "rxjs": "~7.8.1",
@@ -42,7 +44,7 @@
   "overrides": {
     "autoprefixer": "10.4.5",
     "webpack": "5.81.0",
-    "ng-lightning": {
+    "@coreui/angular": {
       "@angular/cdk": "$@angular/cdk",
       "@angular/common": "$@angular/common",
       "@angular/core": "$@angular/core",

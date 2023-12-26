@@ -1,15 +1,18 @@
 <h2 class="header">SIGN IN</h2>
-<div class="entry">
-  <ngl-input label="Email Address" >
-    <input ngl type="email" required  placeholder="e.g example@email.com">
-  </ngl-input>
-</div>
-<div class="entry">
-  <ngl-input label="Password" >
-    <input ngl type="password" required>
-  </ngl-input>
-</div>
-<a routerLink="/auth/register">Don't have an account? Register!</a>
-<div class="action">
-  <button type="button" nglButton variant="brand">Sign In</button>
-</div>
+<form cForm>
+  <div class="mb-3">
+    <label cLabel for="emailAddress">Email Address</label>
+    <input cFormControl id="emailAddress" type="email">
+  </div>
+  <div class="mb-3">
+    <label cLabel for="password">Password</label>
+    <input cFormControl id="password" type="password">
+  </div>
+  <a routerLink="/auth/register">Don't have an account? Register!</a>
+  <div class="action">
+    <button cButton
+            color="primary">
+      Sign In
+    </button>
+  </div>
+</form>

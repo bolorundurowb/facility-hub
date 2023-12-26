@@ -8,7 +8,7 @@ namespace FacilityHub.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public abstract class ApiController : ControllerBase
 {
     protected readonly IMapper Mapper;

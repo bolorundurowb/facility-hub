@@ -1,5 +1,7 @@
-import { Component } from "@angular/core";
+import { Component, Inject } from '@angular/core';
 import { Title } from "@angular/platform-browser";
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services';
 
 interface RegisterPayload {
   firstName?: string;
@@ -23,18 +25,23 @@ export class RegisterComponent {
   errorMessage: string | undefined;
   payload: RegisterPayload = {};
 
-  constructor(title: Title) {
+  constructor(title: Title, private authService: AuthService) {
     title.setTitle('Register | Facility Hub');
   }
 
-  register(): void {
+  async register(): Promise<void> {
     this.isBusy = true;
 
     try {
       const hasError = this.validatePayload();
 
       if (!hasError) {
+        const { token, user, expiresAt } = await this.authService.register(this.payload);
+        this.authService.persistAuth(user, token, expiresAt);
       }
+    } catch (e: any) {
+      this.errorMessage = e.message;
+      this.hasError = true;
     } finally {
       this.isBusy = false;
     }

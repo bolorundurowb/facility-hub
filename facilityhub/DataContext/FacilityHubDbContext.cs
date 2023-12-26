@@ -1,4 +1,5 @@
-﻿using FacilityHub.DataContext.EntityConfigurations;
+﻿using FacilityHub.DataContext.Converters;
+using FacilityHub.DataContext.EntityConfigurations;
 using FacilityHub.Models.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,5 +26,12 @@ public class FacilityHubDbContext : DbContext
         modelBuilder.ApplyConfiguration(new UserEntityConfiguration());
 
         base.OnModelCreating(modelBuilder);
+    }
+    
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder
+            .Properties<DateTimeOffset>()
+            .HaveConversion<DateTimeOffsetConverter>();
     }
 }

@@ -12,12 +12,14 @@ public class FacilitiesController : ApiController
 {
     private readonly IFacilityService _facilityService;
     private readonly IUserService _userService;
+    private readonly IMediaHandlerService _mediaService;
 
-    public FacilitiesController(IMapper mapper, IFacilityService facilityService, IUserService userService) :
+    public FacilitiesController(IMapper mapper, IFacilityService facilityService, IUserService userService, IMediaHandlerService mediaService) :
         base(mapper)
     {
         _facilityService = facilityService;
         _userService = userService;
+        _mediaService = mediaService;
     }
 
     [HttpGet("")]
@@ -44,5 +46,33 @@ public class FacilitiesController : ApiController
         var facility = await _facilityService.Create(user, req.Name, req.Address, req.Location);
 
         return Created(Mapper.Map<FacilityRes>(facility));
+    }
+
+    [HttpPost("{facilityId:guid}/documents")]
+    [ProducesResponseType(typeof(DocumentRes), 201)]
+    [ProducesResponseType(typeof(GenericRes), 403)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> CreateDocument(Guid facilityId, [FromForm] UploadDocumentReq req)
+    {
+        var userId = User.GetCallerId();
+        var user = await _userService.FindById(userId);
+
+        if (user == null)
+            return Forbidden("User account not found");
+        
+        var facility = await _facilityService.FindById(userId, facilityId);
+
+        if (facility == null)
+            return NotFound("Facility not found");
+        
+        await using var stream = req.File.OpenReadStream();
+        var result = await _mediaService.UploadAsync(req.File.FileName, stream);
+
+        if (result == null)
+            return BadRequest("Document upload failed.");
+
+        var document = await _facilityService.AddDocument(facility, user, req.Type, result);
+
+        return Created(Mapper.Map<DocumentRes>(document));
     }
 }

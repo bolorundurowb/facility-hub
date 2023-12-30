@@ -12,9 +12,6 @@ public class Document : Entity
 
     public long FileSize { get; private set; }
 
-    [StringLength(6)]
-    public string FileExt { get; private set; }
-
     [StringLength(100)]
     public string MimeType { get; private set; }
 
@@ -29,12 +26,11 @@ public class Document : Entity
     private Document() { }
 #pragma warning restore CS8618
 
-    public Document(User createdBy, string fileName, long fileSize, string url, string fileExt, string mimeType)
+    public Document(string fileName, long fileSize, string url, string mimeType, User? createdBy = null)
     {
         FileName = fileName;
         FileSize = fileSize;
         Url = url;
-        FileExt = fileExt;
         MimeType = mimeType;
 
         CreatedBy = createdBy;

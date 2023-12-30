@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { lastValueFrom, take } from 'rxjs';
+import { asPromise } from '../utils';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class AuthService {
   }
 
   register(user: any): Promise<any> {
-    return this.http.post<any>(`${this.apiBaseUrl}/register`, user).asPromise();
+    return asPromise(this.http.post<any>(`${this.apiBaseUrl}/register`, user));
   }
 
   logout() {

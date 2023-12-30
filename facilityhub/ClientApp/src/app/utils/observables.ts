@@ -6,11 +6,15 @@ declare module 'rxjs' {
   }
 }
 
-Observable.prototype.asPromise = function <T>() {
+export function asPromise<T>(observable: Observable<T>) {
   return new Promise<T>((resolve, reject) => {
-    this.subscribe({
+    observable.subscribe({
       next: (value) => resolve(value),
       error: (error: any) => reject(error),
     });
   });
+}
+
+Observable.prototype.asPromise = function <T>() {
+  return asPromise(this);
 };

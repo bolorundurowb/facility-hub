@@ -7,7 +7,7 @@ public class UploadDocumentReqValidator  : AbstractValidator<UploadDocumentReq>
 {
     public UploadDocumentReqValidator()
     {
-        RuleFor(x => x.DocumentType)
+        RuleFor(x => x.Type)
             .IsInEnum();
 
         RuleFor(x => x.File)

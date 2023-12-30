@@ -5,6 +5,9 @@ namespace FacilityHub.Models.Data;
 
 public class Document : Entity
 {
+    [StringLength(256)]
+    public string ExternalId { get; private set; }
+    
     public DocumentType Type { get; private set; }
 
     [StringLength(256)]
@@ -26,8 +29,9 @@ public class Document : Entity
     private Document() { }
 #pragma warning restore CS8618
 
-    public Document(string fileName, long fileSize, string url, string mimeType, User? createdBy = null)
+    public Document(string fileName, long fileSize, string externalId, string url, string mimeType, User? createdBy = null)
     {
+        ExternalId = externalId;
         FileName = fileName;
         FileSize = fileSize;
         Url = url;

@@ -1,4 +1,5 @@
 ﻿using FacilityHub.DataContext;
+using FacilityHub.Enums;
 using FacilityHub.Models.Data;
 using FacilityHub.Models.DTOs;
 using FacilityHub.Services.Interfaces;
@@ -21,6 +22,14 @@ public class FacilityService : IFacilityService
             .ToListAsync();
     }
 
+    public Task<Facility?> FindById(Guid userId, Guid facilityId)
+    {
+        return _dbContext.Facilities
+            .Include(x => x.Documents)
+            .Where(x => x.Owner!.Id == userId || x.Managers.Any(y => y.Id == userId))
+            .FirstOrDefaultAsync(x => x.Id == facilityId);
+    }
+
     public async Task<Facility> Create(User manager, string name, string address, LocationDto? location)
     {
         var facility = new Facility(name, manager, address, location);
@@ -28,5 +37,11 @@ public class FacilityService : IFacilityService
         await _dbContext.SaveChangesAsync();
 
         return facility;
+    }
+
+    public async Task<Document> AddDocument(Facility facility, User user, DocumentType documentType,
+        IUploadResult details)
+    {
+        
     }
 }

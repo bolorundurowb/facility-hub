@@ -42,6 +42,17 @@ public class FacilityService : IFacilityService
     public async Task<Document> AddDocument(Facility facility, User user, DocumentType documentType,
         IUploadResult details)
     {
-        
+        var document = new Document(
+            details.FileName,
+            details.Size,
+            details.Id,
+            details.Url,
+            details.MimeType,
+            user
+        );
+        facility.Documents.Add(document);
+        await _dbContext.SaveChangesAsync();
+
+        return document;
     }
 }

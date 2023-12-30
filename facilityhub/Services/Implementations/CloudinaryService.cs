@@ -3,6 +3,7 @@ using CloudinaryDotNet.Actions;
 using dotenv.net.Utilities;
 using FacilityHub.Models.Service;
 using FacilityHub.Services.Interfaces;
+using MimeTypes;
 
 namespace FacilityHub.Services.Implementations;
 
@@ -23,13 +24,14 @@ public class CloudinaryService : IMediaHandlerService
     {
         try
         {
+            var mimeType = MimeTypeMap.GetMimeType(fileName);
             var uploadParams = new ImageUploadParams
             {
                 File = new FileDescription(fileName, stream),
             };
 
             var uploadResult = await _cloudinary.UploadAsync(uploadParams);
-            return new CloudinaryResult(uploadResult);
+            return new CloudinaryResult(mimeType, uploadResult);
         }
         catch (Exception ex)
         {

@@ -10,7 +10,7 @@ public static class AuthenticationExtensions
         if (claimsPrincipal.Identity is not ClaimsIdentity identity)
             return default;
 
-        var id = identity.Claims.First(x => x.Type == JwtRegisteredClaimNames.Sub).Value;
+        var id = identity.Claims.First(x => x.Type == "user").Value;
         return Guid.Parse(id);
     }
 }

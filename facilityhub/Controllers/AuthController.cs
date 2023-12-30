@@ -58,7 +58,8 @@ public class AuthController : ApiController
     {
         var claims = new List<Claim>
         {
-            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new("user", user.Id.ToString()),
+            new(JwtRegisteredClaimNames.Sub, user.EmailAddress),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
         };
 

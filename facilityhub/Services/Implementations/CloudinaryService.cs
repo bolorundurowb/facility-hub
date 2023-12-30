@@ -27,6 +27,7 @@ public class CloudinaryService : IMediaHandlerService
             var mimeType = MimeTypeMap.GetMimeType(fileName);
             var uploadParams = new ImageUploadParams
             {
+                Folder = "FacilityHub",
                 File = new FileDescription(fileName, stream),
             };
 

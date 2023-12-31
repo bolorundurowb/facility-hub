@@ -1,16 +1,26 @@
-﻿namespace FacilityHub.Models.Data;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FacilityHub.Models.Data;
 
 public class User : Entity
 {
-    public string? FirstName { get; set; }
+    [StringLength(256)]
+    public string? FirstName { get; private set; }
 
-    public string? LastName { get; set; }
+    [StringLength(256)]
+    public string? LastName { get; private set; }
 
-    public string EmailAddress { get; set; }
+    [StringLength(256)]
+    public string EmailAddress { get; private set; }
 
-    public string PasswordHash { get; set; }
+    [StringLength(2048)]
+    public string PasswordHash { get; private set; }
 
-    public DateTimeOffset JoinedAt { get; set; }
+    public DateTimeOffset JoinedAt { get; private set; }
+
+    public List<Facility> Owned { get; private set; } = new();
+
+    public List<Facility> Managed { get; private set; } = new();
 
 #pragma warning disable CS8618
     private User() { }
@@ -33,4 +43,6 @@ public class User : Entity
 
     public bool VerifyPassword(string password) =>
         !string.IsNullOrWhiteSpace(password) && BCrypt.Net.BCrypt.Verify(password, PasswordHash);
+
+    public string FullName() => $"{FirstName} {LastName}".Trim();
 }

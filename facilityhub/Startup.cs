@@ -72,8 +72,7 @@ public class Startup
 
         var config = TypeAdapterConfig.GlobalSettings;
         config.Scan(Assembly.GetExecutingAssembly());
-        services.AddSingleton(config);
-        services.AddScoped<IMapper, ServiceMapper>();
+        services.AddMapster();
 
         services.AddScoped<IFacilityService, FacilityService>();
         services.AddScoped<IUserService, UserService>();

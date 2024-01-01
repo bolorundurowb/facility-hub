@@ -14,7 +14,8 @@ public class FacilitiesController : ApiController
     private readonly IUserService _userService;
     private readonly IMediaHandlerService _mediaService;
 
-    public FacilitiesController(IMapper mapper, IFacilityService facilityService, IUserService userService, IMediaHandlerService mediaService) :
+    public FacilitiesController(IMapper mapper, IFacilityService facilityService, IUserService userService,
+        IMediaHandlerService mediaService) :
         base(mapper)
     {
         _facilityService = facilityService;
@@ -48,6 +49,20 @@ public class FacilitiesController : ApiController
         return Created(Mapper.Map<FacilityRes>(facility));
     }
 
+    [HttpGet("{facilityId:guid}")]
+    [ProducesResponseType(typeof(FacilityRes), 200)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> GetOne(Guid facilityId)
+    {
+        var userId = User.GetCallerId();
+        var facility = await _facilityService.FindById(userId, facilityId);
+
+        if (facility == null)
+            return NotFound("Facility not found");
+
+        return Ok(Mapper.Map<FacilityRes>(facility));
+    }
+
     [HttpPost("{facilityId:guid}/documents")]
     [ProducesResponseType(typeof(DocumentRes), 201)]
     [ProducesResponseType(typeof(GenericRes), 403)]
@@ -59,12 +74,12 @@ public class FacilitiesController : ApiController
 
         if (user == null)
             return Forbidden("User account not found");
-        
+
         var facility = await _facilityService.FindById(userId, facilityId);
 
         if (facility == null)
             return NotFound("Facility not found");
-        
+
         await using var stream = req.File.OpenReadStream();
         var result = await _mediaService.UploadAsync(req.File.FileName, stream);
 

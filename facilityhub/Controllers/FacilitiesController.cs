@@ -1,4 +1,5 @@
-﻿using FacilityHub.Extensions;
+﻿using FacilityHub.Enums;
+using FacilityHub.Extensions;
 using FacilityHub.Models.DTOs;
 using FacilityHub.Models.Request;
 using FacilityHub.Models.Response;
@@ -89,5 +90,30 @@ public class FacilitiesController : ApiController
         var document = await _facilityService.AddDocument(facility, user, req.Type, result);
 
         return Created(Mapper.Map<DocumentRes>(document));
+    }
+
+    [HttpPost("{facilityId:guid}/invite/tenant")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(GenericRes), 403)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> InviteTenant(Guid facilityId, [FromBody] FacilityInvitationReq req)
+    {
+        var userId = User.GetCallerId();
+        var user = await _userService.FindById(userId);
+
+        if (user == null)
+            return Forbidden("User account not found");
+
+        var facility = await _facilityService.FindById(userId, facilityId);
+
+        if (facility == null)
+            return NotFound("Facility not found");
+
+        await _facilityService.InviteContributor(facility, user, FacilityInvitationType.FacilityTenant,
+            req.EmailAddress);
+
+        // TODO: send an email
+
+        return NoContent();
     }
 }

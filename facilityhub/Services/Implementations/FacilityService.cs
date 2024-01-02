@@ -56,6 +56,8 @@ public class FacilityService : IFacilityService
 
         return document;
     }
+    
+    public Task<FacilityInvitation> FindInvitation()
 
     public async Task InviteContributor(Facility facility, User user, FacilityInvitationType invitationType,
         string emailAddress)

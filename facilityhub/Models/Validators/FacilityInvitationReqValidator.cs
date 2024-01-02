@@ -3,10 +3,14 @@ using FluentValidation;
 
 namespace FacilityHub.Models.Validators;
 
-public class FacilityInvitationReqValidation : AbstractValidator<FacilityInvitationReq>
+public class FacilityInvitationReqValidator : AbstractValidator<FacilityInvitationReq>
 {
-    public FacilityInvitationReqValidation()
+    public FacilityInvitationReqValidator()
     {
+        RuleFor(x => x.FacilityId)
+            .NotEqual(x => Guid.Empty)
+            .WithMessage("A facility ID is required");
+        
         RuleFor(x => x.EmailAddress)
             .NotEmpty()
             .WithMessage("An email address is required")

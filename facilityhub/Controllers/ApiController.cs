@@ -31,4 +31,7 @@ public abstract class ApiController : ControllerBase
 
     protected ObjectResult Error(string message) =>
         StatusCode((int)HttpStatusCode.InternalServerError, new GenericRes(message));
+
+    protected OkObjectResult Ok(string message) =>
+        Ok(new GenericRes(message));
 }

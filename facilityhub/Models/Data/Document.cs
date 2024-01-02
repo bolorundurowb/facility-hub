@@ -29,13 +29,14 @@ public class Document : Entity
     private Document() { }
 #pragma warning restore CS8618
 
-    public Document(string fileName, long fileSize, string externalId, string url, string mimeType, User? createdBy = null)
+    public Document(string fileName, DocumentType documentType, long fileSize, string externalId, string url, string mimeType, User? createdBy = null)
     {
         ExternalId = externalId;
         FileName = fileName;
         FileSize = fileSize;
         Url = url;
         MimeType = mimeType;
+        Type = documentType;
 
         CreatedBy = createdBy;
         CreatedAt = DateTimeOffset.Now;

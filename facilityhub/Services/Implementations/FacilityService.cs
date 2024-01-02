@@ -44,6 +44,7 @@ public class FacilityService : IFacilityService
     {
         var document = new Document(
             details.FileName,
+            documentType,
             details.Size,
             details.Id,
             details.Url,
@@ -54,5 +55,33 @@ public class FacilityService : IFacilityService
         await _dbContext.SaveChangesAsync();
 
         return document;
+    }
+
+    public async Task InviteContributor(Facility facility, User user, FacilityInvitationType invitationType,
+        string emailAddress)
+    {
+        var normalizedEmailAddress = emailAddress.Trim().ToLowerInvariant();
+        var invitation = await _dbContext.FacilityInvitations
+            .FirstOrDefaultAsync(x =>
+                x.Facility.Id == facility.Id
+                && x.EmailAddress == normalizedEmailAddress
+                && x.Type == invitationType
+            );
+
+        if (invitation == null)
+        {
+            invitation = new FacilityInvitation(facility, user, invitationType, normalizedEmailAddress);
+            await _dbContext.FacilityInvitations.AddAsync(invitation);
+        }
+        else if (invitation.IsClaimed)
+        {
+            throw new InvalidOperationException();
+        }
+        else
+        {
+            invitation.GenerateClaimDetails();
+        }
+
+        await _dbContext.SaveChangesAsync();
     }
 }

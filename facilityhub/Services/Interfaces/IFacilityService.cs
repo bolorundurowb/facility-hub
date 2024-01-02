@@ -15,5 +15,7 @@ public interface IFacilityService
     Task<Document> AddDocument(Facility facility, User user, DocumentType documentType,
         IUploadResult details);
 
+    Task<FacilityInvitation?> FindInvitationById(Guid invitationId);
+
     Task InviteContributor(Facility facility, User user, FacilityInvitationType invitationType, string emailAddress);
 }

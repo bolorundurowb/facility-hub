@@ -56,8 +56,12 @@ public class FacilityService : IFacilityService
 
         return document;
     }
-    
-    public Task<FacilityInvitation> FindInvitation()
+
+    public Task<FacilityInvitation?> FindInvitationById(Guid invitationId)
+    {
+        return _dbContext.FacilityInvitations
+            .FirstOrDefaultAsync(x => x.Id == invitationId);
+    }
 
     public async Task InviteContributor(Facility facility, User user, FacilityInvitationType invitationType,
         string emailAddress)

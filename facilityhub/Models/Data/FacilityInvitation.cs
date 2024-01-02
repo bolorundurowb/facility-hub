@@ -47,4 +47,6 @@ public class FacilityInvitation : Entity
         ClaimToken = Guid.NewGuid();
         ExpiresAt = DateTimeOffset.UtcNow.AddDays(7);
     }
+
+    public bool IsExpired() => ExpiresAt < DateTimeOffset.UtcNow;
 }

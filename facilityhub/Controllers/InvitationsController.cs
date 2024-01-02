@@ -48,28 +48,18 @@ public class InvitationsController : ApiController
     }
 
     [AllowAnonymous]
-    [HttpPost("{facilityId:guid}/invitation/{invitationId:guid}/validate")]
+    [HttpPost("{invitationId:guid}/validate")]
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(GenericRes), 403)]
     [ProducesResponseType(typeof(GenericRes), 404)]
-    public async Task<IActionResult> ValidateInvitation(Guid facilityId, Guid invitationId)
+    public async Task<IActionResult> ValidateInvitation(Guid invitationId, [FromBody] ValidateInvitationReq req)
     {
-        var userId = User.GetCallerId();
-        var user = await _userService.FindById(userId);
+        var invitation = await _facilityService.FindInvitationById(invitationId);
 
-        if (user == null)
-            return Forbidden("User account not found");
+        if (invitation == null || invitation.ClaimToken != req.ClaimToken || invitation.IsClaimed ||
+            invitation.IsExpired())
+            return BadRequest("Invalid invitation");
 
-        var facility = await _facilityService.FindById(userId, facilityId);
-
-        if (facility == null)
-            return NotFound("Facility not found");
-
-        await _facilityService.InviteContributor(facility, user, FacilityInvitationType.FacilityTenant,
-            req.EmailAddress);
-
-        // TODO: send an email
-
-        return NoContent();
+        return Ok("Invitation valid");
     }
 }

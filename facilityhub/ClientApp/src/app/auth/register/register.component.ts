@@ -74,6 +74,8 @@ export class RegisterComponent {
     if (message) {
       this.errorMessage = message;
       this.hasError = true
+    } else {
+      this.dismissError();
     }
 
     return this.hasError;

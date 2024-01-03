@@ -1,5 +1,13 @@
 <h2 class="header">SIGN IN</h2>
 <form cForm>
+  <c-alert
+    fade
+    dismissible
+    color="danger"
+    [(visible)]="hasError">
+    {{errorMessage}}
+  </c-alert>
+
   <div class="mb-3">
     <label cLabel for="emailAddress">Email Address</label>
     <input cFormControl name="emailAddress" type="email" [(ngModel)]="payload.emailAddress">

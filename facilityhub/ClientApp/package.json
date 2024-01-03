@@ -6,8 +6,8 @@
     "dev": "ng serve --hmr",
     "prestart": "node aspnetcore-https",
     "start": "run-script-os",
-    "start:windows": "ng serve --port 44485 --ssl --ssl-cert \"%APPDATA%\\ASP.NET\\https\\%npm_package_name%.pem\" --ssl-key \"%APPDATA%\\ASP.NET\\https\\%npm_package_name%.key\"",
-    "start:default": "ng serve --port 44485 --ssl --ssl-cert \"$HOME/.aspnet/https/${npm_package_name}.pem\" --ssl-key \"$HOME/.aspnet/https/${npm_package_name}.key\"",
+    "start:windows": "ng serve --hmr --port 44485 --ssl --ssl-cert \"%APPDATA%\\ASP.NET\\https\\%npm_package_name%.pem\" --ssl-key \"%APPDATA%\\ASP.NET\\https\\%npm_package_name%.key\"",
+    "start:default": "ng serve --hmr --port 44485 --ssl --ssl-cert \"$HOME/.aspnet/https/${npm_package_name}.pem\" --ssl-key \"$HOME/.aspnet/https/${npm_package_name}.key\"",
     "build": "ng build",
     "build:ssr": "ng run facilityhub:server:dev",
     "watch": "ng build --watch --configuration development"

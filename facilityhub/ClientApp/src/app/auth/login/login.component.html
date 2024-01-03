@@ -2,16 +2,18 @@
 <form cForm>
   <div class="mb-3">
     <label cLabel for="emailAddress">Email Address</label>
-    <input cFormControl id="emailAddress" type="email">
+    <input cFormControl name="emailAddress" type="email" [(ngModel)]="payload.emailAddress">
   </div>
   <div class="mb-3">
     <label cLabel for="password">Password</label>
-    <input cFormControl id="password" type="password">
+    <input cFormControl name="password" type="password" [(ngModel)]="payload.password">
   </div>
   <a routerLink="/auth/register">Don't have an account? Register!</a>
   <div class="action">
     <button cButton
-            color="primary">
+            color="primary"
+            [disabled]="isBusy"
+            (click)="login()">
       Sign In
     </button>
   </div>

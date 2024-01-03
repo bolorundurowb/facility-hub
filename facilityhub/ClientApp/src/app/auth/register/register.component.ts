@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { Title } from "@angular/platform-browser";
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services';
+import {Router} from "@angular/router";
 
 interface RegisterPayload {
   firstName?: string;
@@ -25,7 +26,7 @@ export class RegisterComponent {
   errorMessage: string | undefined;
   payload: RegisterPayload = {};
 
-  constructor(title: Title, private authService: AuthService) {
+  constructor(title: Title, private authService: AuthService, private router: Router) {
     title.setTitle('Register | Facility Hub');
   }
 
@@ -38,6 +39,8 @@ export class RegisterComponent {
       if (!hasError) {
         const { token, user, expiresAt } = await this.authService.register(this.payload);
         this.authService.persistAuth(user, token, expiresAt);
+
+        await this.router.navigate(['/']);
       }
     } catch (e: any) {
       this.errorMessage = e.message;

@@ -19,6 +19,10 @@ export class AuthService {
     return asPromise(this.http.post<any>(`${this.apiBaseUrl}/register`, user));
   }
 
+  login(user: any): Promise<any> {
+    return asPromise(this.http.post<any>(`${this.apiBaseUrl}/login`, user));
+  }
+
   logout() {
     localStorage.removeItem(this.userKey);
     localStorage.removeItem(this.tokenKey);

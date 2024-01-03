@@ -33,7 +33,7 @@ export class LoginComponent {
       const hasError = this.validatePayload();
 
       if (!hasError) {
-        const { token, user, expiresAt } = await this.authService.register(this.payload);
+        const { token, user, expiresAt } = await this.authService.login(this.payload);
         this.authService.persistAuth(user, token, expiresAt);
 
         await this.router.navigate(['/']);

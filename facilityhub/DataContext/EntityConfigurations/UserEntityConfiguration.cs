@@ -10,11 +10,11 @@ public class UserEntityConfiguration : BaseEntityConfiguration<User>
         builder.HasMany(x => x.Managed)
             .WithMany(x => x.Managers)
             .UsingEntity("FacilityManagers");
-        
+
         builder.HasMany(x => x.Owned)
             .WithMany(x => x.Owners)
             .UsingEntity("FacilityOwners");
-        
+
         base.Configure(builder);
     }
 }

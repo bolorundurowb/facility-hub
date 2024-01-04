@@ -64,15 +64,17 @@ public class FacilityService : IFacilityService
             .FirstOrDefaultAsync(x => x.Id == invitationId);
     }
 
-    public async Task SetTenant(Facility facility, User inviter, User? user, string emailAddress, DateOnly startsAt,
+    public async Task<Tenant> SetTenant(Facility facility, User inviter, User? user, string emailAddress, DateOnly startsAt,
         DateOnly endsAt, DateOnly paidAt)
     {
-        facility.SetTenant(inviter, user, startsAt, endsAt, paidAt);
+        var tenant = facility.SetTenant(inviter, user, startsAt, endsAt, paidAt);
         await _dbContext.SaveChangesAsync();
 
         // if the tenant doesn't have a user account, invite them
         if (user == null)
             await InviteContributor(facility, inviter, FacilityInvitationType.FacilityTenant, emailAddress);
+
+        return tenant;
     }
 
     public async Task InviteContributor(Facility facility, User user, FacilityInvitationType invitationType,

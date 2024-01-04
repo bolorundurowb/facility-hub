@@ -54,11 +54,11 @@ public class InvitationsController : ApiController
             return NotFound("Facility not found");
 
         var user = await _userService.FindByEmail(req.EmailAddress);
-        await _facilityService.SetTenant(facility, inviter, user, req.EmailAddress, req.StartsAt, req.EndsAt,
-            req.PaidAt);
-        
+        var tenant = await _facilityService.SetTenant(facility, inviter, user, req.EmailAddress, req.StartsAt, req.EndsAt,
+             req.PaidAt);
 
-        return NotFound();
+
+        return Created(Mapper.Map<TenantRes>(tenant));
     }
 
     [AllowAnonymous]
@@ -88,7 +88,7 @@ public class InvitationsController : ApiController
 
         if (user == null)
             return Forbidden("User account not found");
-        
+
         var invitation = await _facilityService.FindInvitationById(invitationId);
 
         if (invitation == null || invitation.ClaimToken != handlingReq.ClaimToken || invitation.IsClaimed ||

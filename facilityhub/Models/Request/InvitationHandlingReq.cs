@@ -2,5 +2,5 @@
 
 public class InvitationHandlingReq
 {
-    public Guid ClaimToken { get; set; } 
+    public Guid ClaimToken { get; set; }
 }

@@ -10,7 +10,7 @@ public class FacilityInvitationReqValidator : AbstractValidator<FacilityInvitati
         RuleFor(x => x.FacilityId)
             .NotEqual(x => Guid.Empty)
             .WithMessage("A facility ID is required");
-        
+
         RuleFor(x => x.EmailAddress)
             .NotEmpty()
             .WithMessage("An email address is required")

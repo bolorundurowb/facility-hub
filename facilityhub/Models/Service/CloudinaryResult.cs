@@ -6,7 +6,7 @@ namespace FacilityHub.Models.Service;
 public class CloudinaryResult : IUploadResult
 {
     public string Id { get; }
-    
+
     public string Url { get; }
 
     public long Size { get; }
@@ -17,7 +17,7 @@ public class CloudinaryResult : IUploadResult
 
     public string FileName { get; }
 
-    public CloudinaryResult(string mimeType, RawUploadResult  result)
+    public CloudinaryResult(string mimeType, RawUploadResult result)
     {
         Id = result.PublicId;
         Url = result.SecureUrl.AbsoluteUri;

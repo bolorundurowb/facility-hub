@@ -18,8 +18,11 @@ public class Mappings : IRegister
             {
                 var currentTenancy = model.History.MaxBy(x => x.CreatedAt);
 
-                if (currentTenancy != null)
-                    vm = vm with { StartsAt = currentTenancy.PeriodStart, EndsAt = currentTenancy.PeriodEnd };
+                if (currentTenancy == null)
+                    return;
+
+                vm.StartsAt = currentTenancy.PeriodStart;
+                vm.EndsAt = currentTenancy.PeriodEnd;
             })
             .Compile();
     }

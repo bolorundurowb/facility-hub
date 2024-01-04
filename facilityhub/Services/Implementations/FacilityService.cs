@@ -25,6 +25,8 @@ public class FacilityService : IFacilityService
     public Task<Facility?> FindById(Guid userId, Guid facilityId)
     {
         return _dbContext.Facilities
+            .Include(x => x.Tenant)
+            .Include(x => x.Tenant!.User)
             .Include(x => x.Documents)
             .Where(x => x.Owners.Any(y => y.Id == userId) || x.Managers.Any(y => y.Id == userId))
             .FirstOrDefaultAsync(x => x.Id == facilityId);

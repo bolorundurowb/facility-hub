@@ -7,7 +7,6 @@ using FacilityHub.Services.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Mapster;
-using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

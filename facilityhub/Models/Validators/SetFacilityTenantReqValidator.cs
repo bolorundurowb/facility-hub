@@ -19,15 +19,17 @@ public class SetFacilityTenantReqValidator : AbstractValidator<SetFacilityTenant
 
         RuleFor(x => x.StartsAt)
             .NotEqual(DateOnly.MinValue)
-            .WithMessage("A tenancy start time must be set");
+            .WithMessage("A tenancy start date must be set");
 
         RuleFor(x => x.EndsAt)
             .NotEqual(DateOnly.MinValue)
-            .WithMessage("A tenancy end time must be set")
+            .WithMessage("A tenancy end date must be set")
             .GreaterThan(x => x.StartsAt)
-            .WithMessage("The end time cannot be before the start time");
+            .WithMessage("The end date cannot be before the start date");
 
         RuleFor(x => x.PaidAt)
+            .NotEqual(DateOnly.MinValue)
+            .WithMessage("A paid date must be set")
             .LessThanOrEqualTo(DateOnly.FromDateTime(DateTime.UtcNow.Date))
             .WithMessage("The payment time cannot be in the future");
     }

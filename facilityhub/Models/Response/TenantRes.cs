@@ -1,3 +1,12 @@
 ﻿namespace FacilityHub.Models.Response;
 
-public record TenantRes(Guid Id, string? Name, DateOnly? StartsAt, DateOnly? EndsAt);
+public class TenantRes
+{
+    public Guid Id { get; set; }
+
+    public string? Name { get; set; }
+
+    public DateOnly? StartsAt { get; set; }
+
+    public DateOnly? EndsAt { get; set; }
+}

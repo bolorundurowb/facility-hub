@@ -37,7 +37,7 @@ public class InvitationsController : ApiController
         InviteContributor(req, FacilityInvitationType.FacilityOwner);
 
     [HttpPost("tenant")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(TenantRes), 201)]
     [ProducesResponseType(typeof(GenericRes), 403)]
     [ProducesResponseType(typeof(GenericRes), 404)]
     public async Task<IActionResult> InviteTenant([FromBody] SetFacilityTenantReq req)
@@ -56,7 +56,6 @@ public class InvitationsController : ApiController
         var user = await _userService.FindByEmail(req.EmailAddress);
         var tenant = await _facilityService.SetTenant(facility, inviter, user, req.EmailAddress, req.StartsAt, req.EndsAt,
              req.PaidAt);
-
 
         return Created(Mapper.Map<TenantRes>(tenant));
     }

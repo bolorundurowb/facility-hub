@@ -70,7 +70,9 @@ public class InvitationsController : ApiController
             invitation.IsExpired())
             return BadRequest("Invalid invitation");
 
-        
+        await _facilityService.ClaimInvitation(invitation, user);
+
+        return NoContent();
     }
 
     #region Private Helpers

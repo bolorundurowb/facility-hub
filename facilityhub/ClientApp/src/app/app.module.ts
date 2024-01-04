@@ -9,6 +9,7 @@ import { AuthComponent } from './auth/auth.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IconModule, IconSetService } from '@coreui/icons-angular';
 import {
+  ButtonDirective,
   ContainerComponent,
   NavbarBrandDirective,
   NavbarComponent,
@@ -34,6 +35,7 @@ import {
     ContainerComponent,
     NavbarBrandDirective,
     NavLinkDirective,
+    ButtonDirective,
   ],
   providers: [IconSetService],
   bootstrap: [AppComponent]

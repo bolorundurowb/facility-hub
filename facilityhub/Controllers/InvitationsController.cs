@@ -22,11 +22,41 @@ public class InvitationsController : ApiController
         _userService = userService;
     }
 
-    [HttpPost("tenant")]
+    [HttpPost("manager")]
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(GenericRes), 403)]
     [ProducesResponseType(typeof(GenericRes), 404)]
-    public async Task<IActionResult> InviteTenant([FromBody] FacilityInvitationReq req)
+    public Task<IActionResult> InviteManager([FromBody] FacilityInvitationReq req) =>
+        InviteContributor(req, FacilityInvitationType.FacilityManager);
+
+    [HttpPost("owner")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(GenericRes), 403)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public Task<IActionResult> InviteOwner([FromBody] FacilityInvitationReq req) =>
+        InviteContributor(req, FacilityInvitationType.FacilityOwner);
+
+    [AllowAnonymous]
+    [HttpPost("{invitationId:guid}/validate")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(GenericRes), 403)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> ValidateInvitation(Guid invitationId, [FromBody] InvitationHandlingReq handlingReq)
+    {
+        var invitation = await _facilityService.FindInvitationById(invitationId);
+
+        if (invitation == null || invitation.ClaimToken != handlingReq.ClaimToken || invitation.IsClaimed ||
+            invitation.IsExpired())
+            return BadRequest("Invalid invitation");
+
+        return Ok("Invitation valid");
+    }
+
+    #region Private Helpers
+
+    [NonAction]
+    private async Task<IActionResult> InviteContributor(FacilityInvitationReq req,
+        FacilityInvitationType invitationType)
     {
         var userId = User.GetCallerId();
         var user = await _userService.FindById(userId);
@@ -39,27 +69,12 @@ public class InvitationsController : ApiController
         if (facility == null)
             return NotFound("Facility not found");
 
-        await _facilityService.InviteContributor(facility, user, FacilityInvitationType.FacilityTenant,
-            req.EmailAddress);
+        await _facilityService.InviteContributor(facility, user, invitationType, req.EmailAddress);
 
         // TODO: send an email
 
         return NoContent();
     }
 
-    [AllowAnonymous]
-    [HttpPost("{invitationId:guid}/validate")]
-    [ProducesResponseType(204)]
-    [ProducesResponseType(typeof(GenericRes), 403)]
-    [ProducesResponseType(typeof(GenericRes), 404)]
-    public async Task<IActionResult> ValidateInvitation(Guid invitationId, [FromBody] ValidateInvitationReq req)
-    {
-        var invitation = await _facilityService.FindInvitationById(invitationId);
-
-        if (invitation == null || invitation.ClaimToken != req.ClaimToken || invitation.IsClaimed ||
-            invitation.IsExpired())
-            return BadRequest("Invalid invitation");
-
-        return Ok("Invitation valid");
-    }
+    #endregion
 }

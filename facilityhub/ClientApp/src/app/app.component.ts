@@ -40,6 +40,13 @@ import {AuthService} from "./services";
                 <li>
                   <button
                     cDropdownItem
+                    (click)="goToDashboard()">
+                    Dashboard
+                  </button>
+                </li>
+                <li>
+                  <button
+                    cDropdownItem
                     (click)="logOut()">
                     Log Out
                   </button>
@@ -75,6 +82,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async goToRegister() {
     await this.router.navigate(['auth', 'register']);
+  }
+
+  async goToDashboard() {
+    await this.router.navigate(['dashboard']);
   }
 
   async logOut() {

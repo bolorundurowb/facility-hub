@@ -36,7 +36,7 @@ export class LoginComponent {
         const { token, user, expiresAt } = await this.authService.login(this.payload);
         this.authService.persistAuth(user, token, expiresAt);
 
-        await this.router.navigate(['/']);
+        await this.router.navigate(['dashboard']);
       }
     } catch (e: any) {
       this.errorMessage = e.message;

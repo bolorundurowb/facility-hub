@@ -18,7 +18,7 @@ public class Facility : Entity
 
     public List<User> Owners { get; set; } = new();
 
-    public Tenant? Tenant { get; set; }
+    public Tenant? Tenant { get; private set; }
 
     public List<Document> Documents { get; set; } = new();
 

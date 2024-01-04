@@ -2,7 +2,7 @@ namespace FacilityHub.Models.Data;
 
 public class Tenant : Entity
 {
-    public User User { get; private set; }
+    public User? User { get; private set; }
 
     public List<Document> Documents { get; set; } = new();
 
@@ -16,7 +16,8 @@ public class Tenant : Entity
     private Tenant() { }
 #pragma warning restore CS8618
 
-    public Tenant(User creator, User user, DateTimeOffset periodStart, DateTimeOffset periodEnd, DateTimeOffset paidAt)
+    public Tenant(User creator, DateTimeOffset periodStart, DateTimeOffset periodEnd, DateTimeOffset paidAt,
+        User? user = null)
     {
         User = user;
         History = new List<TenancyHistory> { new(periodStart, periodEnd, paidAt) };

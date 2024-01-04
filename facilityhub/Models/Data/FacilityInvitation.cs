@@ -49,4 +49,6 @@ public class FacilityInvitation : Entity
     }
 
     public bool IsExpired() => ExpiresAt < DateTimeOffset.UtcNow;
+
+    public void Claim() => IsClaimed = true;
 }

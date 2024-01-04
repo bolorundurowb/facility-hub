@@ -16,7 +16,7 @@ public class Tenant : Entity
     private Tenant() { }
 #pragma warning restore CS8618
 
-    public Tenant(User creator, DateTimeOffset periodStart, DateTimeOffset periodEnd, DateTimeOffset paidAt,
+    public Tenant(User creator, DateOnly periodStart, DateOnly periodEnd, DateOnly paidAt,
         User? user = null)
     {
         User = user;
@@ -25,4 +25,6 @@ public class Tenant : Entity
         CreatedBy = creator;
         CreatedAt = DateTimeOffset.Now;
     }
+
+    public void SetUser(User user) => User = user;
 }

@@ -64,6 +64,17 @@ public class FacilityService : IFacilityService
             .FirstOrDefaultAsync(x => x.Id == invitationId);
     }
 
+    public async Task SetTenant(Facility facility, User inviter, User? user, string emailAddress, DateOnly startsAt,
+        DateOnly endsAt, DateOnly paidAt)
+    {
+        facility.SetTenant(inviter, user, startsAt, endsAt, paidAt);
+        await _dbContext.SaveChangesAsync();
+
+        // if the tenant doesn't have a user account, invite them
+        if (user == null)
+            await InviteContributor(facility, inviter, FacilityInvitationType.FacilityTenant, emailAddress);
+    }
+
     public async Task InviteContributor(Facility facility, User user, FacilityInvitationType invitationType,
         string emailAddress)
     {
@@ -99,21 +110,29 @@ public class FacilityService : IFacilityService
         var facility = invitation.Facility;
         if (invitation.Type == FacilityInvitationType.FacilityTenant)
         {
-            // TODO: this means the tenancy has been set but the owner may not
-            return;
+            await _dbContext.Entry(facility)
+                .Reference(x => x.Tenant)
+                .LoadAsync();
+
+            if (facility.Tenant == null)
+                throw new ArgumentNullException(nameof(facility.Tenant), "No tenant set on facility to be claimed");
+
+            facility.Tenant!.SetUser(user);
         }
+        else
+        {
+            await _dbContext.Entry(facility)
+                .Collection(x => x.Managers)
+                .LoadAsync();
+            await _dbContext.Entry(facility)
+                .Collection(x => x.Owners)
+                .LoadAsync();
 
-        await _dbContext.Entry(facility)
-            .Collection(x => x.Managers)
-            .LoadAsync();
-        await _dbContext.Entry(facility)
-            .Collection(x => x.Owners)
-            .LoadAsync();
-
-        if (invitation.Type == FacilityInvitationType.FacilityManager)
-            facility.AddManager(user);
-        else if (invitation.Type == FacilityInvitationType.FacilityOwner)
-            facility.AddOwner(user);
+            if (invitation.Type == FacilityInvitationType.FacilityManager)
+                facility.AddManager(user);
+            else if (invitation.Type == FacilityInvitationType.FacilityOwner)
+                facility.AddOwner(user);
+        }
 
         await _dbContext.SaveChangesAsync();
     }

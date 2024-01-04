@@ -2,9 +2,9 @@
 
 public class SetFacilityTenantReq : FacilityInvitationReq
 {
-    public DateTimeOffset StartsAt { get; set; }
+    public DateOnly StartsAt { get; set; }
 
-    public DateTimeOffset EndsAt { get; set; }
+    public DateOnly EndsAt { get; set; }
 
-    public DateTimeOffset PaidAt { get; set; }
+    public DateOnly PaidAt { get; set; }
 }

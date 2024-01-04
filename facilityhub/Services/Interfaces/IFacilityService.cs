@@ -17,6 +17,9 @@ public interface IFacilityService
 
     Task<FacilityInvitation?> FindInvitationById(Guid invitationId);
 
+    Task SetTenant(Facility facility, User inviter, User? user, string emailAddress, DateOnly startsAt,
+        DateOnly endsAt, DateOnly paidAt);
+
     Task InviteContributor(Facility facility, User user, FacilityInvitationType invitationType, string emailAddress);
 
     Task ClaimInvitation(FacilityInvitation invitation, User user);

@@ -61,4 +61,7 @@ public class Facility : Entity
         if (!isAlreadyOwner)
             Owners.Add(user);
     }
+
+    public void SetTenant(User inviter, User? user, DateOnly startsAt, DateOnly endsAt, DateOnly paidAt) =>
+        Tenant = new Tenant(inviter, startsAt, endsAt, paidAt, user);
 }

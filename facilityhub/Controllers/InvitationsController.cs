@@ -36,6 +36,31 @@ public class InvitationsController : ApiController
     public Task<IActionResult> InviteOwner([FromBody] FacilityInvitationReq req) =>
         InviteContributor(req, FacilityInvitationType.FacilityOwner);
 
+    [HttpPost("tenant")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(GenericRes), 403)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> InviteTenant([FromBody] SetFacilityTenantReq req)
+    {
+        var userId = User.GetCallerId();
+        var inviter = await _userService.FindById(userId);
+
+        if (inviter == null)
+            return Forbidden("User account not found");
+
+        var facility = await _facilityService.FindById(userId, req.FacilityId);
+
+        if (facility == null)
+            return NotFound("Facility not found");
+
+        var user = await _userService.FindByEmail(req.EmailAddress);
+        await _facilityService.SetTenant(facility, inviter, user, req.EmailAddress, req.StartsAt, req.EndsAt,
+            req.PaidAt);
+        
+
+        return NotFound();
+    }
+
     [AllowAnonymous]
     [HttpPost("{invitationId:guid}/validate")]
     [ProducesResponseType(204)]

@@ -60,6 +60,7 @@ public class FacilityService : IFacilityService
     public Task<FacilityInvitation?> FindInvitationById(Guid invitationId)
     {
         return _dbContext.FacilityInvitations
+            .Include(x => x.Facility)
             .FirstOrDefaultAsync(x => x.Id == invitationId);
     }
 
@@ -87,6 +88,32 @@ public class FacilityService : IFacilityService
         {
             invitation.GenerateClaimDetails();
         }
+
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task ClaimInvitation(FacilityInvitation invitation, User user)
+    {
+        invitation.Claim();
+
+        var facility = invitation.Facility;
+        if (invitation.Type == FacilityInvitationType.FacilityTenant)
+        {
+            // TODO: this means the tenancy has been set but the owner may not
+            return;
+        }
+
+        await _dbContext.Entry(facility)
+            .Collection(x => x.Managers)
+            .LoadAsync();
+        await _dbContext.Entry(facility)
+            .Collection(x => x.Owners)
+            .LoadAsync();
+
+        if (invitation.Type == FacilityInvitationType.FacilityManager)
+            facility.AddManager(user);
+        else if (invitation.Type == FacilityInvitationType.FacilityOwner)
+            facility.AddOwner(user);
 
         await _dbContext.SaveChangesAsync();
     }

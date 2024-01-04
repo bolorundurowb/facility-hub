@@ -52,6 +52,27 @@ public class InvitationsController : ApiController
         return Ok("Invitation valid");
     }
 
+    [HttpPost("{invitationId:guid}/claim")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(GenericRes), 403)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> ClaimInvitation(Guid invitationId, [FromBody] InvitationHandlingReq handlingReq)
+    {
+        var userId = User.GetCallerId();
+        var user = await _userService.FindById(userId);
+
+        if (user == null)
+            return Forbidden("User account not found");
+        
+        var invitation = await _facilityService.FindInvitationById(invitationId);
+
+        if (invitation == null || invitation.ClaimToken != handlingReq.ClaimToken || invitation.IsClaimed ||
+            invitation.IsExpired())
+            return BadRequest("Invalid invitation");
+
+        
+    }
+
     #region Private Helpers
 
     [NonAction]

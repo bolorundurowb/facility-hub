@@ -18,4 +18,6 @@ public interface IFacilityService
     Task<FacilityInvitation?> FindInvitationById(Guid invitationId);
 
     Task InviteContributor(Facility facility, User user, FacilityInvitationType invitationType, string emailAddress);
+
+    Task ClaimInvitation(FacilityInvitation invitation, User user);
 }

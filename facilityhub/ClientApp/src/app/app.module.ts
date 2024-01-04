@@ -10,7 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IconModule, IconSetService } from '@coreui/icons-angular';
 import {
   ButtonDirective,
-  ContainerComponent,
+  ContainerComponent, DropdownComponent, DropdownItemDirective, DropdownMenuDirective, DropdownToggleDirective,
   NavbarBrandDirective,
   NavbarComponent,
   NavbarNavComponent,
@@ -36,6 +36,10 @@ import {
     NavbarBrandDirective,
     NavLinkDirective,
     ButtonDirective,
+    DropdownComponent,
+    DropdownToggleDirective,
+    DropdownMenuDirective,
+    DropdownItemDirective,
   ],
   providers: [IconSetService],
   bootstrap: [AppComponent]

@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import {EventEmitter, Inject, Injectable, Output} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { asPromise } from '../utils';
 
@@ -6,6 +6,8 @@ import { asPromise } from '../utils';
   providedIn: 'root'
 })
 export class AuthService {
+  authenticated = new EventEmitter<boolean>();
+
   userKey = 'fh-user';
   tokenKey = 'fh-token';
   expiryKey = 'fh-expires-at';
@@ -27,6 +29,8 @@ export class AuthService {
     localStorage.removeItem(this.userKey);
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.expiryKey);
+
+    this.authenticated.emit(false);
   }
 
   isLoggedIn() {
@@ -39,9 +43,15 @@ export class AuthService {
     localStorage.setItem(this.userKey, JSON.stringify(user));
     localStorage.setItem(this.tokenKey, token);
     localStorage.setItem(this.expiryKey, expires);
+
+    this.authenticated.emit(true);
   }
 
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
+  }
+
+  getUser(): any {
+    return JSON.parse(localStorage.getItem(this.userKey) || '{}');
   }
 }

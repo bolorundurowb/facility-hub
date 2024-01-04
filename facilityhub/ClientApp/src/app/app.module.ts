@@ -8,6 +8,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthComponent } from './auth/auth.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IconModule, IconSetService } from '@coreui/icons-angular';
+import {
+  ContainerComponent,
+  NavbarBrandDirective,
+  NavbarComponent,
+  NavbarNavComponent,
+  NavItemComponent, NavLinkDirective
+} from "@coreui/angular";
 
 @NgModule({
   declarations: [
@@ -17,10 +24,16 @@ import { IconModule, IconSetService } from '@coreui/icons-angular';
   ],
   imports: [
     AppRoutingModule,
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    BrowserModule.withServerTransition({appId: 'ng-cli-universal'}),
     BrowserAnimationsModule,
     HttpClientModule,
     IconModule,
+    NavItemComponent,
+    NavbarNavComponent,
+    NavbarComponent,
+    ContainerComponent,
+    NavbarBrandDirective,
+    NavLinkDirective,
   ],
   providers: [IconSetService],
   bootstrap: [AppComponent]

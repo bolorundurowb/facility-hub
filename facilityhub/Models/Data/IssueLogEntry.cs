@@ -6,9 +6,9 @@ namespace FacilityHub.Models.Data;
 public class IssueLogEntry
 {
     public IssueStatus? TransitionedFrom { get; private set; }
-    
+
     public IssueStatus TransitionedTo { get; private set; }
-    
+
     [StringLength(1024)]
     public string? Notes { get; private set; }
 

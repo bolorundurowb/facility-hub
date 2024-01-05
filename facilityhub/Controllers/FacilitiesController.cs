@@ -63,6 +63,18 @@ public class FacilitiesController : ApiController
         return Ok(Mapper.Map<FacilityRes>(facility));
     }
 
+    [HttpGet("{facilityId:guid}/documents")]
+    [ProducesResponseType(typeof(List<DocumentRes>), 200)]
+    [ProducesResponseType(typeof(GenericRes), 403)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> GetDocuments(Guid facilityId)
+    {
+        var userId = User.GetCallerId();
+        var documents = await _facilityService.GetAllDocuments(userId, facilityId);
+
+        return Ok(Mapper.Map<List<DocumentRes>>(documents));
+    }
+
     [HttpPost("{facilityId:guid}/documents")]
     [ProducesResponseType(typeof(DocumentRes), 201)]
     [ProducesResponseType(typeof(GenericRes), 403)]

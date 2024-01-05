@@ -17,7 +17,11 @@ public class FacilityService : IFacilityService
     {
         return _dbContext.Facilities
             .AsNoTracking()
-            .Where(x => x.Owners.Any(y => y.Id == userId) || x.Managers.Any(y => y.Id == userId))
+            .Where(x =>
+                x.Tenant!.User!.Id == userId
+                || x.Owners.Any(y => y.Id == userId)
+                || x.Managers.Any(y => y.Id == userId)
+            )
             .Select(x => new FacilitySummaryDto(x.Id, x.Name, x.Address))
             .ToListAsync();
     }
@@ -27,8 +31,11 @@ public class FacilityService : IFacilityService
         return _dbContext.Facilities
             .Include(x => x.Tenant)
             .Include(x => x.Tenant!.User)
-            .Include(x => x.Documents)
-            .Where(x => x.Owners.Any(y => y.Id == userId) || x.Managers.Any(y => y.Id == userId))
+            .Where(x =>
+                x.Tenant!.User!.Id == userId
+                || x.Owners.Any(y => y.Id == userId)
+                || x.Managers.Any(y => y.Id == userId)
+            )
             .FirstOrDefaultAsync(x => x.Id == facilityId);
     }
 
@@ -39,6 +46,16 @@ public class FacilityService : IFacilityService
         await _dbContext.SaveChangesAsync();
 
         return facility;
+    }
+
+    public Task<List<Document>> GetAllDocuments(Guid userId, Guid facilityId)
+    {
+        return _dbContext.Facilities
+            .Where(x => x.Id == facilityId)
+            .Where(x => x.Owners.Any(y => y.Id == userId) || x.Managers.Any(y => y.Id == userId))
+            .SelectMany(x => x.Documents)
+            .OrderByDescending(x => x.CreatedAt)
+            .ToListAsync();
     }
 
     public async Task<Document> AddDocument(Facility facility, User user, DocumentType documentType,
@@ -66,7 +83,8 @@ public class FacilityService : IFacilityService
             .FirstOrDefaultAsync(x => x.Id == invitationId);
     }
 
-    public async Task<Tenant> SetTenant(Facility facility, User inviter, User? user, string emailAddress, DateOnly startsAt,
+    public async Task<Tenant> SetTenant(Facility facility, User inviter, User? user, string emailAddress,
+        DateOnly startsAt,
         DateOnly endsAt, DateOnly paidAt)
     {
         var tenant = facility.SetTenant(inviter, user, startsAt, endsAt, paidAt);

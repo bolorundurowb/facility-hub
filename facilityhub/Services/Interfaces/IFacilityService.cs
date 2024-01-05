@@ -12,6 +12,8 @@ public interface IFacilityService
 
     Task<Facility> Create(User manager, string name, string address, LocationDto? location);
 
+    Task<List<Document>> GetAllDocuments(Guid userId, Guid facilityId);
+
     Task<Document> AddDocument(Facility facility, User user, DocumentType documentType,
         IUploadResult details);
 

@@ -60,7 +60,10 @@ public class FacilitiesController : ApiController
         if (facility == null)
             return NotFound("Facility not found");
 
-        return Ok(Mapper.Map<FacilityRes>(facility));
+        var response = Mapper.Map<FacilityRes>(facility);
+        response.IsTenant = facility.Tenant?.User?.Id == userId;
+
+        return Ok(response);
     }
 
     [HttpGet("{facilityId:guid}/documents")]

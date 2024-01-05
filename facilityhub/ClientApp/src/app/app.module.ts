@@ -16,11 +16,13 @@ import {
   NavbarNavComponent,
   NavItemComponent, NavLinkDirective
 } from "@coreui/angular";
+import { DashboardComponent } from "./dashboard/dashboard.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     AuthComponent,
+    DashboardComponent,
     HomeComponent,
   ],
   imports: [

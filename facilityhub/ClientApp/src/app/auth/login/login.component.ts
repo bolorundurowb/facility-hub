@@ -15,7 +15,6 @@ interface LoginPayload {
 })
 export class LoginComponent {
   emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d\s]).{8,}$/;
 
   isBusy = false;
   hasError = false;

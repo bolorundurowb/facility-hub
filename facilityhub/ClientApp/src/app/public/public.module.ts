@@ -2,18 +2,27 @@ import { NgModule } from "@angular/core";
 import { PublicRoutingModule } from "./public-routing.module";
 import { HomeComponent } from "./home/home.component";
 import {
-  ButtonDirective, ContainerComponent,
-  DropdownComponent, DropdownItemDirective, DropdownMenuDirective,
+  ButtonDirective,
+  ContainerComponent,
+  DropdownComponent,
+  DropdownItemDirective,
+  DropdownMenuDirective,
+  DropdownToggleDirective,
   NavbarComponent,
   NavbarNavComponent,
-  NavItemComponent
+  NavItemComponent,
+  NavLinkDirective
 } from "@coreui/angular";
+import { CommonModule } from "@angular/common";
+import { PublicComponent } from "./public.component";
 
 @NgModule({
   declarations: [
-    HomeComponent
+    HomeComponent,
+    PublicComponent,
   ],
   imports: [
+    CommonModule,
     PublicRoutingModule,
     NavbarComponent,
     NavbarNavComponent,
@@ -23,6 +32,8 @@ import {
     DropdownMenuDirective,
     DropdownItemDirective,
     ContainerComponent,
+    DropdownToggleDirective,
+    NavLinkDirective,
   ]
 })
 export class PublicModule {

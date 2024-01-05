@@ -11,9 +11,11 @@ import {
   FormLabelDirective,
   FormTextDirective
 } from '@coreui/angular';
+import { AuthComponent } from "./auth.component";
 
 @NgModule({
   declarations: [
+    AuthComponent,
     LoginComponent,
     RegisterComponent
   ],

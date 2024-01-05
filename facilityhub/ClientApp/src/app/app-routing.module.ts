@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { HomeComponent } from './home/home.component';
 import { AuthComponent } from "./auth/auth.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
+import { PublicComponent } from "./public/public.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
-    pathMatch: 'full'
+    component: PublicComponent,
+    loadChildren: () => import('./public/public.module').then(x => x.PublicModule)
   },
   {
     path: 'auth',

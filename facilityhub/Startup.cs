@@ -22,6 +22,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddLogging();
         services.AddCors();
         services.AddRouting(option => option.LowercaseUrls = true);
         services.AddControllers()
@@ -68,6 +69,7 @@ public class Startup
                 .EnableDetailedErrors()
 #endif
         );
+        services.AddHostedService<DatabaseMigrationService>();
 
         var config = TypeAdapterConfig.GlobalSettings;
         config.Scan(Assembly.GetExecutingAssembly());

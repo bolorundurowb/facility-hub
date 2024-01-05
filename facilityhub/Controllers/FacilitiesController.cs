@@ -15,8 +15,7 @@ public class FacilitiesController : ApiController
     private readonly IMediaHandlerService _mediaService;
 
     public FacilitiesController(IMapper mapper, IFacilityService facilityService, IUserService userService,
-        IMediaHandlerService mediaService) :
-        base(mapper)
+        IMediaHandlerService mediaService) : base(mapper)
     {
         _facilityService = facilityService;
         _userService = userService;

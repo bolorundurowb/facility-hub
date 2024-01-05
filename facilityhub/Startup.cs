@@ -76,6 +76,7 @@ public class Startup
         services.AddMapster();
 
         services.AddScoped<IFacilityService, FacilityService>();
+        services.AddScoped<IIssueService, IssueService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IMediaHandlerService, CloudinaryService>();
     }

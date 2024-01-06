@@ -1,8 +1,8 @@
 import { Component, Inject } from '@angular/core';
-import { Title } from "@angular/platform-browser";
+import { Title } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services';
-import {Router} from "@angular/router";
+import { Router } from '@angular/router';
 
 interface RegisterPayload {
   firstName?: string;
@@ -40,7 +40,7 @@ export class RegisterComponent {
         const { token, user, expiresAt } = await this.authService.register(this.payload);
         this.authService.persistAuth(user, token, expiresAt);
 
-        await this.router.navigate(['/']);
+        await this.router.navigate([ 'dashboard' ]);
       }
     } catch (e: any) {
       this.errorMessage = e.message;
@@ -73,7 +73,7 @@ export class RegisterComponent {
 
     if (message) {
       this.errorMessage = message;
-      this.hasError = true
+      this.hasError = true;
     } else {
       this.dismissError();
     }

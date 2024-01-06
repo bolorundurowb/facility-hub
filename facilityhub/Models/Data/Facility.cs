@@ -7,24 +7,24 @@ namespace FacilityHub.Models.Data;
 public class Facility : Entity
 {
     [StringLength(256)]
-    public string Name { get; set; }
+    public string Name { get; private set; }
 
     [StringLength(1024)]
-    public string Address { get; set; }
+    public string Address { get; private set; }
 
-    public Point? Location { get; set; }
+    public Point? Location { get; private set; }
 
-    public List<User> Managers { get; set; }
+    public List<User> Managers { get; private set; }
 
-    public List<User> Owners { get; set; } = new();
+    public List<User> Owners { get; private set; } = new();
 
-    public Tenant? Tenant { get; set; }
+    public Tenant? Tenant { get; private set; }
 
-    public List<Document> Documents { get; set; } = new();
+    public List<Document> Documents { get; private set; } = new();
 
-    public List<Issue> Issues { get; set; } = new();
+    public List<Issue> Issues { get; private set; } = new();
 
-    public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset CreatedAt { get; private set; }
 
 #pragma warning disable CS8618
     private Facility() { }
@@ -40,4 +40,28 @@ public class Facility : Entity
         if (location is not null)
             Location = new Point(location.Longitude, location.Latitude);
     }
+
+    public void AddManager(User user)
+    {
+        // if the user is an owner, they don't need to be a manager
+        var isOwner = Owners.Any(x => x.Id == user.Id);
+        var isAlreadyManager = Managers.Any(x => x.Id == user.Id);
+
+        if (!isOwner && !isAlreadyManager)
+            Managers.Add(user);
+    }
+
+    public void AddOwner(User user)
+    {
+        // if the user is a manager, then promote
+        var isAlreadyOwner = Owners.Any(x => x.Id == user.Id);
+
+        Managers.RemoveAll(x => x.Id == user.Id);
+
+        if (!isAlreadyOwner)
+            Owners.Add(user);
+    }
+
+    public Tenant SetTenant(User inviter, User? user, DateOnly startsAt, DateOnly endsAt, DateOnly paidAt) =>
+        Tenant = new Tenant(inviter, startsAt, endsAt, paidAt, user);
 }

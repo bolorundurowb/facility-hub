@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace FacilityHub.Models.Validators;
 
-public class UploadDocumentReqValidator  : AbstractValidator<UploadDocumentReq>
+public class UploadDocumentReqValidator : AbstractValidator<UploadDocumentReq>
 {
     public UploadDocumentReqValidator()
     {

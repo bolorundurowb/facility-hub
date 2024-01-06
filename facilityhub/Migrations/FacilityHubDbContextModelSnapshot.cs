@@ -56,6 +56,9 @@ namespace FacilityHub.Migrations
                     b.Property<long>("FileSize")
                         .HasColumnType("bigint");
 
+                    b.Property<Guid?>("IssueId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("MimeType")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -77,6 +80,8 @@ namespace FacilityHub.Migrations
                     b.HasIndex("CreatedById");
 
                     b.HasIndex("FacilityId");
+
+                    b.HasIndex("IssueId");
 
                     b.HasIndex("TenantId");
 
@@ -165,6 +170,16 @@ namespace FacilityHub.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)");
+
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasMaxLength(4096)
+                        .HasColumnType("character varying(4096)");
+
                     b.Property<Guid?>("FacilityId")
                         .HasColumnType("uuid");
 
@@ -173,6 +188,18 @@ namespace FacilityHub.Migrations
 
                     b.Property<Guid>("FiledById")
                         .HasColumnType("uuid");
+
+                    b.Property<List<IssueLogEntry>>("Log")
+                        .IsRequired()
+                        .HasColumnType("jsonb");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
@@ -200,7 +227,7 @@ namespace FacilityHub.Migrations
                         .IsRequired()
                         .HasColumnType("jsonb");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -285,6 +312,10 @@ namespace FacilityHub.Migrations
                         .WithMany("Documents")
                         .HasForeignKey("FacilityId");
 
+                    b.HasOne("FacilityHub.Models.Data.Issue", null)
+                        .WithMany("Documents")
+                        .HasForeignKey("IssueId");
+
                     b.HasOne("FacilityHub.Models.Data.Tenant", null)
                         .WithMany("Documents")
                         .HasForeignKey("TenantId");
@@ -345,9 +376,7 @@ namespace FacilityHub.Migrations
 
                     b.HasOne("FacilityHub.Models.Data.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("CreatedBy");
 
@@ -389,6 +418,11 @@ namespace FacilityHub.Migrations
                     b.Navigation("Documents");
 
                     b.Navigation("Issues");
+                });
+
+            modelBuilder.Entity("FacilityHub.Models.Data.Issue", b =>
+                {
+                    b.Navigation("Documents");
                 });
 
             modelBuilder.Entity("FacilityHub.Models.Data.Tenant", b =>

@@ -1,11 +1,9 @@
-﻿using FacilityHub.Enums;
-using FacilityHub.Extensions;
+﻿using FacilityHub.Extensions;
 using FacilityHub.Models.DTOs;
 using FacilityHub.Models.Request;
 using FacilityHub.Models.Response;
 using FacilityHub.Services.Interfaces;
 using MapsterMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FacilityHub.Controllers;
@@ -13,16 +11,17 @@ namespace FacilityHub.Controllers;
 public class FacilitiesController : ApiController
 {
     private readonly IFacilityService _facilityService;
+    private readonly IIssueService _issueService;
     private readonly IUserService _userService;
     private readonly IMediaHandlerService _mediaService;
 
     public FacilitiesController(IMapper mapper, IFacilityService facilityService, IUserService userService,
-        IMediaHandlerService mediaService) :
-        base(mapper)
+        IMediaHandlerService mediaService, IIssueService issueService) : base(mapper)
     {
         _facilityService = facilityService;
         _userService = userService;
         _mediaService = mediaService;
+        _issueService = issueService;
     }
 
     [HttpGet("")]
@@ -62,7 +61,22 @@ public class FacilitiesController : ApiController
         if (facility == null)
             return NotFound("Facility not found");
 
-        return Ok(Mapper.Map<FacilityRes>(facility));
+        var response = Mapper.Map<FacilityRes>(facility);
+        response.IsTenant = facility.Tenant?.User?.Id == userId;
+
+        return Ok(response);
+    }
+
+    [HttpGet("{facilityId:guid}/documents")]
+    [ProducesResponseType(typeof(List<DocumentRes>), 200)]
+    [ProducesResponseType(typeof(GenericRes), 403)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> GetDocuments(Guid facilityId)
+    {
+        var userId = User.GetCallerId();
+        var documents = await _facilityService.GetAllDocuments(userId, facilityId);
+
+        return Ok(Mapper.Map<List<DocumentRes>>(documents));
     }
 
     [HttpPost("{facilityId:guid}/documents")]
@@ -91,5 +105,17 @@ public class FacilitiesController : ApiController
         var document = await _facilityService.AddDocument(facility, user, req.Type, result);
 
         return Created(Mapper.Map<DocumentRes>(document));
+    }
+
+    [HttpGet("{facilityId:guid}/issues")]
+    [ProducesResponseType(typeof(List<IssueRes>), 200)]
+    [ProducesResponseType(typeof(GenericRes), 403)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> GetIssues(Guid facilityId)
+    {
+        var userId = User.GetCallerId();
+        var issues = await _issueService.GetAllForFacility(userId, facilityId);
+
+        return Ok(Mapper.Map<List<IssueRes>>(issues));
     }
 }

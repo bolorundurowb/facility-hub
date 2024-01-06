@@ -2,11 +2,11 @@ namespace FacilityHub.Models.Data;
 
 public class TenancyHistory
 {
-    public DateTimeOffset PeriodStart { get; private set; }
+    public DateOnly PeriodStart { get; private set; }
 
-    public DateTimeOffset PeriodEnd { get; private set; }
+    public DateOnly PeriodEnd { get; private set; }
 
-    public DateTimeOffset PaidAt { get; private set; }
+    public DateOnly PaidAt { get; private set; }
 
     public DateTimeOffset CreatedAt { get; private set; }
 
@@ -14,7 +14,7 @@ public class TenancyHistory
     private TenancyHistory() { }
 #pragma warning restore CS8618
 
-    public TenancyHistory(DateTimeOffset periodStart, DateTimeOffset periodEnd, DateTimeOffset paidAt)
+    public TenancyHistory(DateOnly periodStart, DateOnly periodEnd, DateOnly paidAt)
     {
         PeriodStart = periodStart;
         PeriodEnd = periodEnd;

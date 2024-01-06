@@ -11,7 +11,7 @@ public static class Config
     public static string Audience => "facilityhub.africa";
 
     public static string Issuer => "facilityhub.africa";
-    
+
     public const long MaxDocumentSize = 10 * 1024 * 1024; // 10MB
 
     public static readonly string[] AcceptedPhotoFileExtensions = { ".jpg", ".jpeg", ".png", ".svg", ".webp" };

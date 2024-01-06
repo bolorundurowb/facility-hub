@@ -1,8 +1,8 @@
-import {NgModule} from "@angular/core";
-import {LoginComponent} from "./login/login.component";
-import {AuthRoutingModule} from "./auth-routing.module";
-import {RegisterComponent} from "./register/register.component";
-import { FormsModule } from "@angular/forms";
+import { NgModule } from '@angular/core';
+import { LoginComponent } from './login/login.component';
+import { AuthRoutingModule } from './auth-routing.module';
+import { RegisterComponent } from './register/register.component';
+import { FormsModule } from '@angular/forms';
 import {
   AlertComponent,
   ButtonDirective,
@@ -11,9 +11,11 @@ import {
   FormLabelDirective,
   FormTextDirective
 } from '@coreui/angular';
+import { AuthComponent } from './auth.component';
 
 @NgModule({
   declarations: [
+    AuthComponent,
     LoginComponent,
     RegisterComponent
   ],
@@ -28,4 +30,5 @@ import {
     AlertComponent
   ]
 })
-export class AuthModule {}
+export class AuthModule {
+}

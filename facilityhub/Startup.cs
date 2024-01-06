@@ -7,7 +7,6 @@ using FacilityHub.Services.Interfaces;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Mapster;
-using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -23,6 +22,7 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddLogging();
         services.AddCors();
         services.AddRouting(option => option.LowercaseUrls = true);
         services.AddControllers()
@@ -69,12 +69,14 @@ public class Startup
                 .EnableDetailedErrors()
 #endif
         );
+        services.AddHostedService<DatabaseMigrationService>();
 
         var config = TypeAdapterConfig.GlobalSettings;
         config.Scan(Assembly.GetExecutingAssembly());
         services.AddMapster();
 
         services.AddScoped<IFacilityService, FacilityService>();
+        services.AddScoped<IIssueService, IssueService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IMediaHandlerService, CloudinaryService>();
     }

@@ -7,7 +7,7 @@ public class Document : Entity
 {
     [StringLength(256)]
     public string ExternalId { get; private set; }
-    
+
     public DocumentType Type { get; private set; }
 
     [StringLength(256)]

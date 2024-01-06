@@ -1,7 +1,7 @@
-import { Component } from "@angular/core";
-import { Title } from "@angular/platform-browser";
-import {AuthService} from "../../services";
-import {Router} from "@angular/router";
+import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { AuthService } from '../../services';
+import { Router } from '@angular/router';
 
 interface LoginPayload {
   emailAddress?: string;
@@ -15,7 +15,6 @@ interface LoginPayload {
 })
 export class LoginComponent {
   emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d\s]).{8,}$/;
 
   isBusy = false;
   hasError = false;
@@ -36,7 +35,7 @@ export class LoginComponent {
         const { token, user, expiresAt } = await this.authService.login(this.payload);
         this.authService.persistAuth(user, token, expiresAt);
 
-        await this.router.navigate(['/']);
+        await this.router.navigate([ 'dashboard' ]);
       }
     } catch (e: any) {
       this.errorMessage = e.message;
@@ -63,7 +62,7 @@ export class LoginComponent {
 
     if (message) {
       this.errorMessage = message;
-      this.hasError = true
+      this.hasError = true;
     } else {
       this.dismissError();
     }

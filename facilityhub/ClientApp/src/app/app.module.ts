@@ -6,6 +6,7 @@ import { IconModule, IconSetService } from '@coreui/icons-angular';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { SidebarModule } from "@coreui/angular";
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserAnimationsModule,
     HttpClientModule,
     IconModule,
+    SidebarModule
   ],
   providers: [ IconSetService ],
   bootstrap: [ AppComponent ]

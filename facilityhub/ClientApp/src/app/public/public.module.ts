@@ -7,7 +7,7 @@ import {
   DropdownComponent,
   DropdownItemDirective,
   DropdownMenuDirective,
-  DropdownToggleDirective,
+  DropdownToggleDirective, NavbarBrandDirective,
   NavbarComponent,
   NavbarNavComponent,
   NavItemComponent,
@@ -34,6 +34,7 @@ import { PublicComponent } from "./public.component";
     ContainerComponent,
     DropdownToggleDirective,
     NavLinkDirective,
+    NavbarBrandDirective,
   ]
 })
 export class PublicModule {

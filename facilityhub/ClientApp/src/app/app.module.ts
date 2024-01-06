@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SidebarModule } from '@coreui/angular';
 import { AuthInterceptor, ErrorInterceptor } from './interceptors';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { AuthInterceptor, ErrorInterceptor } from './interceptors';
     BrowserAnimationsModule,
     HttpClientModule,
     IconModule,
-    SidebarModule
+    LeafletModule,
+    SidebarModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

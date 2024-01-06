@@ -3,7 +3,13 @@ import { FacilitiesComponent } from './facilities/facilities.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import {
-  NavItemComponent,
+  ButtonDirective,
+  CardBodyComponent,
+  CardComponent, CardHeaderComponent, CardImgDirective, CardTextDirective, CardTitleDirective,
+  ColComponent,
+  ContainerComponent,
+  HeaderComponent,
+  NavItemComponent, RowComponent,
   SidebarBrandComponent,
   SidebarComponent,
   SidebarNavComponent,
@@ -12,6 +18,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { IconComponent, IconDirective } from '@coreui/icons-angular';
 import { HomeComponent } from './home/home.component';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 @NgModule({
   declarations: [
@@ -21,6 +28,7 @@ import { HomeComponent } from './home/home.component';
   ],
   imports: [
     CommonModule,
+    LeafletModule,
     DashboardRoutingModule,
     SidebarComponent,
     SidebarBrandComponent,
@@ -29,6 +37,16 @@ import { HomeComponent } from './home/home.component';
     NavItemComponent,
     IconComponent,
     IconDirective,
+    HeaderComponent,
+    ContainerComponent,
+    RowComponent,
+    ColComponent,
+    CardComponent,
+    CardBodyComponent,
+    CardHeaderComponent,
+    CardTextDirective,
+    ButtonDirective,
+    CardImgDirective,
   ],
 })
 export class DashboardModule {

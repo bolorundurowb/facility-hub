@@ -1,4 +1,6 @@
-﻿using FacilityHub.Models.Data;
+﻿using CloudinaryDotNet.Actions;
+using FacilityHub.Models.Data;
+using FacilityHub.Models.DTOs;
 using FacilityHub.Models.Response;
 using Mapster;
 
@@ -24,6 +26,11 @@ public class Mappings : IRegister
                 vm.StartsAt = currentTenancy.PeriodStart;
                 vm.EndsAt = currentTenancy.PeriodEnd;
             })
+            .Compile();
+
+        config.NewConfig<Point, LocationDto>()
+            .Map(x => x.Longitude, y => y.X)
+            .Map(x => x.Latitude, y => y.Y)
             .Compile();
     }
 }

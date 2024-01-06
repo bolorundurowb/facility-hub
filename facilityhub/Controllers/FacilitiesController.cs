@@ -31,7 +31,7 @@ public class FacilitiesController : ApiController
         var userId = User.GetCallerId();
         var facilities = await _facilityService.GetAll(userId);
 
-        return Ok(facilities);
+        return Ok(Mapper.Map<List<FacilitySummaryDto>>(facilities));
     }
 
     [HttpPost("")]

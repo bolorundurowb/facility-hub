@@ -1,1 +1,31 @@
-<div>Hello</div>
+<div>
+  <c-header>
+    <h3>Facilities</h3>
+  </c-header>
+
+  <c-container>
+    <c-row>
+      <c-col [xs]="4" [sm]="6" *ngFor="let facility of facilities">
+        <c-card class="facility-card">
+          <ng-container *ngIf="facility.location">
+            <div cCardImg="top"
+                 class="map"
+                 leaflet
+                 [leafletOptions]="getMapOptions(facility)">
+            </div>
+          </ng-container>
+
+          <c-card-header>
+            <h5>{{ facility.name }}</h5>
+          </c-card-header>
+          <c-card-body>
+            <p cCardText>
+              <span style="font-weight: bold">Address:</span> {{ facility.address }}
+            </p>
+            <button cButton (click)="goToDetails(facility.id)">Details</button>
+          </c-card-body>
+        </c-card>
+      </c-col>
+    </c-row>
+  </c-container>
+</div>

@@ -6,7 +6,7 @@ namespace FacilityHub.Services.Interfaces;
 
 public interface IFacilityService
 {
-    Task<List<FacilitySummaryDto>> GetAll(Guid userId);
+    Task<List<Facility>> GetAll(Guid userId);
 
     Task<Facility?> FindById(Guid userId, Guid facilityId);
 

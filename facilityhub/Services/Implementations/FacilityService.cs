@@ -13,7 +13,7 @@ public class FacilityService : IFacilityService
 
     public FacilityService(FacilityHubDbContext dbContext) => _dbContext = dbContext;
 
-    public Task<List<FacilitySummaryDto>> GetAll(Guid userId)
+    public Task<List<Facility>> GetAll(Guid userId)
     {
         return _dbContext.Facilities
             .AsNoTracking()
@@ -22,7 +22,6 @@ public class FacilityService : IFacilityService
                 || x.Owners.Any(y => y.Id == userId)
                 || x.Managers.Any(y => y.Id == userId)
             )
-            .Select(x => new FacilitySummaryDto(x.Id, x.Name, x.Address))
             .ToListAsync();
     }
 

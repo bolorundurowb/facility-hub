@@ -1,7 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Title } from '@angular/platform-browser';
-import { AuthService } from './services';
+import { Component } from '@angular/core';
 import { IconSetService } from '@coreui/icons-angular';
 import { cilBuilding } from '@coreui/icons';
 

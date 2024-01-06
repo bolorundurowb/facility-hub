@@ -1,4 +1,4 @@
-import {EventEmitter, Inject, Injectable, Output} from '@angular/core';
+import { EventEmitter, Inject, Injectable, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { asPromise } from '../utils';
 
@@ -13,7 +13,7 @@ export class AuthService {
   expiryKey = 'fh-expires-at';
   private readonly apiBaseUrl;
 
-  constructor(private http: HttpClient,  @Inject('BASE_URL') baseUrl: string) {
+  constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.apiBaseUrl = `${baseUrl}api/auth`;
   }
 

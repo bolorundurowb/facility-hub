@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'fh-auth',
@@ -6,7 +6,7 @@ import { Component } from "@angular/core";
     <div class="container">
       <div class="box">
         <div class="logo">
-          <img src="/assets/logo/main-transparent.svg" />
+          <img src="/assets/logo/main-transparent.svg"/>
         </div>
         <router-outlet></router-outlet>
       </div>

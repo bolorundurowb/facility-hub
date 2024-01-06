@@ -1,6 +1,6 @@
-import { NgModule } from "@angular/core";
-import { PublicRoutingModule } from "./public-routing.module";
-import { HomeComponent } from "./home/home.component";
+import { NgModule } from '@angular/core';
+import { PublicRoutingModule } from './public-routing.module';
+import { HomeComponent } from './home/home.component';
 import {
   ButtonDirective,
   ContainerComponent,
@@ -12,9 +12,9 @@ import {
   NavbarNavComponent,
   NavItemComponent,
   NavLinkDirective
-} from "@coreui/angular";
-import { CommonModule } from "@angular/common";
-import { PublicComponent } from "./public.component";
+} from '@coreui/angular';
+import { CommonModule } from '@angular/common';
+import { PublicComponent } from './public.component';
 
 @NgModule({
   declarations: [

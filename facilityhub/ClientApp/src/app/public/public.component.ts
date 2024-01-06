@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { Title } from "@angular/platform-browser";
-import { Router } from "@angular/router";
-import { AuthService } from "../services";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { AuthService } from '../services';
 
 @Component({
   selector: 'fh-public',

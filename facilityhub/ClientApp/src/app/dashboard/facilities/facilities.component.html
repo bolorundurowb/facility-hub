@@ -56,6 +56,14 @@
 
   <c-modal-body>
     <form cForm>
+      <c-alert
+        fade
+        dismissible
+        color="danger"
+        [(visible)]="hasError">
+        {{ errorMessage }}
+      </c-alert>
+
       <div class="mb-3">
         <label cLabel>Facility Name</label>
         <input cFormControl name="name" [(ngModel)]="newFacilityPayload.name">
@@ -83,6 +91,6 @@
     <button cButton color="secondary" (click)="dismissNewFacilityModal()">
       Close
     </button>
-    <button cButton color="success" (click)="createFacility()">Create Facility</button>
+    <button cButton color="success" [disabled]="isCreatingFacility" (click)="createFacility()">Create Facility</button>
   </c-modal-footer>
 </c-modal>

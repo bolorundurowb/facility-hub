@@ -3,6 +3,7 @@ import { FacilitiesComponent } from './facilities/facilities.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import {
+  AlertComponent,
   ButtonCloseDirective,
   ButtonDirective, CalloutComponent,
   CardBodyComponent,
@@ -64,6 +65,7 @@ import { FormsModule } from '@angular/forms';
     FormLabelDirective,
     FormsModule,
     FormTextDirective,
+    AlertComponent,
   ],
 })
 export class DashboardModule {

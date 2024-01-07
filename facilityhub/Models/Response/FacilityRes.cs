@@ -1,4 +1,6 @@
-﻿namespace FacilityHub.Models.Response;
+﻿using FacilityHub.Models.DTOs;
+
+namespace FacilityHub.Models.Response;
 
 public class FacilityRes
 {
@@ -7,6 +9,8 @@ public class FacilityRes
     public string Name { get; set; } = null!;
 
     public TenantRes? Tenant { get; set; }
+
+    public LocationDto? Location { get; set; }
 
     public bool IsTenant { get; set; }
 }

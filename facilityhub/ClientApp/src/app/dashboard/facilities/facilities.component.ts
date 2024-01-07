@@ -6,6 +6,15 @@ import { getLayers } from '../../utils';
 import * as Leaflet from 'leaflet';
 import { cilPlus } from '@coreui/icons';
 
+interface NewFacilityPayload {
+  name?: string;
+  address?: string;
+  location?: {
+    longitude?: number;
+    latitude?: number;
+  }
+}
+
 @Component({
   selector: 'fh-dashboard-facilities',
   templateUrl: './facilities.component.html',
@@ -17,8 +26,11 @@ export class FacilitiesComponent implements OnInit {
 
   isNewModalVisible = false;
   isCreatingFacility = false;
-  newFacilityPayload: any = {};
+  newFacilityPayload: NewFacilityPayload = {};
   newFacilityMapLayers: Leaflet.Layer[] = [];
+
+  hasError = false;
+  errorMessage: string | undefined;
 
   constructor(title: Title, private facilitiesService: FacilitiesService, private router: Router) {
     title.setTitle('Facilities | Facility Hub');
@@ -61,12 +73,23 @@ export class FacilitiesComponent implements OnInit {
       return;
     }
 
-    this.isNewModalVisible = true;
+    this.isNewModalVisible = false;
     this.newFacilityPayload = {};
   }
 
   async createFacility() {
     this.isCreatingFacility = true;
+
+    try {
+      const response = await this.facilitiesService.create(this.newFacilityPayload);
+      this.facilities.push(response);
+      this.dismissNewFacilityModal();
+    }  catch (e: any) {
+      this.errorMessage = e.message;
+      this.hasError = true;
+    } finally {
+      this.isCreatingFacility = false;
+    }
   }
 
   getNewFacilityMapOptions(): Leaflet.MapOptions {

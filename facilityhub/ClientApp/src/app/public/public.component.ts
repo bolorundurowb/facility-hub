@@ -6,11 +6,11 @@ import { AuthService } from '../services';
 @Component({
   selector: 'fh-public',
   template: `
-    <c-navbar colorScheme="light" expand="lg" class="bg-light">
+    <c-navbar colorScheme="light" expand="lg" class="bg-dark">
       <c-container fluid>
         <a cNavbarBrand routerLink="/">
-          <img src="./assets/img/brand/coreui-signet.svg" alt="" width="22" height="24"/>
-          <span class="align-middle ms-2">Facility Hub</span>
+          <img class="brand-logo" src="/assets/logo/white-transparent.svg" style="margin-top: -1rem; margin-bottom: -1rem;"/>
+          <span class="align-middle ms-2 text-light">Facility Hub</span>
         </a>
         <c-navbar-nav class="d-flex">
           <ng-container *ngIf="!isLoggedIn">
@@ -33,7 +33,7 @@ import { AuthService } from '../services';
           </ng-container>
           <ng-container *ngIf="isLoggedIn">
             <c-dropdown variant="nav-item" [popper]="false">
-              <a cDropdownToggle cNavLink>
+              <a cDropdownToggle cNavLink class="text-light">
                 {{ user.firstName }} {{ user.lastName }}
               </a>
               <ul cDropdownMenu>
@@ -60,9 +60,8 @@ import { AuthService } from '../services';
 
     <router-outlet></router-outlet>
   `,
-  styleUrl: './public.component.scss'
 })
-export class PublicComponent implements OnInit, OnDestroy {
+export class PublicComponent {
   isLoggedIn = false;
   user: any;
 
@@ -71,10 +70,6 @@ export class PublicComponent implements OnInit, OnDestroy {
 
     this.isLoggedIn = authService.isLoggedIn();
     this.user = authService.getUser();
-  }
-
-  ngOnInit() {
-    this.authService.authenticated.subscribe(this.handleAuthChange);
   }
 
   async goToLogin() {
@@ -89,18 +84,8 @@ export class PublicComponent implements OnInit, OnDestroy {
     await this.router.navigate([ 'dashboard' ]);
   }
 
-  async logOut() {
+  logOut() {
     this.authService.logout();
-    await this.router.navigate([ '/' ]);
-  }
-
-  handleAuthChange(event: boolean) {
-    console.log('hello', event);
-    this.isLoggedIn = event;
-    this.user = this.authService.getUser();
-  }
-
-  ngOnDestroy() {
-    this.authService.authenticated.unsubscribe();
+    location.reload();
   }
 }

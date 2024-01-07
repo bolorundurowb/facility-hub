@@ -6,8 +6,6 @@ import { asPromise } from '../utils';
   providedIn: 'root'
 })
 export class AuthService {
-  authenticated = new EventEmitter<boolean>();
-
   userKey = 'fh-user';
   tokenKey = 'fh-token';
   expiryKey = 'fh-expires-at';
@@ -29,8 +27,6 @@ export class AuthService {
     localStorage.removeItem(this.userKey);
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.expiryKey);
-
-    this.authenticated.emit(false);
   }
 
   isLoggedIn() {
@@ -43,8 +39,6 @@ export class AuthService {
     localStorage.setItem(this.userKey, JSON.stringify(user));
     localStorage.setItem(this.tokenKey, token);
     localStorage.setItem(this.expiryKey, expires);
-
-    this.authenticated.emit(true);
   }
 
   getToken(): string | null {

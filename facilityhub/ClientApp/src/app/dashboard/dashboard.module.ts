@@ -6,8 +6,8 @@ import {
   ButtonDirective,
   CardBodyComponent,
   CardComponent, CardHeaderComponent, CardImgDirective, CardTextDirective, CardTitleDirective,
-  ColComponent,
-  ContainerComponent,
+  ColComponent, ColDirective,
+  ContainerComponent, GutterDirective,
   HeaderComponent,
   NavItemComponent, RowComponent,
   SidebarBrandComponent,
@@ -47,6 +47,9 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
     CardTextDirective,
     ButtonDirective,
     CardImgDirective,
+    GutterDirective,
+    CardTitleDirective,
+    ColDirective,
   ],
 })
 export class DashboardModule {

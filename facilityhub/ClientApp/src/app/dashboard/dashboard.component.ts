@@ -6,7 +6,7 @@ import { INavData } from '@coreui/angular';
   template: `
     <c-sidebar visible>
       <c-sidebar-brand routerLink="/">
-        <img src="./assets/img/brand/coreui-signet.svg" alt="" width="22" height="24"/>
+        <img class="brand-logo" src="/assets/logo/white-transparent.svg" style="margin-left: -3rem;"/>
         <span class="align-middle ms-2">Facility Hub</span>
       </c-sidebar-brand>
       <c-sidebar-nav [navItems]="sidebarLinks" dropdownMode="close"></c-sidebar-nav>

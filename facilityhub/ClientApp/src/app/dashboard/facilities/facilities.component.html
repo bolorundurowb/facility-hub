@@ -4,7 +4,7 @@
   </c-header>
 
   <c-container>
-    <c-row>
+    <c-row [gutter]="4">
       <c-col [xs]="4" [sm]="6" *ngFor="let facility of facilities">
         <c-card class="facility-card">
           <ng-container *ngIf="facility.location">
@@ -13,6 +13,9 @@
                  leaflet
                  [leafletOptions]="getMapOptions(facility)">
             </div>
+          </ng-container>
+          <ng-container *ngIf="!facility.location">
+            <img cCardImg="top" class="no-location-img" src="/assets/images/no-location.png">
           </ng-container>
 
           <c-card-header>

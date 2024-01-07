@@ -3,12 +3,13 @@ import { FacilitiesComponent } from './facilities/facilities.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import {
+  ButtonCloseDirective,
   ButtonDirective, CalloutComponent,
   CardBodyComponent,
   CardComponent, CardHeaderComponent, CardImgDirective, CardTextDirective, CardTitleDirective,
   ColComponent, ColDirective,
-  ContainerComponent, GutterDirective,
-  HeaderComponent,
+  ContainerComponent, FormControlDirective, FormDirective, FormLabelDirective, FormTextDirective, GutterDirective,
+  HeaderComponent, ModalBodyComponent, ModalComponent, ModalFooterComponent, ModalHeaderComponent, ModalTitleDirective,
   NavItemComponent, RowComponent,
   SidebarBrandComponent,
   SidebarComponent,
@@ -19,6 +20,7 @@ import { CommonModule } from '@angular/common';
 import { IconComponent, IconDirective } from '@coreui/icons-angular';
 import { HomeComponent } from './home/home.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -51,6 +53,17 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
     CardTitleDirective,
     ColDirective,
     CalloutComponent,
+    ModalComponent,
+    ModalHeaderComponent,
+    ButtonCloseDirective,
+    ModalTitleDirective,
+    ModalFooterComponent,
+    ModalBodyComponent,
+    FormDirective,
+    FormControlDirective,
+    FormLabelDirective,
+    FormsModule,
+    FormTextDirective,
   ],
 })
 export class DashboardModule {

@@ -27,4 +27,8 @@ export class FacilitiesService {
   getOneIssues(facilityId: string): Promise<any[]> {
     return asPromise(this.http.get<any>(`${this.apiBaseUrl}/${facilityId}/issues`));
   }
+
+  create(payload: any): Promise<any> {
+    return asPromise(this.http.post<any>(this.apiBaseUrl, payload));
+  }
 }

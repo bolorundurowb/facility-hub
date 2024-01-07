@@ -5,7 +5,7 @@
 
   <c-container>
     <div class="action-row">
-      <button cButton>
+      <button cButton (click)="showNewFacilityModal()">
         <svg [cIcon]="icons.cilPlus"></svg>
         New Facility
       </button>
@@ -47,3 +47,42 @@
     </ng-container>
   </c-container>
 </div>
+
+<c-modal [(visible)]="isNewModalVisible">
+  <c-modal-header>
+    <h5 cModalTitle>Add Facility</h5>
+    <button cButtonClose (click)="dismissNewFacilityModal()"></button>
+  </c-modal-header>
+
+  <c-modal-body>
+    <form cForm>
+      <div class="mb-3">
+        <label cLabel>Facility Name</label>
+        <input cFormControl name="name" [(ngModel)]="newFacilityPayload.name">
+        <div cFormText>
+          <small>Ideally this should be a unique name to identify the property</small>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label cLabel>Facility Address</label>
+        <input cFormControl name="address" [(ngModel)]="newFacilityPayload.address">
+      </div>
+      <div class="mb-3">
+        <label cLabel>Facility Location</label>
+        <div class="map"
+             leaflet
+             [leafletLayers]="newFacilityMapLayers"
+             [leafletOptions]="getNewFacilityMapOptions()"
+             (leafletClick)="mapClicked($event)">
+        </div>
+      </div>
+    </form>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton color="secondary" (click)="dismissNewFacilityModal()">
+      Close
+    </button>
+    <button cButton color="success" (click)="createFacility()">Create Facility</button>
+  </c-modal-footer>
+</c-modal>

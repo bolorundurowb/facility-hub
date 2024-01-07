@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IconSetService } from '@coreui/icons-angular';
-import { cilBuilding } from '@coreui/icons';
+import { freeSet, brandSet } from '@coreui/icons';
 
 @Component({
   selector: 'fh-root',
@@ -10,6 +10,6 @@ import { cilBuilding } from '@coreui/icons';
 })
 export class AppComponent {
   constructor(public iconSet: IconSetService) {
-    iconSet.icons = { cilBuilding };
+    iconSet.icons = { ...freeSet, ...brandSet };
   }
 }

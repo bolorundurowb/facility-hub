@@ -22,12 +22,19 @@ import { INavData } from '@coreui/angular';
 export class DashboardComponent {
   sidebarLinks: INavData[] = [
     {
-      name: 'Home',
-      url: [ 'home' ]
+      name: 'Dashboard',
+      url: '/dashboard/home',
+      iconComponent: { name: 'cil-chart-line' }
     },
     {
       name: 'Facilities',
-      url: [ 'facilities' ]
-    }
+      url: '/dashboard/facilities',
+      iconComponent: { name: 'cil-bank' }
+    },
+    {
+      name: 'Issues',
+      url: '/dashboard/issues',
+      iconComponent: { name: 'cil-bell-exclamation' }
+    },
   ];
 }

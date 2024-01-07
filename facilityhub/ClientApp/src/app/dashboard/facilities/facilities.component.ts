@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { getLayers } from '../../utils';
 import * as Leaflet from 'leaflet';
+import { cilPlus } from '@coreui/icons';
 
 @Component({
   selector: 'fh-dashboard-facilities',
@@ -12,6 +13,7 @@ import * as Leaflet from 'leaflet';
 })
 export class FacilitiesComponent implements OnInit {
   facilities: any[] = [];
+  icons = { cilPlus };
 
   constructor(title: Title, private facilitiesService: FacilitiesService, private router: Router) {
     title.setTitle('Facilities | Facility Hub');

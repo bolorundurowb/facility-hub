@@ -3,7 +3,7 @@ import { FacilitiesComponent } from './facilities/facilities.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import {
-  ButtonDirective,
+  ButtonDirective, CalloutComponent,
   CardBodyComponent,
   CardComponent, CardHeaderComponent, CardImgDirective, CardTextDirective, CardTitleDirective,
   ColComponent, ColDirective,
@@ -50,6 +50,7 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
     GutterDirective,
     CardTitleDirective,
     ColDirective,
+    CalloutComponent,
   ],
 })
 export class DashboardModule {

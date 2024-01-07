@@ -15,20 +15,20 @@ import { AuthService } from '../services';
         <c-navbar-nav class="d-flex">
           <ng-container *ngIf="!isLoggedIn">
             <c-nav-item>
-              <button
-                cButton
-                color="light"
-                (click)="goToLogin()">
-                Log In
-              </button>
-            </c-nav-item>
-            <c-nav-item>
-              <button
-                cButton
-                color="primary"
-                (click)="goToRegister()">
-                Get Started
-              </button>
+              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button
+                  cButton
+                  color="light"
+                  (click)="goToLogin()">
+                  Log In
+                </button>
+                <button
+                  cButton
+                  color="primary"
+                  (click)="goToRegister()">
+                  Get Started
+                </button>
+              </div>
             </c-nav-item>
           </ng-container>
           <ng-container *ngIf="isLoggedIn">

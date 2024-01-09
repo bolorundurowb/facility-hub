@@ -1,0 +1,25 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Node.js dependencies and build frontend
+        working-directory: facilityhub/ClientApp
+        run: |
+          npm install
+          npm run build
+
+      - name: Restore and build .NET Core project
+        run: |
+          dotnet restore
+          dotnet build

@@ -12,7 +12,7 @@ interface NewFacilityPayload {
   location?: {
     longitude?: number;
     latitude?: number;
-  }
+  };
 }
 
 @Component({
@@ -83,8 +83,11 @@ export class FacilitiesComponent implements OnInit {
     try {
       const response = await this.facilitiesService.create(this.newFacilityPayload);
       this.facilities.push(response);
-      this.dismissNewFacilityModal();
-    }  catch (e: any) {
+
+      this.isNewModalVisible = false;
+      this.newFacilityPayload = {};
+    } catch (e: any) {
+      console.log(e);
       this.errorMessage = e.message;
       this.hasError = true;
     } finally {
@@ -97,7 +100,7 @@ export class FacilitiesComponent implements OnInit {
       maxZoom: 18,
       minZoom: 3,
       zoom: 15,
-      center: new Leaflet.LatLng(7.2008237, 5.5532686)
+      center: new Leaflet.LatLng(7.2008237, 5.5532686) // my hometown
     };
   };
 

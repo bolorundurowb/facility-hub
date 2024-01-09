@@ -31,7 +31,7 @@ jobs:
         run: echo "${{ secrets.DOCR_TOKEN }}" | docker login ${{ secrets.DOCR_REGISTRY_URL }} -u _token --password-stdin
 
       - name: Push Docker image to DOCR
-        run: docker push ${{ secrets.DOCR_REGISTRY_URL }}/your-image-name:${{ github.event.inputs.build-tag }}
+        run: docker push ${{ secrets.DOCR_REGISTRY_URL }}/facility-hub:${{ github.event.inputs.build-tag }}
         
         env:
           DOCKER_CLI_ACI: 1

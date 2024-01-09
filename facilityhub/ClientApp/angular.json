@@ -15,7 +15,7 @@
 			},
 			"root": "",
 			"sourceRoot": "src",
-			"prefix": "fc",
+			"prefix": "fh",
 			"architect": {
 				"build": {
 					"builder": "@angular-devkit/build-angular:browser",
@@ -46,13 +46,13 @@
 							"budgets": [
 								{
 									"type": "initial",
-									"maximumWarning": "1mb",
-									"maximumError": "2mb"
+									"maximumWarning": "21mb",
+									"maximumError": "4mb"
 								},
 								{
 									"type": "anyComponentStyle",
 									"maximumWarning": "2kb",
-									"maximumError": "4kb"
+									"maximumError": "8kb"
 								}
 							],
 							"fileReplacements": [

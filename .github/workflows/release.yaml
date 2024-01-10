@@ -22,7 +22,7 @@ jobs:
         run: |
           docker buildx create --use
           docker buildx inspect --bootstrap
-          docker buildx build --platform linux/amd64,linux/arm64 -t ${{ secrets.DOCR_REGISTRY_URL }}/facility-hub:${{ github.event.inputs.build-tag }} .
+          docker buildx build --platform linux/amd64,linux/arm64 -t ${{ secrets.DOCR_REGISTRY_URL }}/facility-hub:latest .
         
         env:
           DOCKER_BUILDKIT: 1
@@ -31,7 +31,7 @@ jobs:
         run: echo "${{ secrets.DOCR_TOKEN }}" | docker login ${{ secrets.DOCR_REGISTRY_URL }} -u _token --password-stdin
 
       - name: Push Docker image to DOCR
-        run: docker push ${{ secrets.DOCR_REGISTRY_URL }}/facility-hub:${{ github.event.inputs.build-tag }}
+        run: docker push ${{ secrets.DOCR_REGISTRY_URL }}/facility-hub:latest
         
         env:
           DOCKER_CLI_ACI: 1

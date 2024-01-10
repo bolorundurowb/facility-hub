@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { mapToCanActivate, RouterModule, Routes } from '@angular/router';
 
-import { AuthComponent } from "./auth/auth.component";
-import { DashboardComponent } from "./dashboard/dashboard.component";
-import { PublicComponent } from "./public/public.component";
+import { AuthComponent } from './auth/auth.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { PublicComponent } from './public/public.component';
+import { AuthGuard } from './interceptors/auth.guard';
 
 const routes: Routes = [
   {
@@ -19,9 +20,10 @@ const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: mapToCanActivate([ AuthGuard ]),
     loadChildren: () => import('./dashboard/dashboard.module').then(x => x.DashboardModule)
   },
-]
+];
 
 @NgModule({
   imports: [ RouterModule.forRoot(routes) ],

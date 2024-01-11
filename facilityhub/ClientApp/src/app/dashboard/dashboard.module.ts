@@ -22,11 +22,13 @@ import { IconComponent, IconDirective } from '@coreui/icons-angular';
 import { HomeComponent } from './home/home.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { FormsModule } from '@angular/forms';
+import { FacilityDetailsComponent } from './facility-details/facility-details.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     FacilitiesComponent,
+    FacilityDetailsComponent,
     HomeComponent,
   ],
   imports: [

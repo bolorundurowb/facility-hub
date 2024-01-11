@@ -1,3 +1,32 @@
 <div>
+  <c-header>
+    <h3>Facility Details</h3>
+  </c-header>
 
+  <div class="loading" *ngIf="isLoading">
+    <c-spinner color="primary" variant="grow"></c-spinner>
+  </div>
+
+  <ng-container *ngIf="!isLoading">
+    <ng-container *ngIf="!facility">
+      <c-callout color="danger">
+        The facility you are trying to view does not exist or you do not have permissions to view it.
+      </c-callout>
+    </ng-container>
+
+    <ng-container *ngIf="facility">
+      <c-container>
+        <div>facility Name</div>
+        <div>facility location</div>
+      </c-container>
+
+      <c-header>
+        <h5>Facility Details</h5>
+      </c-header>
+
+      <c-header>
+        <h5>Documents</h5>
+      </c-header>
+    </ng-container>
+  </ng-container>
 </div>

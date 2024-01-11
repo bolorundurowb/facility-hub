@@ -15,7 +15,7 @@ import {
   SidebarBrandComponent,
   SidebarComponent,
   SidebarNavComponent,
-  SidebarTogglerComponent
+  SidebarTogglerComponent, SpinnerComponent
 } from '@coreui/angular';
 import { CommonModule } from '@angular/common';
 import { IconComponent, IconDirective } from '@coreui/icons-angular';
@@ -68,6 +68,7 @@ import { FacilityDetailsComponent } from './facility-details/facility-details.co
     FormsModule,
     FormTextDirective,
     AlertComponent,
+    SpinnerComponent,
   ],
 })
 export class DashboardModule {

@@ -10,7 +10,7 @@ const routes: Routes = [
     component: FacilitiesComponent,
   },
   {
-    path: 'facilities/:facilitiesId',
+    path: 'facilities/:facilityId',
     component: FacilityDetailsComponent,
   },
   {

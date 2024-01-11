@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { FacilitiesService } from '../../services';
 import { ActivatedRoute } from '@angular/router';
+import * as Leaflet from 'leaflet';
+import { getLayers } from '../../utils';
 
 @Component({
   selector: 'fh-dashboard-facility-details',
@@ -33,5 +35,26 @@ export class FacilityDetailsComponent implements OnInit {
     finally {
       this.isLoading = false;
     }
+  }
+
+  getMapOptions(facility: any): Leaflet.MapOptions {
+    return {
+      layers: [
+        ...getLayers(),
+        new Leaflet.Marker(
+          new Leaflet.LatLng(facility.location.latitude, facility.location.longitude),
+          {
+            icon: new Leaflet.Icon({
+              iconSize: [ 50, 50 ],
+              iconAnchor: [ 0, 0 ],
+              iconUrl: 'assets/icons/marker.png',
+            })
+          })
+      ],
+      minZoom: 10,
+      maxZoom: 10,
+      zoom: 10,
+      center: new Leaflet.LatLng(facility.location.latitude, facility.location.longitude)
+    };
   }
 }

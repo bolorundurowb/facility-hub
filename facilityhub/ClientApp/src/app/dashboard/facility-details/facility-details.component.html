@@ -16,17 +16,28 @@
 
     <ng-container *ngIf="facility">
       <c-container>
-        <div>facility Name</div>
-        <div>facility location</div>
+        <ng-container *ngIf="facility.location">
+          <div class="facility-image"
+               leaflet
+               [leafletOptions]="getMapOptions(facility)">
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!facility.location">
+          <img class="facility-image"
+               src="/assets/images/no-location.png">
+        </ng-container>
+
+        <div class="facility-name">{{ facility.name }}</div>
+        <div class="facility-address">{{ facility.address }}</div>
+
+        <c-header>
+          <h5>Issues</h5>
+        </c-header>
+
+        <c-header>
+          <h5>Documents</h5>
+        </c-header>
       </c-container>
-
-      <c-header>
-        <h5>Facility Details</h5>
-      </c-header>
-
-      <c-header>
-        <h5>Documents</h5>
-      </c-header>
     </ng-container>
   </ng-container>
 </div>

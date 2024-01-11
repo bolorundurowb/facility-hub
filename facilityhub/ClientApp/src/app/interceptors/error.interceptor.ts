@@ -13,7 +13,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       console.log(error);
       if (error?.status === 401) {
         this.authService.logout();
-        location.reload();
+        window.location.href = '/auth/login';
       }
 
       return throwError(() => error?.error?.message);

@@ -3,19 +3,19 @@ import { FacilitiesComponent } from './facilities/facilities.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import {
-  AlertComponent,
+  AlertComponent, BadgeComponent,
   ButtonCloseDirective,
-  ButtonDirective, CalloutComponent,
+  ButtonDirective, ButtonGroupComponent, CalloutComponent,
   CardBodyComponent,
   CardComponent, CardHeaderComponent, CardImgDirective, CardTextDirective, CardTitleDirective,
   ColComponent, ColDirective,
   ContainerComponent, FormControlDirective, FormDirective, FormLabelDirective, FormTextDirective, GutterDirective,
   HeaderComponent, ModalBodyComponent, ModalComponent, ModalFooterComponent, ModalHeaderComponent, ModalTitleDirective,
-  NavItemComponent, RowComponent,
+  NavItemComponent, PopoverDirective, RowComponent,
   SidebarBrandComponent,
   SidebarComponent,
   SidebarNavComponent,
-  SidebarTogglerComponent, SpinnerComponent
+  SidebarTogglerComponent, SpinnerComponent, TableDirective
 } from '@coreui/angular';
 import { CommonModule } from '@angular/common';
 import { IconComponent, IconDirective } from '@coreui/icons-angular';
@@ -23,6 +23,8 @@ import { HomeComponent } from './home/home.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { FormsModule } from '@angular/forms';
 import { FacilityDetailsComponent } from './facility-details/facility-details.component';
+import { NgxFilesizeModule } from 'ngx-filesize';
+import { TruncateModule } from '@yellowspot/ng-truncate';
 
 @NgModule({
   declarations: [
@@ -69,6 +71,12 @@ import { FacilityDetailsComponent } from './facility-details/facility-details.co
     FormTextDirective,
     AlertComponent,
     SpinnerComponent,
+    TableDirective,
+    BadgeComponent,
+    PopoverDirective,
+    ButtonGroupComponent,
+    NgxFilesizeModule,
+    TruncateModule,
   ],
 })
 export class DashboardModule {

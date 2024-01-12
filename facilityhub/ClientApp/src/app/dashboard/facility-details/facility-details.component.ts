@@ -4,6 +4,7 @@ import { FacilitiesService } from '../../services';
 import { ActivatedRoute } from '@angular/router';
 import * as Leaflet from 'leaflet';
 import { getLayers } from '../../utils';
+import { cilCloudDownload, cilCloudUpload, cilNoteAdd, cilTrash } from '@coreui/icons';
 
 @Component({
   selector: 'fh-dashboard-facility-details',
@@ -12,6 +13,7 @@ import { getLayers } from '../../utils';
 })
 export class FacilityDetailsComponent implements OnInit {
   isLoading = true;
+  icons = { cilCloudUpload, cilNoteAdd, cilCloudDownload, cilTrash };
 
   facilityId?: string;
   facility?: any;
@@ -31,8 +33,7 @@ export class FacilityDetailsComponent implements OnInit {
       this.issues = await this.facilityService.getOneIssues(facilityId);
 
       this.facilityId = facilityId;
-    }
-    finally {
+    } finally {
       this.isLoading = false;
     }
   }
@@ -52,8 +53,8 @@ export class FacilityDetailsComponent implements OnInit {
           })
       ],
       minZoom: 10,
-      maxZoom: 10,
-      zoom: 10,
+      maxZoom: 18,
+      zoom: 17,
       center: new Leaflet.LatLng(facility.location.latitude, facility.location.longitude)
     };
   }

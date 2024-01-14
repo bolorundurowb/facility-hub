@@ -22,3 +22,12 @@
   height: 20rem;
   object-fit: cover;
 }
+
+.facility-header-row {
+  display: flex;
+  align-items: center;
+
+  button {
+    margin-right: 1rem;
+  }
+}

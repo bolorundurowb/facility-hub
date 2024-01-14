@@ -1,6 +1,12 @@
 <div>
   <c-header>
-    <h3>Facility Details</h3>
+    <div class="facility-header-row">
+      <button cButton variant="ghost" color="dark" (click)="goBack()">
+        <svg [cIcon]="icons.cilArrowLeft"></svg>
+        Back
+      </button>
+      <h3>Facility Details</h3>
+    </div>
   </c-header>
 
   <div class="loading" *ngIf="isLoading">

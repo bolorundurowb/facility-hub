@@ -4,7 +4,8 @@ import { FacilitiesService } from '../../services';
 import { ActivatedRoute } from '@angular/router';
 import * as Leaflet from 'leaflet';
 import { getLayers } from '../../utils';
-import { cilCloudDownload, cilCloudUpload, cilNoteAdd, cilTrash } from '@coreui/icons';
+import { Location } from '@angular/common'
+import { cilArrowLeft, cilCloudDownload, cilCloudUpload, cilNoteAdd, cilTrash } from '@coreui/icons';
 
 @Component({
   selector: 'fh-dashboard-facility-details',
@@ -13,15 +14,19 @@ import { cilCloudDownload, cilCloudUpload, cilNoteAdd, cilTrash } from '@coreui/
 })
 export class FacilityDetailsComponent implements OnInit {
   isLoading = true;
-  icons = { cilCloudUpload, cilNoteAdd, cilCloudDownload, cilTrash };
+  icons = { cilCloudUpload, cilNoteAdd, cilCloudDownload, cilTrash, cilArrowLeft };
 
   facilityId?: string;
   facility?: any;
   documents: Array<any> = [];
   issues: Array<any> = [];
 
-  constructor(title: Title, private facilityService: FacilitiesService, private route: ActivatedRoute) {
+  constructor(title: Title, private facilityService: FacilitiesService, private route: ActivatedRoute, private location: Location) {
     title.setTitle('Facility Details | Facility Hub');
+  }
+
+   goBack() {
+this.location.back();
   }
 
   async ngOnInit() {

@@ -1,0 +1,157 @@
+<div>
+  <c-header>
+    <div class="facility-header-row">
+      <button cButton variant="ghost" color="dark" (click)="goBack()">
+        <svg [cIcon]="icons.cilArrowLeft"></svg>
+        Back
+      </button>
+      <h3>Facility Details</h3>
+    </div>
+  </c-header>
+
+  <div class="loading" *ngIf="isLoading">
+    <c-spinner color="primary" variant="grow"></c-spinner>
+  </div>
+
+  <ng-container *ngIf="!isLoading">
+    <ng-container *ngIf="!facility">
+      <c-callout color="danger">
+        The facility you are trying to view does not exist or you do not have permissions to view it.
+      </c-callout>
+    </ng-container>
+
+    <ng-container *ngIf="facility">
+      <c-container>
+        <ng-container *ngIf="facility.location">
+          <div class="facility-image"
+               leaflet
+               [leafletOptions]="getMapOptions(facility)">
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!facility.location">
+          <img class="facility-image"
+               src="/assets/images/no-location.png">
+        </ng-container>
+
+        <div class="facility-name">{{ facility.name }}</div>
+        <div class="facility-address">{{ facility.address }}</div>
+      </c-container>
+
+      <c-container>
+        <c-header>
+          <h5>Issues</h5>
+        </c-header>
+
+        <div class="action-row">
+          <button cButton>
+            <svg [cIcon]="icons.cilNoteAdd"></svg>
+            Report Issue
+          </button>
+        </div>
+
+        <ng-container *ngIf="!issues.length">
+          <c-callout color="success">
+            No issues have been reported on this facility.
+          </c-callout>
+        </ng-container>
+
+        <ng-container *ngIf="issues.length">
+          <table cTable [striped]="true">
+            <thead>
+            <tr>
+              <th scope="col">Code</th>
+              <th scope="col">Title</th>
+              <th scope="col">Summary</th>
+              <th scope="col">Status</th>
+              <th scope="col">Reported At</th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let issue of issues">
+              <tr>
+                <th scope="row">{{ issue.code }}</th>
+                <td>{{ issue.title | truncate: 25 : { trailingString: '...' } }}</td>
+                <td>{{ issue.details | truncate: 75 : { trailingString: '...' } }}</td>
+                <td>
+                  <c-badge [color]="issue.status === 'Repaired' ? 'success' : 'info'">
+                    {{ issue.status }}
+                  </c-badge>
+                </td>
+                <td>{{ issue.filedAt | date : 'MMM d, y h:mma' }}</td>
+              </tr>
+            </ng-container>
+            </tbody>
+          </table>
+        </ng-container>
+      </c-container>
+
+      <c-container>
+        <c-header>
+          <h5>Documents</h5>
+        </c-header>
+
+        <div class="action-row">
+          <button cButton>
+            <svg [cIcon]="icons.cilCloudUpload"></svg>
+            Upload Document
+          </button>
+        </div>
+
+        <ng-container *ngIf="!documents.length">
+          <c-callout color="success">
+            No documents have been uploaded for this facility.
+          </c-callout>
+        </ng-container>
+
+        <ng-container *ngIf="documents.length">
+          <table cTable [striped]="true">
+            <thead>
+            <tr>
+              <th scope="col">File Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Size</th>
+              <th scope="col">Uploaded At</th>
+              <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let document of documents">
+              <tr>
+                <td>{{ document.fileName }}</td>
+                <td>{{ document.type }}</td>
+                <td>{{ document.fileSize | filesize }}</td>
+                <td>{{ document.createdAt | date : 'MMM d, y h:mma' }}</td>
+                <td>
+                  <button cButton color="dark" variant="ghost"
+                          cPopover="Download File" cPopoverPlacement="left" [cPopoverTrigger]="'hover'">
+                    <svg [cIcon]="icons.cilCloudDownload" size="lg"></svg>
+                  </button>
+                  |
+                  <button cButton color="danger" variant="ghost"
+                          [cPopover]="popoverHtml" cPopoverPlacement="bottom" [cPopoverTrigger]="'click'">
+                    <svg [cIcon]="icons.cilTrash" size="lg"></svg>
+                  </button>
+                  <ng-template #popoverHtml>
+                    <h3 class="popover-header">
+                      Confirm Delete
+                    </h3>
+                    <div class="popover-body">
+                      <p>Are you sure you want to delete this file? This action is permanent and cannot be reversed!</p>
+                      <div style="text-align: end">
+                        <c-button-group size="sm" style="text-align: end">
+                          <button cButton color="secondary">Cancel</button>
+                          <button cButton color="danger">Proceed</button>
+                        </c-button-group>
+                      </div>
+                    </div>
+                  </ng-template>
+                </td>
+              </tr>
+            </ng-container>
+            </tbody>
+          </table>
+        </ng-container>
+      </c-container>
+    </ng-container>
+  </ng-container>
+</div>

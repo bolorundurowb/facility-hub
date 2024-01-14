@@ -1,0 +1,33 @@
+.loading {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+
+.facility-name {
+  margin-top: 1rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.facility-address {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  font-style: italic;
+  color: gray;
+}
+
+.facility-image {
+  width: 100%;
+  height: 20rem;
+  object-fit: cover;
+}
+
+.facility-header-row {
+  display: flex;
+  align-items: center;
+
+  button {
+    margin-right: 1rem;
+  }
+}

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { FacilitiesService } from '../../services';
+import { FacilitiesService, NotificationService } from '../../services';
 import { ActivatedRoute } from '@angular/router';
 import * as Leaflet from 'leaflet';
 import { getLayers } from '../../utils';
-import { Location } from '@angular/common'
+import { Location } from '@angular/common';
 import { cilArrowLeft, cilCloudDownload, cilCloudUpload, cilNoteAdd, cilTrash } from '@coreui/icons';
 
 @Component({
@@ -21,12 +21,12 @@ export class FacilityDetailsComponent implements OnInit {
   documents: Array<any> = [];
   issues: Array<any> = [];
 
-  constructor(title: Title, private facilityService: FacilitiesService, private route: ActivatedRoute, private location: Location) {
+  constructor(title: Title, private facilityService: FacilitiesService, private route: ActivatedRoute, private location: Location, private notificationService: NotificationService) {
     title.setTitle('Facility Details | Facility Hub');
   }
 
-   goBack() {
-this.location.back();
+  goBack() {
+    this.location.back();
   }
 
   async ngOnInit() {

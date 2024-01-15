@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FacilitiesService } from '../../services';
+import { FacilitiesService, NotificationService } from '../../services';
 import { Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { getLayers } from '../../utils';
@@ -32,7 +32,7 @@ export class FacilitiesComponent implements OnInit {
   hasError = false;
   errorMessage: string | undefined;
 
-  constructor(title: Title, private facilitiesService: FacilitiesService, private router: Router) {
+  constructor(title: Title, private facilitiesService: FacilitiesService, private router: Router, private notificationService: NotificationService) {
     title.setTitle('Facilities | Facility Hub');
   }
 
@@ -86,9 +86,10 @@ export class FacilitiesComponent implements OnInit {
 
       this.isNewModalVisible = false;
       this.newFacilityPayload = {};
+
+      this.notificationService.showSuccess('Facility successfully created');
     } catch (e: any) {
-      console.log(e);
-      this.errorMessage = e.message;
+      this.errorMessage = e;
       this.hasError = true;
     } finally {
       this.isCreatingFacility = false;

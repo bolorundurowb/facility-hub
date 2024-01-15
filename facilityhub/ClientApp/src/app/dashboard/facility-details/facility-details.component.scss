@@ -49,5 +49,9 @@
     span {
       font-weight: normal;
     }
+
+    &:last-child {
+      margin-bottom: 1.2rem;
+    }
   }
 }

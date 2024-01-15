@@ -16,6 +16,9 @@ public class User : Entity
     [StringLength(2048)]
     public string PasswordHash { get; private set; }
 
+    [StringLength(25)]
+    public string? PhoneNumber { get; private set; }
+
     public DateTimeOffset JoinedAt { get; private set; }
 
     public List<Facility> Owned { get; private set; } = new();
@@ -35,14 +38,14 @@ public class User : Entity
         PasswordHash = HashText(password);
     }
 
-    public string HashText(string password)
-    {
-        var salt = BCrypt.Net.BCrypt.GenerateSalt();
-        return BCrypt.Net.BCrypt.HashPassword(password, salt);
-    }
-
     public bool VerifyPassword(string password) =>
         !string.IsNullOrWhiteSpace(password) && BCrypt.Net.BCrypt.Verify(password, PasswordHash);
 
     public string FullName() => $"{FirstName} {LastName}".Trim();
+
+    private string HashText(string password)
+    {
+        var salt = BCrypt.Net.BCrypt.GenerateSalt();
+        return BCrypt.Net.BCrypt.HashPassword(password, salt);
+    }
 }

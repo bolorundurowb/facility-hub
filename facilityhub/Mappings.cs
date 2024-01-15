@@ -18,6 +18,8 @@ public class Mappings : IRegister
             .AfterMapping((model, vm) =>
             {
                 vm.Name = model.User?.FullName();
+                vm.EmailAddress = model.User?.EmailAddress;
+                vm.PhoneNumber = model.User?.PhoneNumber;
                 var currentTenancy = model.History.MaxBy(x => x.CreatedAt);
 
                 if (currentTenancy == null)

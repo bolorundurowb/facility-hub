@@ -7,7 +7,7 @@
 .facility-name {
   margin-top: 1rem;
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 }
 
 .facility-address {
@@ -29,5 +29,25 @@
 
   button {
     margin-right: 1rem;
+  }
+}
+
+.tenant {
+  font-size: 0.9rem;
+
+  header {
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+
+  div {
+    font-weight: bold;
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+    margin-left: 0.5rem;
+
+    span {
+      font-weight: normal;
+    }
   }
 }

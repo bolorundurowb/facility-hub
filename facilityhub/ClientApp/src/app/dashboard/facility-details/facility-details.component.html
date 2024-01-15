@@ -35,6 +35,17 @@
 
         <div class="facility-name">{{ facility.name }}</div>
         <div class="facility-address">{{ facility.address }}</div>
+
+        <ng-container *ngIf="facility.tenant">
+          <div class="tenant">
+            <header>Tenant Details</header>
+            <div>Name: <span>{{ facility.tenant.name }}</span></div>
+            <div>Email: <span>{{ facility.tenant.emailAddress }}</span></div>
+            <div>Phone: <span>{{ facility.tenant.phoneNumber || 'N/A' }}</span></div>
+            <div>Tenancy Started At: <span>{{ facility.tenant.startsAt | date: 'dd MMM, yyyy' }}</span></div>
+            <div>Tenancy Ends At: <span>{{ facility.tenant.endsAt | date: 'dd MMM, yyyy' }}</span></div>
+          </div>
+        </ng-container>
       </c-container>
 
       <c-container>

@@ -7,6 +7,24 @@ import { getLayers } from '../../utils';
 import { Location } from '@angular/common';
 import { cilArrowLeft, cilCloudDownload, cilCloudUpload, cilNoteAdd, cilTrash } from '@coreui/icons';
 
+interface FacilityDetailsDto {
+  id: string;
+  name: string;
+  address: string;
+  isTenant: boolean,
+  location?: {
+    longitude: number,
+    latitude: number
+  },
+  tenant: {
+    name?: string;
+    emailAddress?: string;
+    phoneNumber?: string;
+    startsAt?: string;
+    endsAt?: string;
+  }
+}
+
 @Component({
   selector: 'fh-dashboard-facility-details',
   templateUrl: './facility-details.component.html',
@@ -17,7 +35,7 @@ export class FacilityDetailsComponent implements OnInit {
   icons = { cilCloudUpload, cilNoteAdd, cilCloudDownload, cilTrash, cilArrowLeft };
 
   facilityId?: string;
-  facility?: any;
+  facility?: FacilityDetailsDto;
   documents: Array<any> = [];
   issues: Array<any> = [];
 

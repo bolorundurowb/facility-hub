@@ -2,6 +2,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using FacilityHub.DataContext;
+using FacilityHub.Extensions;
 using FacilityHub.Services.Implementations;
 using FacilityHub.Services.Interfaces;
 using FluentValidation;
@@ -26,7 +27,11 @@ public class Startup
         services.AddCors();
         services.AddRouting(option => option.LowercaseUrls = true);
         services.AddControllers()
-            .AddJsonOptions(x => x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+            .AddJsonOptions(x => x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
+            .ConfigureApiBehaviorOptions(opts =>
+            {
+                opts.InvalidModelStateResponseFactory = context => context.Format();
+            });
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddFluentValidationAutoValidation(opts => opts.DisableDataAnnotationsValidation = true);

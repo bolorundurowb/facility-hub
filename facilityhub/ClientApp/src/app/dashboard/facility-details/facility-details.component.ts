@@ -80,7 +80,7 @@ export class FacilityDetailsComponent implements OnInit {
       .subscribe({
         next: (event) => {
           if (event.type === HttpEventType.Response) {
-            const document = event.body;
+            const document = event.body as DocumentRes;
             console.log(document);
             this.documents.unshift(document);
 
@@ -92,6 +92,7 @@ export class FacilityDetailsComponent implements OnInit {
         }, error: (err) => {
           this.errorMessage = err as string;
           this.hasError = true;
+          this.isUploadingDoc = false;
         }
       });
   }
@@ -126,10 +127,25 @@ export class FacilityDetailsComponent implements OnInit {
     };
   }
 
-  async downloadFile(document: any) {
+  async downloadFile(document: DocumentRes) {
     this.downloadService.downloadFile(
       document.url,
       `${document.id}-${document.fileName}`
     );
+  }
+
+  async deleteDocument(document: DocumentRes) {
+    try {
+      const response = await this.facilityService.deleteDocument(this.facilityId!, document.id);
+
+      const documentIndex = this.documents.findIndex((doc) => {
+        return doc.id === document.id;
+      });
+      this.documents.splice(documentIndex, 1);
+
+      this.notificationService.showSuccess(response.message);
+    } catch (e) {
+      this.notificationService.showError(e as string);
+    }
   }
 }

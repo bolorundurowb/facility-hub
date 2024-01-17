@@ -3,19 +3,42 @@ import { FacilitiesComponent } from './facilities/facilities.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import {
-  AlertComponent, BadgeComponent,
+  AlertComponent,
+  BadgeComponent,
   ButtonCloseDirective,
-  ButtonDirective, ButtonGroupComponent, CalloutComponent,
+  ButtonDirective,
+  ButtonGroupComponent,
+  CalloutComponent,
   CardBodyComponent,
-  CardComponent, CardHeaderComponent, CardImgDirective, CardTextDirective, CardTitleDirective,
-  ColComponent, ColDirective,
-  ContainerComponent, FormControlDirective, FormDirective, FormLabelDirective, FormTextDirective, GutterDirective,
-  HeaderComponent, ModalBodyComponent, ModalComponent, ModalFooterComponent, ModalHeaderComponent, ModalTitleDirective,
-  NavItemComponent, PopoverDirective, RowComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardImgDirective,
+  CardTextDirective,
+  CardTitleDirective,
+  ColComponent,
+  ColDirective,
+  ContainerComponent,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  FormSelectDirective,
+  FormTextDirective,
+  GutterDirective,
+  HeaderComponent, InputGroupComponent,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  ModalTitleDirective,
+  NavItemComponent,
+  PopoverDirective,
+  RowComponent,
   SidebarBrandComponent,
   SidebarComponent,
   SidebarNavComponent,
-  SidebarTogglerComponent, SpinnerComponent, TableDirective
+  SidebarTogglerComponent,
+  SpinnerComponent,
+  TableDirective
 } from '@coreui/angular';
 import { CommonModule } from '@angular/common';
 import { IconComponent, IconDirective } from '@coreui/icons-angular';
@@ -77,6 +100,8 @@ import { TruncateModule } from '@yellowspot/ng-truncate';
     ButtonGroupComponent,
     NgxFilesizeModule,
     TruncateModule,
+    FormSelectDirective,
+    InputGroupComponent,
   ],
 })
 export class DashboardModule {

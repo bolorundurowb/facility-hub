@@ -6,23 +6,21 @@ import * as Leaflet from 'leaflet';
 import { getLayers } from '../../utils';
 import { Location } from '@angular/common';
 import { cilArrowLeft, cilCloudDownload, cilCloudUpload, cilNoteAdd, cilTrash } from '@coreui/icons';
+import { DocumentRes, DocumentType, LocationRes, TenantRes } from '../../components';
+import { HttpEventType } from '@angular/common/http';
 
 interface FacilityDetailsDto {
   id: string;
   name: string;
   address: string;
   isTenant: boolean,
-  location?: {
-    longitude: number,
-    latitude: number
-  },
-  tenant: {
-    name?: string;
-    emailAddress?: string;
-    phoneNumber?: string;
-    startsAt?: string;
-    endsAt?: string;
-  }
+  location?: LocationRes,
+  tenant?: TenantRes
+}
+
+interface FacilityDocumentUploadPayload {
+  type?: DocumentType,
+  file?: any;
 }
 
 @Component({
@@ -36,8 +34,15 @@ export class FacilityDetailsComponent implements OnInit {
 
   facilityId?: string;
   facility?: FacilityDetailsDto;
-  documents: Array<any> = [];
+  documents: Array<DocumentRes> = [];
   issues: Array<any> = [];
+
+  hasError = false;
+  errorMessage?: string;
+
+  isNewDocModalVisible = false;
+  isUploadingDoc = false;
+  newDocPayload: FacilityDocumentUploadPayload = {};
 
   constructor(title: Title, private facilityService: FacilitiesService, private route: ActivatedRoute, private location: Location, private notificationService: NotificationService) {
     title.setTitle('Facility Details | Facility Hub');
@@ -48,6 +53,8 @@ export class FacilityDetailsComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.isLoading = true;
+
     try {
       const facilityId = this.route.snapshot.params['facilityId'];
 
@@ -59,6 +66,41 @@ export class FacilityDetailsComponent implements OnInit {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  showDocumentModal() {
+    this.isNewDocModalVisible = true;
+  }
+
+  uploadDocument() {
+    this.isUploadingDoc = true;
+
+    this.facilityService.uploadDocument(this.facilityId!, this.newDocPayload)
+      .subscribe(event => {
+        if (event.type === HttpEventType.Response) {
+          const document = event.body;
+          console.log(document);
+          this.documents.unshift(document);
+
+          this.dismissDocumentModal();
+
+          this.notificationService.showSuccess('Document uploaded successfully');
+          this.isUploadingDoc = false;
+        }
+      }, err => {
+        this.errorMessage = err as string;
+        this.hasError = true;
+      });
+
+  }
+
+  dismissDocumentModal() {
+    this.isNewDocModalVisible = false;
+    this.newDocPayload = {};
+  }
+
+  documentSelected(event: any) {
+    this.newDocPayload.file = event.target.files[0];
   }
 
   getMapOptions(facility: any): Leaflet.MapOptions {

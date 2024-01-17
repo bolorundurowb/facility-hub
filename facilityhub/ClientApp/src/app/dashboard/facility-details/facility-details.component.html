@@ -133,13 +133,22 @@
                 <td>{{ document.fileSize | filesize }}</td>
                 <td>{{ document.createdAt | date : 'MMM d, y h:mma' }}</td>
                 <td>
-                  <button cButton color="dark" variant="ghost"
-                          cPopover="Download File" cPopoverPlacement="left" [cPopoverTrigger]="'hover'">
+                  <button cButton
+                          color="dark"
+                          variant="ghost"
+                          cPopover="Download File"
+                          cPopoverPlacement="left"
+                          [cPopoverTrigger]="'hover'"
+                          (click)="downloadFile(document)">
                     <svg [cIcon]="icons.cilCloudDownload" size="lg"></svg>
                   </button>
                   |
-                  <button cButton color="danger" variant="ghost"
-                          [cPopover]="popoverHtml" cPopoverPlacement="bottom" [cPopoverTrigger]="'click'">
+                  <button cButton
+                          color="danger"
+                          variant="ghost"
+                          cPopoverPlacement="bottom"
+                          [cPopover]="popoverHtml"
+                          [cPopoverTrigger]="'click'">
                     <svg [cIcon]="icons.cilTrash" size="lg"></svg>
                   </button>
                   <ng-template #popoverHtml>
@@ -151,7 +160,7 @@
                       <div style="text-align: end">
                         <c-button-group size="sm" style="text-align: end">
                           <button cButton color="secondary">Cancel</button>
-                          <button cButton color="danger">Proceed</button>
+                          <button cButton color="danger" (click)="deleteDocument(document)">Proceed</button>
                         </c-button-group>
                       </div>
                     </div>

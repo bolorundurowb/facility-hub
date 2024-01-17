@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { FacilitiesService, NotificationService } from '../../services';
+import { FacilitiesService, FileDownloadService, NotificationService } from '../../services';
 import { ActivatedRoute } from '@angular/router';
 import * as Leaflet from 'leaflet';
 import { getLayers } from '../../utils';
@@ -44,7 +44,8 @@ export class FacilityDetailsComponent implements OnInit {
   isUploadingDoc = false;
   newDocPayload: FacilityDocumentUploadPayload = {};
 
-  constructor(title: Title, private facilityService: FacilitiesService, private route: ActivatedRoute, private location: Location, private notificationService: NotificationService) {
+  constructor(title: Title, private facilityService: FacilitiesService, private route: ActivatedRoute,
+              private location: Location, private notificationService: NotificationService, private downloadService: FileDownloadService) {
     title.setTitle('Facility Details | Facility Hub');
   }
 
@@ -76,22 +77,24 @@ export class FacilityDetailsComponent implements OnInit {
     this.isUploadingDoc = true;
 
     this.facilityService.uploadDocument(this.facilityId!, this.newDocPayload)
-      .subscribe(event => {
-        if (event.type === HttpEventType.Response) {
-          const document = event.body;
-          console.log(document);
-          this.documents.unshift(document);
+      .subscribe({
+        next: (event) => {
+          if (event.type === HttpEventType.Response) {
+            const document = event.body as DocumentRes;
+            console.log(document);
+            this.documents.unshift(document);
 
-          this.dismissDocumentModal();
+            this.dismissDocumentModal();
 
-          this.notificationService.showSuccess('Document uploaded successfully');
+            this.notificationService.showSuccess('Document uploaded successfully');
+            this.isUploadingDoc = false;
+          }
+        }, error: (err) => {
+          this.errorMessage = err as string;
+          this.hasError = true;
           this.isUploadingDoc = false;
         }
-      }, err => {
-        this.errorMessage = err as string;
-        this.hasError = true;
       });
-
   }
 
   dismissDocumentModal() {
@@ -122,5 +125,27 @@ export class FacilityDetailsComponent implements OnInit {
       zoom: 17,
       center: new Leaflet.LatLng(facility.location.latitude, facility.location.longitude)
     };
+  }
+
+  async downloadFile(document: DocumentRes) {
+    this.downloadService.downloadFile(
+      document.url,
+      `${document.id}-${document.fileName}`
+    );
+  }
+
+  async deleteDocument(document: DocumentRes) {
+    try {
+      const response = await this.facilityService.deleteDocument(this.facilityId!, document.id);
+
+      const documentIndex = this.documents.findIndex((doc) => {
+        return doc.id === document.id;
+      });
+      this.documents.splice(documentIndex, 1);
+
+      this.notificationService.showSuccess(response.message);
+    } catch (e) {
+      this.notificationService.showError(e as string);
+    }
   }
 }

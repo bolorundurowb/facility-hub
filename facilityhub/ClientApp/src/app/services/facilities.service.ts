@@ -33,8 +33,12 @@ export class FacilitiesService {
     return this.http.post<any>(`${this.apiBaseUrl}/${facilityId}/documents`, formData, {
       reportProgress: true,
       observe: 'events',
-      responseType: 'text' as 'json'
+      responseType: 'json'
     });
+  }
+
+  deleteDocument(facilityId: string, documentId: string): Promise<any> {
+    return asPromise(this.http.delete<any>(`${this.apiBaseUrl}/${facilityId}/documents/${documentId}`));
   }
 
   getOneIssues(facilityId: string): Promise<any[]> {

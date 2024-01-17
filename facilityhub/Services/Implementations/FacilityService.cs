@@ -57,6 +57,15 @@ public class FacilityService : IFacilityService
             .ToListAsync();
     }
 
+    public Task<Document?> FindDocument(Guid userId, Guid facilityId, Guid documentId)
+    {
+        return _dbContext.Facilities
+            .Where(x => x.Id == facilityId)
+            .Where(x => x.Owners.Any(y => y.Id == userId) || x.Managers.Any(y => y.Id == userId))
+            .SelectMany(x => x.Documents)
+            .FirstOrDefaultAsync(x => x.Id == documentId);
+    }
+
     public async Task<Document> AddDocument(Facility facility, User user, DocumentType documentType,
         IUploadResult details)
     {
@@ -73,6 +82,12 @@ public class FacilityService : IFacilityService
         await _dbContext.SaveChangesAsync();
 
         return document;
+    }
+
+    public async Task DeleteDocument(Facility facility, Document document)
+    {
+        facility.DeleteDocument(document);
+        await _dbContext.SaveChangesAsync();
     }
 
     public Task<FacilityInvitation?> FindInvitationById(Guid invitationId)

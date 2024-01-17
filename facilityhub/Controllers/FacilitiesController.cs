@@ -107,6 +107,28 @@ public class FacilitiesController : ApiController
         return Created(Mapper.Map<DocumentRes>(document));
     }
 
+    [HttpDelete("{facilityId:guid}/documents/{documentId:guid}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> DeleteDocument(Guid facilityId, Guid documentId)
+    {
+        var userId = User.GetCallerId();
+        var facility = await _facilityService.FindById(userId, facilityId);
+
+        if (facility == null)
+            return NotFound("Facility not found");
+
+        var document = await _facilityService.FindDocument(userId, facilityId, documentId);
+
+        if (document == null)
+            return NotFound("Document not found");
+
+        await _mediaService.DeleteAsync(document.ExternalId);
+        await _facilityService.DeleteDocument(facility, document);
+
+        return Ok("Document deleted successfully");
+    }
+
     [HttpGet("{facilityId:guid}/issues")]
     [ProducesResponseType(typeof(List<IssueRes>), 200)]
     [ProducesResponseType(typeof(GenericRes), 403)]

@@ -64,4 +64,6 @@ public class Facility : Entity
 
     public Tenant SetTenant(User inviter, User? user, DateOnly startsAt, DateOnly endsAt, DateOnly paidAt) =>
         Tenant = new Tenant(inviter, startsAt, endsAt, paidAt, user);
+
+    public void DeleteDocument(Document document) => Documents.Remove(document);
 }

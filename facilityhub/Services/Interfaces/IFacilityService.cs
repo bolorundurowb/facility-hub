@@ -14,8 +14,12 @@ public interface IFacilityService
 
     Task<List<Document>> GetAllDocuments(Guid userId, Guid facilityId);
 
+    Task<Document?> FindDocument(Guid userId, Guid facilityId, Guid documentId);
+
     Task<Document> AddDocument(Facility facility, User user, DocumentType documentType,
         IUploadResult details);
+
+    Task DeleteDocument(Facility facility, Document document);
 
     Task<FacilityInvitation?> FindInvitationById(Guid invitationId);
 

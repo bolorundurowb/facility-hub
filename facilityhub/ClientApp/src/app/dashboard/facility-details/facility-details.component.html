@@ -133,8 +133,13 @@
                 <td>{{ document.fileSize | filesize }}</td>
                 <td>{{ document.createdAt | date : 'MMM d, y h:mma' }}</td>
                 <td>
-                  <button cButton color="dark" variant="ghost"
-                          cPopover="Download File" cPopoverPlacement="left" [cPopoverTrigger]="'hover'">
+                  <button cButton
+                          color="dark"
+                          variant="ghost"
+                          cPopover="Download File"
+                          cPopoverPlacement="left"
+                          [cPopoverTrigger]="'hover'"
+                          (click)="downloadFile(document)">
                     <svg [cIcon]="icons.cilCloudDownload" size="lg"></svg>
                   </button>
                   |

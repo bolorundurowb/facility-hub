@@ -143,8 +143,12 @@
                     <svg [cIcon]="icons.cilCloudDownload" size="lg"></svg>
                   </button>
                   |
-                  <button cButton color="danger" variant="ghost"
-                          [cPopover]="popoverHtml" cPopoverPlacement="bottom" [cPopoverTrigger]="'click'">
+                  <button cButton
+                          color="danger"
+                          variant="ghost"
+                          cPopoverPlacement="bottom"
+                          [cPopover]="popoverHtml"
+                          [cPopoverTrigger]="'click'">
                     <svg [cIcon]="icons.cilTrash" size="lg"></svg>
                   </button>
                   <ng-template #popoverHtml>

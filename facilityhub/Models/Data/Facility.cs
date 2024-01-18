@@ -62,8 +62,10 @@ public class Facility : Entity
             Owners.Add(user);
     }
 
-    public Tenant SetTenant(User inviter, User? user, DateOnly startsAt, DateOnly endsAt, DateOnly paidAt) =>
-        Tenant = new Tenant(inviter, startsAt, endsAt, paidAt, user);
+    public Tenant SetTenant(User inviter, User? user, string name, string emailAddress, string? phoneNumber,
+        DateOnly startsAt,
+        DateOnly endsAt, DateOnly paidAt) =>
+        Tenant = new Tenant(inviter, name, emailAddress, phoneNumber, startsAt, endsAt, paidAt, user);
 
     public void DeleteDocument(Document document) => Documents.Remove(document);
 }

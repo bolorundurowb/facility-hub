@@ -23,8 +23,8 @@ public interface IFacilityService
 
     Task<FacilityInvitation?> FindInvitationById(Guid invitationId);
 
-    Task<Tenant> SetTenant(Facility facility, User inviter, User? user, string emailAddress, DateOnly startsAt,
-        DateOnly endsAt, DateOnly paidAt);
+    Task<Tenant> SetTenant(Facility facility, User inviter, User? user, string name, string emailAddress,
+        string? phoneNumber, DateOnly startsAt, DateOnly endsAt, DateOnly paidAt);
 
     Task InviteContributor(Facility facility, User user, FacilityInvitationType invitationType, string emailAddress);
 

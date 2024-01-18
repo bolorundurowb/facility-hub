@@ -97,11 +97,10 @@ public class FacilityService : IFacilityService
             .FirstOrDefaultAsync(x => x.Id == invitationId);
     }
 
-    public async Task<Tenant> SetTenant(Facility facility, User inviter, User? user, string emailAddress,
-        DateOnly startsAt,
-        DateOnly endsAt, DateOnly paidAt)
+    public async Task<Tenant> SetTenant(Facility facility, User inviter, User? user, string name, string emailAddress,
+        string? phoneNumber, DateOnly startsAt, DateOnly endsAt, DateOnly paidAt)
     {
-        var tenant = facility.SetTenant(inviter, user, startsAt, endsAt, paidAt);
+        var tenant = facility.SetTenant(inviter, user, name, emailAddress, phoneNumber, startsAt, endsAt, paidAt);
         await _dbContext.SaveChangesAsync();
 
         // if the tenant doesn't have a user account, invite them

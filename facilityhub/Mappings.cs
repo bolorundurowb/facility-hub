@@ -17,9 +17,9 @@ public class Mappings : IRegister
         config.NewConfig<Tenant, TenantRes>()
             .AfterMapping((model, vm) =>
             {
-                vm.Name = model.User?.FullName();
-                vm.EmailAddress = model.User?.EmailAddress;
-                vm.PhoneNumber = model.User?.PhoneNumber;
+                vm.Name = model.User?.FullName() ?? model.Name;
+                vm.EmailAddress = model.User?.EmailAddress ?? model.EmailAddress;
+                vm.PhoneNumber = model.User?.PhoneNumber ?? model.PhoneNumber;
                 var currentTenancy = model.History.MaxBy(x => x.CreatedAt);
 
                 if (currentTenancy == null)

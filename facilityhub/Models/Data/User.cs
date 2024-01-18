@@ -43,6 +43,12 @@ public class User : Entity
 
     public string FullName() => $"{FirstName} {LastName}".Trim();
 
+    public void UpdateFirstName(string firstName) => FirstName = firstName;
+
+    public void UpdateLastName(string lastName) => LastName = lastName;
+
+    public void UpdatePhoneNumber(string? phoneNumber) => PhoneNumber = phoneNumber;
+
     private string HashText(string password)
     {
         var salt = BCrypt.Net.BCrypt.GenerateSalt();

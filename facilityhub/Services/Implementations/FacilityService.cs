@@ -1,5 +1,6 @@
 ﻿using FacilityHub.DataContext;
 using FacilityHub.Enums;
+using FacilityHub.Extensions;
 using FacilityHub.Models.Data;
 using FacilityHub.Models.DTOs;
 using FacilityHub.Services.Interfaces;
@@ -151,6 +152,19 @@ public class FacilityService : IFacilityService
 
             if (facility.Tenant == null)
                 throw new ArgumentNullException(nameof(facility.Tenant), "No tenant set on facility to be claimed");
+
+            // update the user details if not set
+            var tenant = facility.Tenant;
+            var (firstName, lastName) = tenant.Name.SplitName();
+
+            if (string.IsNullOrWhiteSpace(user.FirstName))
+                user.UpdateFirstName(firstName);
+
+            if (string.IsNullOrWhiteSpace(user.LastName))
+                user.UpdateLastName(lastName);
+
+            if (string.IsNullOrWhiteSpace(user.PhoneNumber))
+                user.UpdatePhoneNumber(tenant.PhoneNumber);
 
             facility.Tenant!.SetUser(user);
         }

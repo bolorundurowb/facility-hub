@@ -36,16 +36,27 @@
         <div class="facility-name">{{ facility.name }}</div>
         <div class="facility-address">{{ facility.address }}</div>
 
-        <ng-container *ngIf="facility.tenant">
-          <div class="tenant">
-            <header>Tenant Details</header>
+        <div class="tenant">
+          <header>Tenant Details</header>
+          <ng-container *ngIf="!facility.tenant">
+            <div style="margin-top: 1.5rem;">
+              <button cButton
+                      color="primary"
+                      variant="ghost">
+                <svg [cIcon]="icons.cilUserPlus"></svg>
+                Add Tenant Details
+              </button>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="facility.tenant">
             <div>Name: <span>{{ facility.tenant.name }}</span></div>
             <div>Email: <span>{{ facility.tenant.emailAddress }}</span></div>
             <div>Phone: <span>{{ facility.tenant.phoneNumber || 'N/A' }}</span></div>
             <div>Tenancy Started At: <span>{{ facility.tenant.startsAt | date: 'dd MMM, yyyy' }}</span></div>
             <div>Tenancy Ends At: <span>{{ facility.tenant.endsAt | date: 'dd MMM, yyyy' }}</span></div>
-          </div>
-        </ng-container>
+          </ng-container>
+        </div>
       </c-container>
 
       <c-container>

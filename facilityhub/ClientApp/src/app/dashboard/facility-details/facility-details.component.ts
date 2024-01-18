@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import * as Leaflet from 'leaflet';
 import { getLayers } from '../../utils';
 import { Location } from '@angular/common';
-import { cilArrowLeft, cilCloudDownload, cilCloudUpload, cilNoteAdd, cilTrash } from '@coreui/icons';
+import { cilArrowLeft, cilCloudDownload, cilCloudUpload, cilNoteAdd, cilTrash, cilUserPlus } from '@coreui/icons';
 import { DocumentRes, DocumentType, LocationRes, TenantRes } from '../../components';
 import { HttpEventType } from '@angular/common/http';
 
@@ -23,6 +23,13 @@ interface FacilityDocumentUploadPayload {
   file?: any;
 }
 
+interface FacilityTenantPayload {
+  emailAddress?: string;
+  startsAt?: Date;
+  endsAt?: Date;
+  paidAt?: Date;
+}
+
 @Component({
   selector: 'fh-dashboard-facility-details',
   templateUrl: './facility-details.component.html',
@@ -30,7 +37,7 @@ interface FacilityDocumentUploadPayload {
 })
 export class FacilityDetailsComponent implements OnInit {
   isLoading = true;
-  icons = { cilCloudUpload, cilNoteAdd, cilCloudDownload, cilTrash, cilArrowLeft };
+  icons = { cilCloudUpload, cilNoteAdd, cilCloudDownload, cilTrash, cilArrowLeft, cilUserPlus };
 
   facilityId?: string;
   facility?: FacilityDetailsDto;
@@ -44,8 +51,13 @@ export class FacilityDetailsComponent implements OnInit {
   isUploadingDoc = false;
   newDocPayload: FacilityDocumentUploadPayload = {};
 
+  isNewTenantModalVisible = false;
+  isCreatingTenant = false;
+  newTenantPayload: FacilityTenantPayload = {};
+
   constructor(title: Title, private facilityService: FacilitiesService, private route: ActivatedRoute,
-              private location: Location, private notificationService: NotificationService, private downloadService: FileDownloadService) {
+              private location: Location, private notificationService: NotificationService,
+              private downloadService: FileDownloadService) {
     title.setTitle('Facility Details | Facility Hub');
   }
 

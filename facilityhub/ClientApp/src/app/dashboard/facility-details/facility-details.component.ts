@@ -24,7 +24,9 @@ interface FacilityDocumentUploadPayload {
 }
 
 interface FacilityTenantPayload {
+  name?: string;
   emailAddress?: string;
+  phoneNumber?: string;
   startsAt?: Date;
   endsAt?: Date;
   paidAt?: Date;

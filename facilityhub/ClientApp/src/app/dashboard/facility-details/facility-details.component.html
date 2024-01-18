@@ -258,10 +258,21 @@
       </c-alert>
 
       <div class="mb-3">
+        <label cLabel>Tenant's Full Name</label>
+        <input cFormControl name="full-name" [(ngModel)]="newTenantPayload.name">
+      </div>
+      <div class="mb-3">
         <label cLabel>Tenant's Email Address</label>
         <input cFormControl name="email-address" type="email" [(ngModel)]="newTenantPayload.emailAddress">
         <div cFormText>
           <small>When this tenancy is registered, the tenant would receive an invite to join the platform</small>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label cLabel>Tenant's Phone Number</label>
+        <input cFormControl name="phone-number" type="tel" [(ngModel)]="newTenantPayload.phoneNumber">
+        <div cFormText>
+          <small>Optional</small>
         </div>
       </div>
       <div class="mb-3">

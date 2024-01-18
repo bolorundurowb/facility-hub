@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { FacilitiesService, FileDownloadService, NotificationService } from '../../services';
+import { FacilitiesService, FileDownloadService, InvitationsService, NotificationService } from '../../services';
 import { ActivatedRoute } from '@angular/router';
 import * as Leaflet from 'leaflet';
 import { getLayers } from '../../utils';
@@ -57,7 +57,7 @@ export class FacilityDetailsComponent implements OnInit {
 
   constructor(title: Title, private facilityService: FacilitiesService, private route: ActivatedRoute,
               private location: Location, private notificationService: NotificationService,
-              private downloadService: FileDownloadService) {
+              private downloadService: FileDownloadService, private invitationService: InvitationsService) {
     title.setTitle('Facility Details | Facility Hub');
   }
 
@@ -87,6 +87,7 @@ export class FacilityDetailsComponent implements OnInit {
 
   uploadDocument() {
     this.isUploadingDoc = true;
+    this.hasError = false;
 
     this.facilityService.uploadDocument(this.facilityId!, this.newDocPayload)
       .subscribe({
@@ -158,6 +159,36 @@ export class FacilityDetailsComponent implements OnInit {
       this.notificationService.showSuccess(response.message);
     } catch (e) {
       this.notificationService.showError(e as string);
+    }
+  }
+
+  showNewTenantModal() {
+    this.isNewTenantModalVisible = true;
+  }
+
+  dismissNewTenantModal() {
+    this.isNewTenantModalVisible = false;
+    this.newTenantPayload = {};
+  }
+
+  async inviteTenant() {
+    this.isCreatingTenant = true;
+    this.hasError = false;
+
+    try {
+      const response = await this.invitationService.inviteTenant(this.facilityId!, this.newTenantPayload);
+
+      if (this.facility) {
+        this.facility.tenant = response;
+      }
+
+      this.dismissNewTenantModal();
+      this.notificationService.showSuccess('Tenant successfully registered');
+    } catch (e) {
+      this.errorMessage = e as string;
+      this.hasError = true;
+    } finally {
+      this.isCreatingTenant = false;
     }
   }
 }

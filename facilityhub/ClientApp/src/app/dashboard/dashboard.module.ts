@@ -38,7 +38,7 @@ import {
   SidebarNavComponent,
   SidebarTogglerComponent,
   SpinnerComponent,
-  TableDirective
+  TableDirective,
 } from '@coreui/angular';
 import { CommonModule } from '@angular/common';
 import { IconComponent, IconDirective } from '@coreui/icons-angular';

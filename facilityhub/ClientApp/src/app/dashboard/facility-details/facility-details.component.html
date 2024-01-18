@@ -42,7 +42,8 @@
             <div style="margin-top: 1.5rem;">
               <button cButton
                       color="primary"
-                      variant="ghost">
+                      variant="ghost"
+                      (click)="showNewTenantModal()">
                 <svg [cIcon]="icons.cilUserPlus"></svg>
                 Add Tenant Details
               </button>
@@ -50,9 +51,9 @@
           </ng-container>
 
           <ng-container *ngIf="facility.tenant">
-            <div>Name: <span>{{ facility.tenant.name }}</span></div>
+            <div>Name: <span>{{ facility.tenant.name || '(Not Available)' }}</span></div>
             <div>Email: <span>{{ facility.tenant.emailAddress }}</span></div>
-            <div>Phone: <span>{{ facility.tenant.phoneNumber || 'N/A' }}</span></div>
+            <div>Phone: <span>{{ facility.tenant.phoneNumber || '(Not Available)' }}</span></div>
             <div>Tenancy Started At: <span>{{ facility.tenant.startsAt | date: 'dd MMM, yyyy' }}</span></div>
             <div>Tenancy Ends At: <span>{{ facility.tenant.endsAt | date: 'dd MMM, yyyy' }}</span></div>
           </ng-container>
@@ -236,6 +237,59 @@
             [disabled]="isUploadingDoc"
             (click)="uploadDocument()">
       Upload Document
+    </button>
+  </c-modal-footer>
+</c-modal>
+
+
+<c-modal backdrop="static" [(visible)]="isNewTenantModalVisible">
+  <c-modal-header>
+    <h5 cModalTitle>Add Facility Tenant</h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <form cForm>
+      <c-alert
+        fade
+        dismissible
+        color="danger"
+        [(visible)]="hasError">
+        {{ errorMessage }}
+      </c-alert>
+
+      <div class="mb-3">
+        <label cLabel>Tenant's Email Address</label>
+        <input cFormControl name="email-address" type="email" [(ngModel)]="newTenantPayload.emailAddress">
+        <div cFormText>
+          <small>When this tenancy is registered, the tenant would receive an invite to join the platform</small>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label cLabel>Tenancy Start Date</label>
+        <input cFormControl type="date" name="tenancy-start-date" [(ngModel)]="newTenantPayload.startsAt">
+      </div>
+      <div class="mb-3">
+        <label cLabel>Tenancy End Date</label>
+        <input cFormControl type="date" name="tenancy-end-date" [(ngModel)]="newTenantPayload.endsAt">
+      </div>
+      <div class="mb-3">
+        <label cLabel>Rent Paid Date</label>
+        <input cFormControl type="date" name="rent-paid-date" [(ngModel)]="newTenantPayload.paidAt">
+      </div>
+    </form>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton
+            color="secondary"
+            [disabled]="isCreatingTenant"
+            (click)="dismissNewTenantModal()">
+      Close
+    </button>
+    <button cButton color="success"
+            [disabled]="isCreatingTenant"
+            (click)="inviteTenant()">
+      Invite Tenant
     </button>
   </c-modal-footer>
 </c-modal>

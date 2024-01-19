@@ -25,6 +25,8 @@ public class User : Entity
 
     public List<Facility> Managed { get; private set; } = new();
 
+    public string? ResetCode { get; private set; }
+
 #pragma warning disable CS8618
     private User() { }
 #pragma warning restore CS8618
@@ -48,6 +50,12 @@ public class User : Entity
     public void UpdateLastName(string lastName) => LastName = lastName;
 
     public void UpdatePhoneNumber(string? phoneNumber) => PhoneNumber = phoneNumber;
+
+    public void SetResetCode() => ResetCode = Config.GenerateCode(8);
+
+    public void ResetResetCode() => ResetCode = null;
+
+    public bool ValidateResetCode(string resetCode) => ResetCode == resetCode;
 
     private string HashText(string password)
     {

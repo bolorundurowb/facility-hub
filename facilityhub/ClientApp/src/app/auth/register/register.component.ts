@@ -1,6 +1,5 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services';
 import { Router } from '@angular/router';
 

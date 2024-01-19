@@ -22,6 +22,7 @@ export class ForgotPasswordComponent {
 
   constructor(title: Title, private authService: AuthService, private router: Router,
               private notificationService: NotificationService) {
+    title.setTitle('Forgot Password | Facility Hub');
   }
 
   async requestReset() {

@@ -32,4 +32,20 @@ public class UserService : IUserService
 
         return user;
     }
+
+    public async Task RequestPasswordReset(string emailAddress)
+    {
+        var normalizedEmail = emailAddress.ToLowerInvariant();
+        var user = await _dbContext.Users
+            .FirstOrDefaultAsync(x => x.EmailAddress == normalizedEmail);
+
+        // if an account does not exist, do not let the caller know for security reasons
+        if (user != null)
+        {
+            user.SetResetCode();
+            await _dbContext.SaveChangesAsync();
+
+            // TODO: send email to the user
+        }
+    }
 }

@@ -23,6 +23,10 @@ export class AuthService {
     return asPromise(this.http.post<any>(`${this.apiBaseUrl}/login`, user));
   }
 
+  requestReset(payload: any): Promise<any> {
+    return asPromise(this.http.post<any>(`${this.apiBaseUrl}/request-password-reset`, payload));
+  }
+
   logout() {
     localStorage.removeItem(this.userKey);
     localStorage.removeItem(this.tokenKey);

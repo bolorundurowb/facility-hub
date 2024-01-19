@@ -54,6 +54,15 @@ public class AuthController : ApiController
         return Created(new AuthRes(token, expiry, Mapper.Map<UserRes>(user)));
     }
 
+    [AllowAnonymous]
+    [HttpPost("request-password-reset")]
+    [ProducesResponseType(204)]
+    public async Task<IActionResult> RequestPasswordReset([FromBody] ForgotPasswordReq req)
+    {
+        await _userService.RequestPasswordReset(req.EmailAddress);
+        return NoContent();
+    }
+
     private (string, DateTime) GenerateToken(User user)
     {
         var claims = new List<Claim>

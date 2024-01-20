@@ -21,7 +21,7 @@ public class Issue : Entity
     [StringLength(256)]
     public string Location { get; private set; }
 
-    [StringLength(4096)]
+    [StringLength(512)]
     public string? RemedialAction { get; private set; }
 
     public IssueStatus Status { get; private set; }

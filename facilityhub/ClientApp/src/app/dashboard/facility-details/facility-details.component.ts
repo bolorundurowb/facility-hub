@@ -32,6 +32,10 @@ interface FacilityTenantPayload {
   paidAt?: Date;
 }
 
+interface FacilityIssuePayload {
+
+}
+
 @Component({
   selector: 'fh-dashboard-facility-details',
   templateUrl: './facility-details.component.html',

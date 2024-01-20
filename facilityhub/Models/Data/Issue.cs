@@ -10,6 +10,8 @@ public class Issue : Entity
     private static readonly GenerationOptions
         GenOptions = new(useNumbers: true, useSpecialCharacters: false, length: 8);
 
+    public Facility Facility { get; private set; }
+
     [StringLength(8)]
     public string Code { get; private set; }
 
@@ -35,11 +37,13 @@ public class Issue : Entity
     public DateTimeOffset FiledAt { get; private set; }
 
 #pragma warning disable CS8618
-    // private Issue() { }
+    private Issue() { }
 #pragma warning restore CS8618
 
-    public Issue(DateTimeOffset occurredAt, string description, string location, string? remedialAction, Tenant filedBy)
+    public Issue(Facility facility, DateTimeOffset occurredAt, string description, string location,
+        string? remedialAction, Tenant filedBy)
     {
+        Facility = facility;
         OccurredAt = occurredAt;
         Description = description;
         Location = location;

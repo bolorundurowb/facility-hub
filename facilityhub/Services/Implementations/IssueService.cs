@@ -13,44 +13,52 @@ public class IssueService : IIssueService
 
     public async Task<List<Issue>> GetAll(Guid userId)
     {
-        var facilityIds = await GetAccessibleFacilityIds(userId);
-        return await _dbContext.Facilities
+        var managedFacilityIds = await GetManagedFacilityIds(userId);
+        return await _dbContext.Issues
             .AsNoTracking()
-            .Where(x => facilityIds.Contains(x.Id))
-            .SelectMany(x => x.Issues)
+            .Where(x =>
+                // you are referenced in the issue
+                x.FiledBy.User!.Id == userId
+                // or you manage the facility the report is on
+                || managedFacilityIds.Contains(x.Facility.Id)
+            )
             .ToListAsync();
     }
 
-    public Task<List<Issue>> GetAllForFacility(Guid userId, Guid facilityId)
+    public async Task<List<Issue>> GetAllForFacility(Guid userId, Guid facilityId)
     {
-        return _dbContext.Facilities
+        var managedFacilityIds = await GetManagedFacilityIds(userId);
+        return await _dbContext.Issues
             .AsNoTracking()
-            .Where(x => x.Id == facilityId)
+            .Where(x => x.Facility.Id == facilityId)
             .Where(x =>
-                x.Tenant!.User!.Id == userId
-                || x.Owners.Any(y => y.Id == userId)
-                || x.Managers.Any(y => y.Id == userId)
+                // you are referenced in the issue
+                x.FiledBy.User!.Id == userId
+                // or you manage the facility the report is on
+                || managedFacilityIds.Contains(x.Facility.Id)
             )
-            .SelectMany(x => x.Issues)
             .ToListAsync();
     }
 
     public async Task<Issue?> FindById(Guid userId, Guid issueId)
     {
-        var facilityIds = await GetAccessibleFacilityIds(userId);
-        return await _dbContext.Facilities
-            .AsNoTracking()
-            .Where(x => facilityIds.Contains(x.Id))
-            .SelectMany(x => x.Issues)
+        var managedFacilityIds = await GetManagedFacilityIds(userId);
+        return await _dbContext.Issues
+            .Where(x =>
+                // you are referenced in the issue
+                x.FiledBy.User!.Id == userId
+                // or you manage the facility the report is on
+                || managedFacilityIds.Contains(x.Facility.Id)
+            )
             .FirstOrDefaultAsync(x => x.Id == issueId);
     }
 
-    private Task<List<Guid>> GetAccessibleFacilityIds(Guid userId) => _dbContext.Facilities
+    // public async Task<Issue> Create(Tenant tenant, )
+
+    private Task<List<Guid>> GetManagedFacilityIds(Guid userId) => _dbContext.Facilities
         .AsNoTracking()
-        .Where(x =>
-            x.Tenant!.User!.Id == userId
-            || x.Owners.Any(y => y.Id == userId)
-            || x.Managers.Any(y => y.Id == userId)
+        .Where(x => x.Owners.Any(y => y.Id == userId)
+                    || x.Managers.Any(y => y.Id == userId)
         )
         .Select(x => x.Id)
         .ToListAsync();

@@ -13,15 +13,20 @@ public class Issue : Entity
     [StringLength(8)]
     public string Code { get; private set; }
 
-    [StringLength(256)]
-    public string Title { get; private set; }
+    public DateTimeOffset OccurredAt { get; private set; }
 
     [StringLength(4096)]
-    public string Details { get; private set; }
+    public string Description { get; private set; }
+
+    [StringLength(256)]
+    public string Location { get; private set; }
+
+    [StringLength(4096)]
+    public string? RemedialAction { get; private set; }
 
     public IssueStatus Status { get; private set; }
 
-    public List<Document> Documents { get; set; } = new();
+    public List<Document> Evidence { get; set; } = new();
 
     public List<IssueLogEntry> Log { get; private set; } = new();
 
@@ -30,18 +35,21 @@ public class Issue : Entity
     public DateTimeOffset FiledAt { get; private set; }
 
 #pragma warning disable CS8618
-    private Issue() { }
+    // private Issue() { }
 #pragma warning restore CS8618
 
-    public Issue(Tenant filedBy, string title, string details)
+    public Issue(DateTimeOffset occurredAt, string description, string location, string? remedialAction, Tenant filedBy)
     {
+        OccurredAt = occurredAt;
+        Description = description;
+        Location = location;
+        RemedialAction = remedialAction;
         FiledBy = filedBy;
-        Title = title;
-        Details = details;
 
-        Code = ShortId.Generate(GenOptions);
         Status = IssueStatus.Filed;
-        Log = new List<IssueLogEntry> { new(null, Status, null) };
         FiledAt = DateTimeOffset.Now;
+        Evidence = new List<Document>();
+        Code = ShortId.Generate(GenOptions);
+        Log = new List<IssueLogEntry> { new(null, Status, null) };
     }
 }

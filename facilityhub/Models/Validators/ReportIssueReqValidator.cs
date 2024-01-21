@@ -13,7 +13,9 @@ public class ReportIssueReqValidator : AbstractValidator<ReportIssueReq>
 
         RuleFor(req => req.OccurredAt)
             .NotEmpty()
-            .WithMessage("The time occurred is required.");
+            .WithMessage("The time occurred is required.")
+            .Must(x => x < DateTimeOffset.UtcNow)
+            .WithMessage("The issue must have occurred in the past");
 
         RuleFor(req => req.Description)
             .NotEmpty()

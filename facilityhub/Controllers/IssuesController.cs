@@ -50,7 +50,7 @@ public class IssuesController : ApiController
         var userId = User.GetCallerId();
         var facility = await _facilityService.FindById(userId, req.FacilityId);
 
-        if (facility == null || facility.Tenant?.User?.Id == userId)
+        if (facility == null || facility.Tenant?.User?.Id != userId)
             return Forbidden("You cannot report issues on this facility");
 
         var issue = await _issueService.Create(facility, req.OccurredAt, req.Description, req.Location,

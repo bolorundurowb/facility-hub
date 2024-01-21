@@ -61,7 +61,6 @@ public class IssueService : IIssueService
         string location, string? remedialAction)
     {
         var issue = facility.ReportIssue(occurredAt, description, location, remedialAction);
-        await _dbContext.Issues.AddAsync(issue);
         await _dbContext.SaveChangesAsync();
 
         return issue;

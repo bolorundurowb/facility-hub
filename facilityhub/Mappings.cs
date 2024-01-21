@@ -34,5 +34,16 @@ public class Mappings : IRegister
             .Map(x => x.Longitude, y => y.X)
             .Map(x => x.Latitude, y => y.Y)
             .Compile();
+
+        config.NewConfig<Issue, IssueRes>()
+            .AfterMapping((model, vm) =>
+            {
+                vm.FacilityId = model.Facility?.Id;
+                vm.FacilityName = model.Facility?.Name;
+                
+                vm.FiledById = model.FiledBy?.Id;
+                vm.FiledByName = model.FiledBy?.Name;
+            })
+            .Compile();
     }
 }

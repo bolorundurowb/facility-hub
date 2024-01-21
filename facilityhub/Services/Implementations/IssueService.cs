@@ -16,6 +16,8 @@ public class IssueService : IIssueService
         var managedFacilityIds = await GetManagedFacilityIds(userId);
         return await _dbContext.Issues
             .AsNoTracking()
+            .Include(x => x.Facility)
+            .Include(x => x.FiledBy)
             .Where(x =>
                 // you are referenced in the issue
                 x.FiledBy.User!.Id == userId
@@ -44,6 +46,8 @@ public class IssueService : IIssueService
     {
         var managedFacilityIds = await GetManagedFacilityIds(userId);
         return await _dbContext.Issues
+            .Include(x => x.Facility)
+            .Include(x => x.FiledBy)
             .Where(x =>
                 // you are referenced in the issue
                 x.FiledBy.User!.Id == userId

@@ -53,7 +53,15 @@ public class IssueService : IIssueService
             .FirstOrDefaultAsync(x => x.Id == issueId);
     }
 
-    // public async Task<Issue> Create(Tenant tenant, )
+    public async Task<Issue> Create(Facility facility, DateTimeOffset occurredAt, string description,
+        string location, string? remedialAction)
+    {
+        var issue = facility.ReportIssue(occurredAt, description, location, remedialAction);
+        await _dbContext.Issues.AddAsync(issue);
+        await _dbContext.SaveChangesAsync();
+
+        return issue;
+    }
 
     private Task<List<Guid>> GetManagedFacilityIds(Guid userId) => _dbContext.Facilities
         .AsNoTracking()

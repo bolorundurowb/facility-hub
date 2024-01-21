@@ -41,14 +41,14 @@ public class Issue : Entity
 #pragma warning restore CS8618
 
     public Issue(Facility facility, DateTimeOffset occurredAt, string description, string location,
-        string? remedialAction, Tenant filedBy)
+        string? remedialAction)
     {
         Facility = facility;
         OccurredAt = occurredAt;
         Description = description;
         Location = location;
         RemedialAction = remedialAction;
-        FiledBy = filedBy;
+        FiledBy = facility.Tenant!;
 
         Status = IssueStatus.Filed;
         FiledAt = DateTimeOffset.Now;

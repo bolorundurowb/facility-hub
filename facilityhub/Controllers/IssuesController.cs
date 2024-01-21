@@ -17,6 +17,16 @@ public class IssuesController : ApiController
         _issueService = issueService;
     }
 
+    [HttpGet("")]
+    [ProducesResponseType(typeof(List<IssueRes>), 200)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> GetAll()
+    {
+        var userId = User.GetCallerId();
+        var issues = await _issueService.GetAll(userId);
+        return Ok(Mapper.Map<List<IssueRes>>(issues));
+    }
+
     [HttpGet("{issueId:guid}")]
     [ProducesResponseType(typeof(IssueRes), 200)]
     [ProducesResponseType(typeof(GenericRes), 404)]

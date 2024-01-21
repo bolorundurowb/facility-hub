@@ -1,4 +1,5 @@
 ﻿using FacilityHub.Extensions;
+using FacilityHub.Models.Request;
 using FacilityHub.Models.Response;
 using FacilityHub.Services.Interfaces;
 using MapsterMapper;
@@ -39,5 +40,22 @@ public class IssuesController : ApiController
             return NotFound("Issue not found");
 
         return Ok(Mapper.Map<IssueRes>(issue));
+    }
+
+    [HttpPost("")]
+    [ProducesResponseType(typeof(IssueRes), 201)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> Report([FromBody] ReportIssueReq req)
+    {
+        var userId = User.GetCallerId();
+        var facility = await _facilityService.FindById(userId, req.FacilityId);
+
+        if (facility == null || facility.Tenant?.User?.Id == userId)
+            return Forbidden("You cannot report issues on this facility");
+
+        var issue = await _issueService.Create(facility, req.OccurredAt, req.Description, req.Location,
+            req.RemedialAction);
+
+        return Created(Mapper.Map<IssueRes>(issue));
     }
 }

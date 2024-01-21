@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { FacilitiesService, FileDownloadService, InvitationsService, NotificationService } from '../../services';
+import {
+  FacilitiesService,
+  FileDownloadService,
+  InvitationsService,
+  IssuesService,
+  NotificationService
+} from '../../services';
 import { ActivatedRoute } from '@angular/router';
 import * as Leaflet from 'leaflet';
 import { getLayers } from '../../utils';
@@ -32,6 +38,14 @@ interface FacilityTenantPayload {
   paidAt?: Date;
 }
 
+interface FacilityIssuePayload {
+  facilityId?: string;
+  occurredAt?: Date;
+  description?: string;
+  location?: string;
+  remedialAction?: string;
+}
+
 @Component({
   selector: 'fh-dashboard-facility-details',
   templateUrl: './facility-details.component.html',
@@ -57,9 +71,14 @@ export class FacilityDetailsComponent implements OnInit {
   isCreatingTenant = false;
   newTenantPayload: FacilityTenantPayload = {};
 
+  isReportModalVisible = false;
+  isFilingReport = false;
+  newIssuePayload: FacilityIssuePayload = {};
+
   constructor(title: Title, private facilityService: FacilitiesService, private route: ActivatedRoute,
               private location: Location, private notificationService: NotificationService,
-              private downloadService: FileDownloadService, private invitationService: InvitationsService) {
+              private downloadService: FileDownloadService, private invitationService: InvitationsService,
+              private issueService: IssuesService) {
     title.setTitle('Facility Details | Facility Hub');
   }
 
@@ -191,6 +210,33 @@ export class FacilityDetailsComponent implements OnInit {
       this.hasError = true;
     } finally {
       this.isCreatingTenant = false;
+    }
+  }
+
+  showNewIssueModal() {
+    this.isReportModalVisible = true;
+  }
+
+  dismissNewIssueModal() {
+    this.isReportModalVisible = false;
+    this.newIssuePayload = {};
+  }
+
+  async reportIssue() {
+    this.isFilingReport = true;
+    this.hasError = false;
+
+    try {
+      const response = await this.issueService.report(this.facilityId!, this.newIssuePayload);
+      this.issues.unshift(response)
+
+      this.dismissNewIssueModal();
+      this.notificationService.showSuccess('Report successfully filed');
+    } catch (e) {
+      this.errorMessage = e as string;
+      this.hasError = true;
+    } finally {
+      this.isFilingReport = false;
     }
   }
 }

@@ -79,7 +79,7 @@ public class FacilityService : IFacilityService
             details.MimeType,
             user
         );
-        facility.Documents.Add(document);
+        facility.AddDocument(document);
         await _dbContext.SaveChangesAsync();
 
         return document;

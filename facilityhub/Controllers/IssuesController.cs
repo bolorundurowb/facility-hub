@@ -42,7 +42,7 @@ public class IssuesController : ApiController
         return Ok(Mapper.Map<IssueRes>(issue));
     }
 
-    [HttpPost("")]
+    [HttpPost("report")]
     [ProducesResponseType(typeof(IssueRes), 201)]
     [ProducesResponseType(typeof(GenericRes), 404)]
     public async Task<IActionResult> Report([FromBody] ReportIssueReq req)

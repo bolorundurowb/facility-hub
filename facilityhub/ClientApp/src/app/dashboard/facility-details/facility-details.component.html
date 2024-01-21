@@ -66,7 +66,8 @@
         </c-header>
 
         <div class="action-row" *ngIf="facility.isTenant">
-          <button cButton>
+          <button cButton
+                  (click)="showNewIssueModal()">
             <svg [cIcon]="icons.cilNoteAdd"></svg>
             Report Issue
           </button>
@@ -301,6 +302,56 @@
             [disabled]="isCreatingTenant"
             (click)="inviteTenant()">
       Invite Tenant
+    </button>
+  </c-modal-footer>
+</c-modal>
+
+
+<c-modal backdrop="static" [(visible)]="isReportModalVisible">
+  <c-modal-header>
+    <h5 cModalTitle>Report Issue</h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <form cForm>
+      <c-alert
+        fade
+        dismissible
+        color="danger"
+        [(visible)]="hasError">
+        {{ errorMessage }}
+      </c-alert>
+
+      <div class="mb-3">
+        <label cLabel>When did the issue occur?</label>
+        <input cFormControl type="date" name="occurrence-date" [(ngModel)]="newIssuePayload.occurredAt">
+      </div>
+      <div class="mb-3">
+        <label cLabel>Describe the issue</label>
+        <textarea cFormControl name="issue-description" rows="4" [(ngModel)]="newIssuePayload.description"></textarea>
+      </div>
+      <div class="mb-3">
+        <label cLabel>Where did the issue occur?</label>
+        <input cFormControl name="issue-location" [(ngModel)]="newIssuePayload.location">
+      </div>
+      <div class="mb-3">
+        <label cLabel>Did you take any remedial action?</label>
+        <input cFormControl name="remedial-action" [(ngModel)]="newIssuePayload.remedialAction">
+      </div>
+    </form>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton
+            color="secondary"
+            [disabled]="isFilingReport"
+            (click)="dismissNewIssueModal()">
+      Close
+    </button>
+    <button cButton color="success"
+            [disabled]="isFilingReport"
+            (click)="reportIssue()">
+      File Report
     </button>
   </c-modal-footer>
 </c-modal>

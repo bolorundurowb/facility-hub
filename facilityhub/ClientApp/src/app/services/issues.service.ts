@@ -13,6 +13,11 @@ export class IssuesService {
   }
 
 
+  getAll(): Promise<any[]> {
+    return asPromise(this.http.get<any[]>(this.apiBaseUrl));
+  }
+
+
   report(facilityId: string, payload: any): Promise<any> {
     payload.facilityId = facilityId;
     return asPromise(this.http.post<any>(`${this.apiBaseUrl}/report`, payload));

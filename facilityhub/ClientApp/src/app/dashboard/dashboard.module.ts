@@ -48,6 +48,7 @@ import { FormsModule } from '@angular/forms';
 import { FacilityDetailsComponent } from './facility-details/facility-details.component';
 import { NgxFilesizeModule } from 'ngx-filesize';
 import { TruncateModule } from '@yellowspot/ng-truncate';
+import { IssuesComponent } from './issues/issues.component';
 
 @NgModule({
   declarations: [
@@ -55,6 +56,7 @@ import { TruncateModule } from '@yellowspot/ng-truncate';
     FacilitiesComponent,
     FacilityDetailsComponent,
     HomeComponent,
+    IssuesComponent
   ],
   imports: [
     CommonModule,

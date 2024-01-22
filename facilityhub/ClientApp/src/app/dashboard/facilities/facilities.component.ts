@@ -21,6 +21,7 @@ interface NewFacilityPayload {
   styleUrl: './facilities.component.scss'
 })
 export class FacilitiesComponent implements OnInit {
+  isLoading = true;
   facilities: any[] = [];
   icons = { cilPlus };
 
@@ -38,6 +39,7 @@ export class FacilitiesComponent implements OnInit {
 
   async ngOnInit() {
     this.facilities = await this.facilitiesService.getAll();
+    this.isLoading = false;
   }
 
   async goToDetails(facilityId: string) {

@@ -93,7 +93,7 @@
             </thead>
             <tbody>
             <ng-container *ngFor="let issue of issues">
-              <tr>
+              <tr class="issue-table-row" (click)="goToDetails(issue)">
                 <th scope="row">{{ issue.code }}</th>
                 <td>{{ issue.occurredAt | date : 'MMM d, y h:mma' }}</td>
                 <td>{{ issue.description | truncate: 75 : { trailingString: '...' } }}</td>

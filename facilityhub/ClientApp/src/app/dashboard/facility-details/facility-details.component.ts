@@ -7,12 +7,12 @@ import {
   IssuesService,
   NotificationService
 } from '../../services';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as Leaflet from 'leaflet';
 import { getLayers } from '../../utils';
 import { Location } from '@angular/common';
 import { cilArrowLeft, cilCloudDownload, cilCloudUpload, cilNoteAdd, cilTrash, cilUserPlus } from '@coreui/icons';
-import { DocumentRes, DocumentType, LocationRes, TenantRes } from '../../components';
+import { DocumentRes, DocumentType, IssueRes, LocationRes, TenantRes } from '../../components';
 import { HttpEventType } from '@angular/common/http';
 
 interface FacilityDetailsDto {
@@ -58,7 +58,7 @@ export class FacilityDetailsComponent implements OnInit {
   facilityId?: string;
   facility?: FacilityDetailsDto;
   documents: Array<DocumentRes> = [];
-  issues: Array<any> = [];
+  issues: Array<IssueRes> = [];
 
   hasError = false;
   errorMessage?: string;
@@ -78,7 +78,7 @@ export class FacilityDetailsComponent implements OnInit {
   constructor(title: Title, private facilityService: FacilitiesService, private route: ActivatedRoute,
               private location: Location, private notificationService: NotificationService,
               private downloadService: FileDownloadService, private invitationService: InvitationsService,
-              private issueService: IssuesService) {
+              private issueService: IssuesService, private router: Router) {
     title.setTitle('Facility Details | Facility Hub');
   }
 
@@ -238,5 +238,9 @@ export class FacilityDetailsComponent implements OnInit {
     } finally {
       this.isFilingReport = false;
     }
+  }
+
+  async goToDetails(issue: IssueRes) {
+    await this.router.navigate([ 'dashboard', 'issues', issue.id ]);
   }
 }

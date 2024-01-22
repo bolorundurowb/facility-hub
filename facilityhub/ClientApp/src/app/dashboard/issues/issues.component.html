@@ -1,1 +1,55 @@
-<div>Hello</div>
+<div>
+  <c-header>
+    <h3>Issues</h3>
+  </c-header>
+
+  <div  class="loading" *ngIf="isLoading">
+    <c-spinner color="primary" variant="grow"></c-spinner>
+  </div>
+
+  <ng-container *ngIf="!isLoading">
+    <ng-container *ngIf="!issues.length">
+      <c-callout color="success">
+        Great! You do not have any reported issues
+      </c-callout>
+    </ng-container>
+
+    <c-callout color="secondary">
+      <svg [cIcon]="icons.cilLightbulb"></svg> &nbsp;
+      If you are tenant and would like to file a report. You can do that from the facility details page
+    </c-callout>
+
+    <ng-container *ngIf="issues.length">
+      <table cTable [striped]="true">
+        <thead>
+        <tr>
+          <th scope="col">Code</th>
+          <th scope="col">Occurred At</th>
+          <th scope="col">Facility</th>
+          <th scope="col">Location</th>
+          <th scope="col">Status</th>
+          <th scope="col">Reported By</th>
+          <th scope="col">Reported At</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let issue of issues">
+          <tr class="issue-table-row" (click)="goToDetails(issue)">
+            <th scope="row">{{ issue.code }}</th>
+            <td>{{ issue.occurredAt | date : 'MMM d, y h:mma' }}</td>
+            <td>{{ issue.facilityName }}</td>
+            <td>{{ issue.location | truncate: 25 : { trailingString: '...' } }}</td>
+            <td>
+              <c-badge [color]="issue.status === 'Repaired' ? 'success' : 'info'">
+                {{ issue.status }}
+              </c-badge>
+            </td>
+            <td>{{ issue.filedByName || 'N/A' }}</td>
+            <td>{{ issue.filedAt | date : 'MMM d, y h:mma' }}</td>
+          </tr>
+        </ng-container>
+        </tbody>
+      </table>
+    </ng-container>
+  </ng-container>
+</div>

@@ -10,5 +10,7 @@ public enum IssueStatus
 
     Repaired = 30,
 
-    Closed = 40
+    Closed = 40,
+
+    Duplicate = 50
 }

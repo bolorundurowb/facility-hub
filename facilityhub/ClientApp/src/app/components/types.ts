@@ -23,3 +23,18 @@ export interface LocationRes {
   longitude: number,
   latitude: number
 }
+
+export interface IssueRes {
+  id: string;
+  code: string;
+  facilityId?: string;
+  facilityName?: string;
+  occurredAt: string;
+  description: string;
+  location: string;
+  remedialAction?: string;
+  status: string;
+  filedById?: string;
+  filedByName?: string;
+  filedAt: string;
+}

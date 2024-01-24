@@ -3,8 +3,14 @@ import { FacilitiesComponent } from './facilities/facilities.component';
 import { NgModule } from '@angular/core';
 import { HomeComponent } from './home/home.component';
 import { FacilityDetailsComponent } from './facility-details/facility-details.component';
+import { IssuesComponent } from './issues/issues.component';
 
 const routes: Routes = [
+  {
+    path: 'home',
+    component: HomeComponent,
+    pathMatch: 'full'
+  },
   {
     path: 'facilities',
     component: FacilitiesComponent,
@@ -14,9 +20,8 @@ const routes: Routes = [
     component: FacilityDetailsComponent,
   },
   {
-    path: 'home',
-    component: HomeComponent,
-    pathMatch: 'full'
+    path: 'issues',
+    component: IssuesComponent,
   },
   {
     path: '**',

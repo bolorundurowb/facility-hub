@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using CredentialsInUrlParser;
 using FacilityHub.DataContext;
 using FacilityHub.Extensions;
 using FacilityHub.Services.Implementations;
@@ -11,7 +12,6 @@ using Mapster;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using PostgresConnString.NET;
 
 namespace FacilityHub;
 
@@ -65,7 +65,7 @@ public class Startup
         services.AddDbContext<FacilityHubDbContext>(
             dbContextOptions => dbContextOptions
                 .UseNpgsql(
-                    ConnectionDetails.Parse(Config.DbUrl).ToNpgsqlConnectionString(),
+                    CIU.Parse(Config.DbUrl).ToNpgsqlConnectionString(),
                     opts => opts.UseNetTopologySuite()
                 )
 #if DEBUG

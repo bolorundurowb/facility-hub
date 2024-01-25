@@ -4,3 +4,4 @@ export * from './file-download.service';
 export * from './invitations.service';
 export * from './issues.service';
 export * from './notification.service';
+export * from './statistics.service';

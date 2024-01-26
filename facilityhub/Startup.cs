@@ -82,6 +82,7 @@ public class Startup
 
         services.AddScoped<IFacilityService, FacilityService>();
         services.AddScoped<IIssueService, IssueService>();
+        services.AddScoped<IStatisticService, StatisticService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IMediaHandlerService, CloudinaryService>();
         services.AddScoped<IEmailService, EmailService>();

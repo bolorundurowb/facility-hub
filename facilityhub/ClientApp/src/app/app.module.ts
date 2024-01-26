@@ -9,12 +9,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { SidebarModule, ToastModule } from '@coreui/angular';
 import { AuthInterceptor, ErrorInterceptor } from './interceptors';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { NotificationsComponent } from './components';
+import { NotificationsComponent, WidgetComponent } from './components';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NotificationsComponent
+    NotificationsComponent,
   ],
   imports: [
     AppRoutingModule,

@@ -15,7 +15,6 @@ import { NotificationsComponent, WidgetComponent } from './components';
   declarations: [
     AppComponent,
     NotificationsComponent,
-    WidgetComponent,
   ],
   imports: [
     AppRoutingModule,

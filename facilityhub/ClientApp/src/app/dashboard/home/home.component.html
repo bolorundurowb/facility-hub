@@ -4,10 +4,59 @@
   </c-header>
 
   <div class="welcome">
-    Welcome, <span>{{userName}}</span>
+    Welcome, <span>{{ userName }}</span>
   </div>
 
   <c-container>
+    <div class="loading" *ngIf="isLoading">
+      <c-spinner color="primary" variant="grow"></c-spinner>
+    </div>
 
+    <ng-container *ngIf="!isLoading">
+      <c-row style="margin-top: 1.5rem;">
+        <c-col [xs]="12" [sm]="12" [md]="6" [lg]="4" [xl]="4">
+          <fh-widget
+            colour="#cce5f7"
+            title="Facilities You Own"
+            [value]="stats.facilitiesOwned"
+          ></fh-widget>
+        </c-col>
+        <c-col [xs]="12" [sm]="12" [md]="6" [lg]="4" [xl]="4">
+          <fh-widget
+            colour="#dcefd2"
+            title="Facilities You Rent"
+            [value]="stats.facilitiesRented"
+          ></fh-widget>
+        </c-col>
+        <c-col [xs]="12" [sm]="12" [md]="6" [lg]="4" [xl]="4">
+          <fh-widget
+            colour="#ecaa9a"
+            title="Facilities You Manage"
+            [value]="stats.facilitiesManaged"
+          ></fh-widget>
+        </c-col>
+        <c-col [xs]="12" [sm]="12" [md]="6" [lg]="4" [xl]="4">
+          <fh-widget
+            colour="#c2b3e6"
+            title="Issues You Reported"
+            [value]="stats.issuesFiled"
+          ></fh-widget>
+        </c-col>
+        <c-col [xs]="12" [sm]="12" [md]="6" [lg]="4" [xl]="4">
+          <fh-widget
+            colour="#b8cccc"
+            title="Issues You Manage"
+            [value]="stats.issuesManaged"
+          ></fh-widget>
+        </c-col>
+        <c-col [xs]="12" [sm]="12" [md]="6" [lg]="4" [xl]="4">
+          <fh-widget
+            colour="#e5cbaa"
+            title="Issues Resolved"
+            [value]="stats.issuesResolved"
+          ></fh-widget>
+        </c-col>
+      </c-row>
+    </ng-container>
   </c-container>
 </div>

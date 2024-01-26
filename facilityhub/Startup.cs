@@ -85,6 +85,7 @@ public class Startup
         services.AddScoped<IStatisticService, StatisticService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IMediaHandlerService, CloudinaryService>();
+        services.AddScoped<IEmailService, EmailService>();
     }
 
     public void Configure(IApplicationBuilder app)

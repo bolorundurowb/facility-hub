@@ -18,6 +18,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Handlebars.Net" Version="2.1.4" />
+        <PackageReference Include="MailKit" Version="4.3.0" />
         <PackageReference Include="ciu-parser" Version="1.0.0" />
         <PackageReference Include="CloudinaryDotNet" Version="1.25.0" />
         <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="7.0.15" />
@@ -68,6 +70,29 @@
       <_ContentIncludedByDefault Remove="ClientApp\package.json" />
       <_ContentIncludedByDefault Remove="ClientApp\tsconfig.app.json" />
       <_ContentIncludedByDefault Remove="ClientApp\tsconfig.json" />
+    </ItemGroup>
+
+
+
+    <ItemGroup>
+        <PackageReference Include="ciu-parser" Version="1.0.0" />
+        <PackageReference Include="CloudinaryDotNet" Version="1.25.0" />
+        <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="7.0.15" />
+        <PackageReference Include="CloudinaryDotNet" Version="1.24.0" />
+        <PackageReference Include="Handlebars.Net" Version="2.1.4" />
+        <PackageReference Include="MailKit" Version="4.3.0" />
+        <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="7.0.14" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.15" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.15"/>
+    </ItemGroup>
+
+
+
+    <ItemGroup>
+      <None Remove="Templates\ForgotPassword.hbs" />
+      <EmbeddedResource Include="Templates\ForgotPassword.hbs" />
+      <None Remove="Templates\RootEmailTemplate.hbs" />
+      <EmbeddedResource Include="Templates\RootEmailTemplate.hbs" />
     </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

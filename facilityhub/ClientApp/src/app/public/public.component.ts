@@ -2,6 +2,15 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from '../services';
+import {
+  cilArrowLeft,
+  cilChartLine,
+  cilCloudDownload,
+  cilCloudUpload, cilExitToApp,
+  cilNoteAdd,
+  cilTrash, cilUser,
+  cilUserPlus
+} from '@coreui/icons';
 
 @Component({
   selector: 'fh-public',
@@ -41,13 +50,23 @@ import { AuthService } from '../services';
                   <button
                     cDropdownItem
                     (click)="goToDashboard()">
+                    <svg [cIcon]="icons.cilChartLine" size="sm"></svg> &nbsp;
                     Dashboard
                   </button>
                 </li>
                 <li>
                   <button
                     cDropdownItem
+                    (click)="goToProfile()">
+                    <svg [cIcon]="icons.cilUser" size="sm"></svg> &nbsp;
+                    Profile
+                  </button>
+                </li>
+                <li>
+                  <button
+                    cDropdownItem
                     (click)="logOut()">
+                    <svg [cIcon]="icons.cilExitToApp" size="sm"></svg> &nbsp;
                     Log Out
                   </button>
                 </li>
@@ -64,6 +83,7 @@ import { AuthService } from '../services';
 export class PublicComponent {
   isLoggedIn = false;
   user: any;
+  icons = { cilChartLine, cilUser, cilExitToApp  };
 
   constructor(title: Title, private router: Router, private authService: AuthService) {
     title.setTitle('Home | Facility Hub');
@@ -82,6 +102,10 @@ export class PublicComponent {
 
   async goToDashboard() {
     await this.router.navigate([ 'dashboard' ]);
+  }
+
+  async goToProfile() {
+    await this.router.navigate([ 'dashboard', 'profile' ]);
   }
 
   logOut() {

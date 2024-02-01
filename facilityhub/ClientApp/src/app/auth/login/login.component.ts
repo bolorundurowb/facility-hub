@@ -38,7 +38,7 @@ export class LoginComponent {
         await this.router.navigate([ 'dashboard' ]);
       }
     } catch (e: any) {
-      this.errorMessage = e.message;
+      this.errorMessage = e;
       this.hasError = true;
     } finally {
       this.isBusy = false;

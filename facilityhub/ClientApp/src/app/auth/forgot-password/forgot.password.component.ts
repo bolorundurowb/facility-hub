@@ -37,7 +37,7 @@ export class ForgotPasswordComponent {
         await this.router.navigate([ 'auth', 'reset-password' ]);
       }
     } catch (e: any) {
-      this.errorMessage = e.message;
+      this.errorMessage = e;
       this.hasError = true;
     } finally {
       this.isBusy = false;

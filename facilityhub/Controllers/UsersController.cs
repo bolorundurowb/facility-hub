@@ -1,5 +1,4 @@
 ﻿using FacilityHub.Extensions;
-using FacilityHub.Models.Request;
 using FacilityHub.Models.Response;
 using FacilityHub.Services.Interfaces;
 using MapsterMapper;

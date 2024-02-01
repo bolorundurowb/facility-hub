@@ -1,7 +1,5 @@
 ﻿using FacilityHub.Extensions;
 using FacilityHub.Models.DTOs;
-using FacilityHub.Models.Request;
-using FacilityHub.Models.Response;
 using FacilityHub.Services.Interfaces;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;

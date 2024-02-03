@@ -25,8 +25,8 @@ public class StatisticService : IStatisticService
         var issuesManaged = await issQuery.Where(x =>
             x.Facility.Managers.Any(y => y.Id == userId) || x.Facility.Owners.Any(y => y.Id == userId)).CountAsync();
         var issuesResolved = await issQuery.Where(x =>
-            (x.Status == IssueStatus.Closed || x.Status == IssueStatus.Duplicate) 
-            && x.Facility.Managers.Any(y => y.Id == userId) 
+            (x.Status == IssueStatus.Closed || x.Status == IssueStatus.Duplicate)
+            && x.Facility.Managers.Any(y => y.Id == userId)
             || x.Facility.Owners.Any(y => y.Id == userId))
             .CountAsync();
 

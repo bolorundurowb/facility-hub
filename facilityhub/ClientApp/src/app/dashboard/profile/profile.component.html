@@ -1,1 +1,12 @@
-<div>Hello</div>
+<div>
+  <c-header>
+    <h3>Profile</h3>
+  </c-header>
+
+  <div  class="loading" *ngIf="isLoading">
+    <c-spinner color="primary" variant="grow"></c-spinner>
+  </div>
+
+  <ng-container *ngIf="!isLoading">
+  </ng-container>
+</div>

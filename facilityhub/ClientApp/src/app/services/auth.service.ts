@@ -40,9 +40,9 @@ export class AuthService {
   }
 
   persistAuth(user: any, token: string, expires: string): void {
-    localStorage.setItem(this.userKey, JSON.stringify(user));
     localStorage.setItem(this.tokenKey, token);
     localStorage.setItem(this.expiryKey, expires);
+    this.updateUser(user);
   }
 
   getToken(): string | null {
@@ -51,5 +51,9 @@ export class AuthService {
 
   getUser(): any {
     return JSON.parse(localStorage.getItem(this.userKey) || '{}');
+  }
+
+  updateUser(user: any): void {
+    localStorage.setItem(this.userKey, JSON.stringify(user));
   }
 }

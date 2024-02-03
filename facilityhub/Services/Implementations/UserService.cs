@@ -48,4 +48,14 @@ public class UserService : IUserService
             // TODO: send email to the user
         }
     }
+
+    public async Task<User> Update(User user, string? firstName, string? lastName, string? phoneNumber)
+    {
+        user.UpdateFirstName(firstName);
+        user.UpdateLastName(lastName);
+        user.UpdatePhoneNumber(phoneNumber);
+        await _dbContext.SaveChangesAsync();
+
+        return user;
+    }
 }

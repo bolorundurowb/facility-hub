@@ -25,17 +25,14 @@ public static class EmailTemplateHelpers
         const string rootTemplateNamespace = "FacilityHub.Templates.RootEmailTemplate.hbs";
         var templateNamespace = $"FacilityHub.Templates.{templateName}.hbs";
 
-        await using Stream rootStream = assembly.GetManifestResourceStream(rootTemplateNamespace),
-            templateStream = assembly.GetManifestResourceStream(templateNamespace);
-        if (rootStream == null)
-        {
-            return string.Empty;
-        }
+        await using var rootStream = assembly.GetManifestResourceStream(rootTemplateNamespace);
+        await using var templateStream = assembly.GetManifestResourceStream(templateNamespace);
 
-        if (templateStream == null)
-        {
+        if (rootStream == null) 
             return string.Empty;
-        }
+
+        if (templateStream == null) 
+            return string.Empty;
 
         using StreamReader rootStreamReader = new(rootStream),
             streamReader = new(templateStream);

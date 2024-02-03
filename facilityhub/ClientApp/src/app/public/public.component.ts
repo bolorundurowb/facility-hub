@@ -1,15 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AuthService } from '../services';
 import {
-  cilArrowLeft,
   cilChartLine,
-  cilCloudDownload,
-  cilCloudUpload, cilExitToApp,
-  cilNoteAdd,
-  cilTrash, cilUser,
-  cilUserPlus
+  cilExitToApp,
+   cilUser,
 } from '@coreui/icons';
 
 @Component({

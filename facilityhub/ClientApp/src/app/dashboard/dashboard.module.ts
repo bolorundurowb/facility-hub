@@ -49,8 +49,8 @@ import { FacilityDetailsComponent } from './facility-details/facility-details.co
 import { NgxFilesizeModule } from 'ngx-filesize';
 import { TruncateModule } from '@yellowspot/ng-truncate';
 import { IssuesComponent } from './issues/issues.component';
-import { AppModule } from '../app.module';
 import { WidgetComponent } from '../components';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +59,7 @@ import { WidgetComponent } from '../components';
     FacilityDetailsComponent,
     HomeComponent,
     IssuesComponent,
+    ProfileComponent,
     WidgetComponent,
   ],
   imports: [

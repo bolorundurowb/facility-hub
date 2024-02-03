@@ -13,4 +13,8 @@ export class UsersService {
   getProfile(): Promise<any> {
     return asPromise(this.http.get<any>(`${this.apiBaseUrl}/current`));
   }
+
+  updateProfile(user: any): Promise<any> {
+    return asPromise(this.http.put<any>(`${this.apiBaseUrl}/current`, user));
+  }
 }

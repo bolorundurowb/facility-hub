@@ -1,0 +1,29 @@
+.user-action-row {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  text-align: end;
+}
+
+.profile-details {
+  .id {
+    font-size: 0.8rem;
+    margin-top: 1rem;
+    font-weight: bold;
+    color: gray;
+
+    span {
+      font-weight: normal;
+    }
+  }
+
+  .entry {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    font-weight: bold;
+
+    span {
+      font-weight: normal;
+      font-size: 1.1rem;
+    }
+  }
+}

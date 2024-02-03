@@ -8,5 +8,57 @@
   </div>
 
   <ng-container *ngIf="!isLoading">
+    <div class="user-action-row">
+      <c-button-group>
+        <button cButton color="success" variant="outline">
+          Update Profile
+        </button>
+        <button cButton color="warning" variant="outline">
+          Change Password
+        </button>
+        <button cButton color="danger" variant="outline">
+          Delete Account
+        </button>
+      </c-button-group>
+    </div>
+
+    <div class="profile-details">
+      <div class="id">
+        Id:
+        <span>
+          {{ user.id }}
+        </span>
+      </div>
+      <div class="entry">
+        First Name:
+        <span>
+          {{ user.firstName || '(Not Available)' }}
+        </span>
+      </div>
+      <div class="entry">
+        Last Name:
+        <span>
+          {{ user.lastName || '(Not Available)' }}
+        </span>
+      </div>
+      <div class="entry">
+        Email Address:
+        <span>
+          {{ user.emailAddress }}
+        </span>
+      </div>
+      <div class="entry">
+        Phone Number:
+        <span>
+          {{ user.phoneNumber || '(Not Available)' }}
+        </span>
+      </div>
+      <div class="entry">
+        Joined At:
+        <span>
+          {{ user.joinedAt | date: 'dd MMM, yyyy hh:mm' }}
+        </span>
+      </div>
+    </div>
   </ng-container>
 </div>

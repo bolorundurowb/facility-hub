@@ -3,14 +3,15 @@
     <h3>Profile</h3>
   </c-header>
 
-  <div  class="loading" *ngIf="isLoading">
+  <div class="loading" *ngIf="isLoading">
     <c-spinner color="primary" variant="grow"></c-spinner>
   </div>
 
   <ng-container *ngIf="!isLoading">
     <div class="user-action-row">
       <c-button-group>
-        <button cButton color="success" variant="outline">
+        <button cButton color="success" variant="outline"
+                (click)="showUpdateProfileModal()">
           Update Profile
         </button>
         <button cButton color="warning" variant="outline">
@@ -62,3 +63,37 @@
     </div>
   </ng-container>
 </div>
+
+<c-modal [(visible)]="isUpdateProfileModalVisible">
+  <c-modal-header>
+    <h5 cModalTitle>Update Profile</h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <form cForm>
+      <div class="mb-3">
+        <label cLabel>First Name</label>
+        <input cFormControl name="first-name" [(ngModel)]="updateProfilePayload.firstName">
+      </div>
+      <div class="mb-3">
+        <label cLabel>Last Name</label>
+        <input cFormControl name="last-name" [(ngModel)]="updateProfilePayload.lastName">
+      </div>
+      <div class="mb-3">
+        <label cLabel>Email Address</label>
+        <input cFormControl name="email-address" disabled [(ngModel)]="updateProfilePayload.emailAddress">
+      </div>
+      <div class="mb-3">
+        <label cLabel>Phone Number</label>
+        <input cFormControl name="phone-number" type="tel" [(ngModel)]="updateProfilePayload.phoneNumber">
+      </div>
+    </form>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton color="secondary" (click)="dismissUpdateProfileModal()">
+      Close
+    </button>
+    <button cButton color="success" [disabled]="isUpdatingProfile" (click)="updateProfile()">Update Profile</button>
+  </c-modal-footer>
+</c-modal>

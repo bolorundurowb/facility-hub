@@ -33,17 +33,17 @@
         <div class="action-row">
           <button cButton>
             <svg [cIcon]="icons.cilCloudUpload"></svg>
-            Upload Document
+            Provide Evidence
           </button>
         </div>
 
-        <ng-container *ngIf="!documents.length">
+        <ng-container *ngIf="!evidence.length">
           <c-callout color="success">
             No documents/evidence have been uploaded for this issue.
           </c-callout>
         </ng-container>
 
-        <ng-container *ngIf="documents.length">
+        <ng-container *ngIf="evidence.length">
           <table cTable [striped]="true">
             <thead>
             <tr>
@@ -55,7 +55,7 @@
             </tr>
             </thead>
             <tbody>
-            <ng-container *ngFor="let document of documents">
+            <ng-container *ngFor="let document of evidence">
               <tr>
                 <td>{{ document.fileName }}</td>
                 <td>{{ document.type }}</td>

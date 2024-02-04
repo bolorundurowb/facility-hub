@@ -42,6 +42,16 @@ public class IssuesController : ApiController
         return Ok(Mapper.Map<IssueRes>(issue));
     }
 
+    [HttpGet("{issueId:guid}/evidence")]
+    [ProducesResponseType(typeof(List<DocumentRes>), 200)]
+    public async Task<IActionResult> GetOneEvidence(Guid issueId)
+    {
+        var userId = User.GetCallerId();
+        var evidence = await _issueService.GetAllEvidence(userId, issueId);
+
+        return Ok(Mapper.Map<List<DocumentRes>>(evidence));
+    }
+
     [HttpPost("report")]
     [ProducesResponseType(typeof(IssueRes), 201)]
     [ProducesResponseType(typeof(GenericRes), 404)]

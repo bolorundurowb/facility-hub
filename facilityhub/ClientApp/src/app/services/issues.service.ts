@@ -23,8 +23,8 @@ export class IssuesService {
   }
 
 
-  getOneDocuments(issueId: string): Promise<any[]> {
-    return asPromise(this.http.get<any[]>(`${this.apiBaseUrl}/${issueId}/documents`));
+  getOneEvidence(issueId: string): Promise<any[]> {
+    return asPromise(this.http.get<any[]>(`${this.apiBaseUrl}/${issueId}/evidence`));
   }
 
 

@@ -17,7 +17,7 @@ export  class IssueDetailsComponent implements OnInit {
 
   issueId?: string;
   issue?: IssueRes;
-  documents: Array<DocumentRes> = [];
+  evidence: Array<DocumentRes> = [];
 
   hasError = false;
   errorMessage?: string;
@@ -34,7 +34,7 @@ export  class IssueDetailsComponent implements OnInit {
       const issueId = this.route.snapshot.params['issueId'];
 
       this.issue = await this.issueService.getOne(issueId);
-      this.documents = await this.issueService.getOneDocuments(issueId);
+      this.evidence = await this.issueService.getOneEvidence(issueId);
 
       this.issueId = issueId;
     } finally {

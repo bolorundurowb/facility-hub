@@ -13,4 +13,6 @@ public interface IIssueService
 
     Task<Issue> Create(Facility facility, DateTimeOffset occurredAt, string description,
         string location, string? remedialAction);
+
+    Task<List<Document>> GetAllEvidence(Guid userId, Guid issueId);
 }

@@ -21,7 +21,85 @@
     </ng-container>
 
     <ng-container *ngIf="issue">
+      <c-container>
 
+      </c-container>
+
+      <c-container>
+        <c-header>
+          <h5>Documents</h5>
+        </c-header>
+
+        <div class="action-row">
+          <button cButton>
+            <svg [cIcon]="icons.cilCloudUpload"></svg>
+            Upload Document
+          </button>
+        </div>
+
+        <ng-container *ngIf="!documents.length">
+          <c-callout color="success">
+            No documents/evidence have been uploaded for this issue.
+          </c-callout>
+        </ng-container>
+
+        <ng-container *ngIf="documents.length">
+          <table cTable [striped]="true">
+            <thead>
+            <tr>
+              <th scope="col">File Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Size</th>
+              <th scope="col">Uploaded At</th>
+              <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let document of documents">
+              <tr>
+                <td>{{ document.fileName }}</td>
+                <td>{{ document.type }}</td>
+                <td>{{ document.fileSize | filesize }}</td>
+                <td>{{ document.createdAt | date : 'MMM d, y h:mma' }}</td>
+                <td>
+                  <button cButton
+                          color="dark"
+                          variant="ghost"
+                          cPopover="Download File"
+                          cPopoverPlacement="left"
+                          [cPopoverTrigger]="'hover'">
+                    <svg [cIcon]="icons.cilCloudDownload" size="lg"></svg>
+                  </button>
+                  |
+                  <button cButton
+                          color="danger"
+                          variant="ghost"
+                          cPopoverPlacement="bottom"
+                          [cPopover]="popoverHtml"
+                          [cPopoverTrigger]="'click'">
+                    <svg [cIcon]="icons.cilTrash" size="lg"></svg>
+                  </button>
+                  <ng-template #popoverHtml>
+                    <h3 class="popover-header">
+                      Confirm Delete
+                    </h3>
+                    <div class="popover-body">
+                      <p>Are you sure you want to delete this file? This action is permanent and cannot be reversed!</p>
+                      <div style="text-align: end">
+                        <c-button-group size="sm" style="text-align: end">
+                          <button cButton color="secondary">Cancel</button>
+                          <button cButton color="danger" >Proceed</button>
+                        </c-button-group>
+                      </div>
+                    </div>
+                  </ng-template>
+                </td>
+              </tr>
+            </ng-container>
+            </tbody>
+          </table>
+        </ng-container>
+      </c-container>
     </ng-container>
   </ng-container>
 </div>

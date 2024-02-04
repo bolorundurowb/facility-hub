@@ -1,1 +1,27 @@
-<div>Hello</div>
+<div>
+  <c-header>
+    <div class="issue-header-row">
+      <button cButton variant="ghost" color="dark" (click)="goBack()">
+        <svg [cIcon]="icons.cilArrowLeft"></svg>
+        Back
+      </button>
+      <h3>Issue Details</h3>
+    </div>
+  </c-header>
+
+  <div class="loading" *ngIf="isLoading">
+    <c-spinner color="primary" variant="grow"></c-spinner>
+  </div>
+
+  <ng-container *ngIf="!isLoading">
+    <ng-container *ngIf="!issue">
+      <c-callout color="danger">
+        The issue you are trying to view does not exist or you do not have permissions to view it.
+      </c-callout>
+    </ng-container>
+
+    <ng-container *ngIf="issue">
+
+    </ng-container>
+  </ng-container>
+</div>

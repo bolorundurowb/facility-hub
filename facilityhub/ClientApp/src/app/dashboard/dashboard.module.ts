@@ -51,6 +51,7 @@ import { TruncateModule } from '@yellowspot/ng-truncate';
 import { IssuesComponent } from './issues/issues.component';
 import { WidgetComponent } from '../components';
 import { ProfileComponent } from './profile/profile.component';
+import { IssueDetailsComponent } from './issue-details/issue-details.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { ProfileComponent } from './profile/profile.component';
     FacilityDetailsComponent,
     HomeComponent,
     IssuesComponent,
+    IssueDetailsComponent,
     ProfileComponent,
     WidgetComponent,
   ],

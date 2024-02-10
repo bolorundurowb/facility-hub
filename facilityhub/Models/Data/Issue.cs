@@ -56,4 +56,26 @@ public class Issue : Entity
         Code = ShortId.Generate(GenOptions);
         Log = new List<IssueLogEntry> { new(null, Status, null) };
     }
+
+    public void Validate(User manager, string? notes) {
+        if (Status is not IssueStatus.Filed)
+            throw new InvalidOperationException("Only freshly filed issues can be validated);
+                
+        TransitionToStatus(manager, IssueStatus.Validate, notes);
+        }
+
+    public void ScheduleRepair(User manager, string? notes) => TransitionToStatus(manager, IssueStatus.RepairScheduled, notes);
+
+    #region Private Helpers
+
+    private void TransitionToStatus(User manager, IssueStatus transitionTo, string? notes)
+    {
+        var previousStatus = Status;
+        Status = transitionTo;
+
+        Log ??= new List<IssueLogEntry>();
+        Log.Add(new IssueLogEntry(previousStatus, Status, $"Transitioned By: {manager.FullName}\n{notes}"));
+    }
+
+    #endregion
 }

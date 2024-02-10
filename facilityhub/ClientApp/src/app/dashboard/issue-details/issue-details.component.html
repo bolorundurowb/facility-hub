@@ -22,7 +22,22 @@
 
     <ng-container *ngIf="issue">
       <c-container>
+        <div class="action-row" *ngIf="!isTenant">
+          <button cButton>
+            <svg [cIcon]="icons.cilCloudUpload"></svg>
+              Upload Document
+          </button>
+        </div>
 
+        <div class="issue">
+          <div>Code: {{ issue.code }}</div>
+          <div>Facility: <span>{{ issue.facilityName }}</span></div>
+          <div>Status: <c-badge [color]="getIssueColour(issue.status)">{{ issue.status.toUpperCase() }}</c-badge></div>
+          <div>Description: <span>{{ issue.description }}</span></div>
+          <div>Location: <span>{{ issue.location }}</span></div>
+          <div>Remedial Actions Taken: <span>{{ issue.remedialAction || '(None)' }}</span></div>
+          <div>Occurred At: <span>{{ issue.occurredAt | date: 'dd MMM yyyy h:mm aa' }}</span></div>
+        </div>
       </c-container>
 
       <c-container>
@@ -33,17 +48,22 @@
         <div class="action-row">
           <button cButton>
             <svg [cIcon]="icons.cilCloudUpload"></svg>
-            Provide Evidence
+            <ng-container *ngIf="isTenant">
+              Provide Evidence
+            </ng-container>
+            <ng-container *ngIf="!isTenant">
+              Upload Document
+            </ng-container>
           </button>
         </div>
 
-        <ng-container *ngIf="!evidence.length">
+        <ng-container *ngIf="!documents.length">
           <c-callout color="success">
             No documents/evidence have been uploaded for this issue.
           </c-callout>
         </ng-container>
 
-        <ng-container *ngIf="evidence.length">
+        <ng-container *ngIf="documents.length">
           <table cTable [striped]="true">
             <thead>
             <tr>
@@ -55,7 +75,7 @@
             </tr>
             </thead>
             <tbody>
-            <ng-container *ngFor="let document of evidence">
+            <ng-container *ngFor="let document of documents">
               <tr>
                 <td>{{ document.fileName }}</td>
                 <td>{{ document.type }}</td>
@@ -88,7 +108,7 @@
                       <div style="text-align: end">
                         <c-button-group size="sm" style="text-align: end">
                           <button cButton color="secondary">Cancel</button>
-                          <button cButton color="danger" >Proceed</button>
+                          <button cButton color="danger">Proceed</button>
                         </c-button-group>
                       </div>
                     </div>

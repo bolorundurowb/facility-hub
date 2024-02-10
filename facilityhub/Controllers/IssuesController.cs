@@ -42,12 +42,12 @@ public class IssuesController : ApiController
         return Ok(Mapper.Map<IssueRes>(issue));
     }
 
-    [HttpGet("{issueId:guid}/evidence")]
+    [HttpGet("{issueId:guid}/documents")]
     [ProducesResponseType(typeof(List<DocumentRes>), 200)]
-    public async Task<IActionResult> GetOneEvidence(Guid issueId)
+    public async Task<IActionResult> GetOneDocuments(Guid issueId)
     {
         var userId = User.GetCallerId();
-        var evidence = await _issueService.GetAllEvidence(userId, issueId);
+        var evidence = await _issueService.GetAllDocuments(userId, issueId);
 
         return Ok(Mapper.Map<List<DocumentRes>>(evidence));
     }

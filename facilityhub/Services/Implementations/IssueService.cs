@@ -67,7 +67,7 @@ public class IssueService : IIssueService
         return issue;
     }
 
-    public async Task<List<Document>> GetAllEvidence(Guid userId, Guid issueId)
+    public async Task<List<Document>> GetAllDocuments(Guid userId, Guid issueId)
     {
         var managedFacilityIds = await GetManagedFacilityIds(userId);
         return await _dbContext.Issues
@@ -78,7 +78,7 @@ public class IssueService : IIssueService
                 || managedFacilityIds.Contains(x.Facility.Id)
             )
             .Where(x => x.Id == issueId)
-            .SelectMany(x => x.Evidence)
+            .SelectMany(x => x.Documents)
             .ToListAsync();
     }
 

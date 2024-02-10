@@ -11,4 +11,6 @@ public interface IUserService
     Task<User> Create(string? firstName, string? lastName, string emailAddress, string password);
 
     Task RequestPasswordReset(string emailAddress);
+
+    Task<User> Update(User user, string? firstName, string? lastName, string? phoneNumber);
 }

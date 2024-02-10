@@ -85,7 +85,7 @@ namespace FacilityHub.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("Document");
+                    b.ToTable("Document", (string)null);
                 });
 
             modelBuilder.Entity("FacilityHub.Models.Data.Facility", b =>
@@ -118,7 +118,7 @@ namespace FacilityHub.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("Facilities");
+                    b.ToTable("Facilities", (string)null);
                 });
 
             modelBuilder.Entity("FacilityHub.Models.Data.FacilityInvitation", b =>
@@ -160,7 +160,7 @@ namespace FacilityHub.Migrations
 
                     b.HasIndex("InvitedById");
 
-                    b.ToTable("FacilityInvitations");
+                    b.ToTable("FacilityInvitations", (string)null);
                 });
 
             modelBuilder.Entity("FacilityHub.Models.Data.Issue", b =>
@@ -214,7 +214,7 @@ namespace FacilityHub.Migrations
 
                     b.HasIndex("FiledById");
 
-                    b.ToTable("Issues");
+                    b.ToTable("Issues", (string)null);
                 });
 
             modelBuilder.Entity("FacilityHub.Models.Data.Tenant", b =>
@@ -257,7 +257,7 @@ namespace FacilityHub.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Tenant");
+                    b.ToTable("Tenant", (string)null);
                 });
 
             modelBuilder.Entity("FacilityHub.Models.Data.User", b =>
@@ -297,7 +297,7 @@ namespace FacilityHub.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("FacilityManagers", b =>
@@ -312,7 +312,7 @@ namespace FacilityHub.Migrations
 
                     b.HasIndex("ManagersId");
 
-                    b.ToTable("FacilityManagers");
+                    b.ToTable("FacilityManagers", (string)null);
                 });
 
             modelBuilder.Entity("FacilityOwners", b =>
@@ -327,7 +327,7 @@ namespace FacilityHub.Migrations
 
                     b.HasIndex("OwnersId");
 
-                    b.ToTable("FacilityOwners");
+                    b.ToTable("FacilityOwners", (string)null);
                 });
 
             modelBuilder.Entity("FacilityHub.Models.Data.Document", b =>

@@ -82,10 +82,6 @@ export class FacilityDetailsComponent implements OnInit {
     title.setTitle('Facility Details | Facility Hub');
   }
 
-  goBack() {
-    this.location.back();
-  }
-
   async ngOnInit() {
     this.isLoading = true;
 
@@ -100,6 +96,10 @@ export class FacilityDetailsComponent implements OnInit {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  goBack() {
+    this.location.back();
   }
 
   showDocumentModal() {

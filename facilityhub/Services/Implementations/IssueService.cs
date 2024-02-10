@@ -1,5 +1,6 @@
 ﻿using FacilityHub.DataContext;
 using FacilityHub.Models.Data;
+using FacilityHub.Models.Response;
 using FacilityHub.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -64,6 +65,21 @@ public class IssueService : IIssueService
         await _dbContext.SaveChangesAsync();
 
         return issue;
+    }
+
+    public async Task<List<Document>> GetAllDocuments(Guid userId, Guid issueId)
+    {
+        var managedFacilityIds = await GetManagedFacilityIds(userId);
+        return await _dbContext.Issues
+            .Where(x =>
+                // you are referenced in the issue
+                x.FiledBy.User!.Id == userId
+                // or you manage the facility the report is on
+                || managedFacilityIds.Contains(x.Facility.Id)
+            )
+            .Where(x => x.Id == issueId)
+            .SelectMany(x => x.Documents)
+            .ToListAsync();
     }
 
     private Task<List<Guid>> GetManagedFacilityIds(Guid userId) => _dbContext.Facilities

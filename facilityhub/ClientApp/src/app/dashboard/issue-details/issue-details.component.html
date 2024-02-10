@@ -1,0 +1,125 @@
+<div>
+  <c-header>
+    <div class="issue-header-row">
+      <button cButton variant="ghost" color="dark" (click)="goBack()">
+        <svg [cIcon]="icons.cilArrowLeft"></svg>
+        Back
+      </button>
+      <h3>Issue Details</h3>
+    </div>
+  </c-header>
+
+  <div class="loading" *ngIf="isLoading">
+    <c-spinner color="primary" variant="grow"></c-spinner>
+  </div>
+
+  <ng-container *ngIf="!isLoading">
+    <ng-container *ngIf="!issue">
+      <c-callout color="danger">
+        The issue you are trying to view does not exist or you do not have permissions to view it.
+      </c-callout>
+    </ng-container>
+
+    <ng-container *ngIf="issue">
+      <c-container>
+        <div class="action-row" *ngIf="!isTenant">
+          <button cButton>
+            <svg [cIcon]="icons.cilCloudUpload"></svg>
+              Upload Document
+          </button>
+        </div>
+
+        <div class="issue">
+          <div>Code: {{ issue.code }}</div>
+          <div>Facility: <span>{{ issue.facilityName }}</span></div>
+          <div>Status: <c-badge [color]="getIssueColour(issue.status)">{{ issue.status.toUpperCase() }}</c-badge></div>
+          <div>Description: <span>{{ issue.description }}</span></div>
+          <div>Location: <span>{{ issue.location }}</span></div>
+          <div>Remedial Actions Taken: <span>{{ issue.remedialAction || '(None)' }}</span></div>
+          <div>Occurred At: <span>{{ issue.occurredAt | date: 'dd MMM yyyy h:mm aa' }}</span></div>
+        </div>
+      </c-container>
+
+      <c-container>
+        <c-header>
+          <h5>Documents</h5>
+        </c-header>
+
+        <div class="action-row">
+          <button cButton>
+            <svg [cIcon]="icons.cilCloudUpload"></svg>
+            <ng-container *ngIf="isTenant">
+              Provide Evidence
+            </ng-container>
+            <ng-container *ngIf="!isTenant">
+              Upload Document
+            </ng-container>
+          </button>
+        </div>
+
+        <ng-container *ngIf="!documents.length">
+          <c-callout color="success">
+            No documents/evidence have been uploaded for this issue.
+          </c-callout>
+        </ng-container>
+
+        <ng-container *ngIf="documents.length">
+          <table cTable [striped]="true">
+            <thead>
+            <tr>
+              <th scope="col">File Name</th>
+              <th scope="col">Type</th>
+              <th scope="col">Size</th>
+              <th scope="col">Uploaded At</th>
+              <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let document of documents">
+              <tr>
+                <td>{{ document.fileName }}</td>
+                <td>{{ document.type }}</td>
+                <td>{{ document.fileSize | filesize }}</td>
+                <td>{{ document.createdAt | date : 'MMM d, y h:mma' }}</td>
+                <td>
+                  <button cButton
+                          color="dark"
+                          variant="ghost"
+                          cPopover="Download File"
+                          cPopoverPlacement="left"
+                          [cPopoverTrigger]="'hover'">
+                    <svg [cIcon]="icons.cilCloudDownload" size="lg"></svg>
+                  </button>
+                  |
+                  <button cButton
+                          color="danger"
+                          variant="ghost"
+                          cPopoverPlacement="bottom"
+                          [cPopover]="popoverHtml"
+                          [cPopoverTrigger]="'click'">
+                    <svg [cIcon]="icons.cilTrash" size="lg"></svg>
+                  </button>
+                  <ng-template #popoverHtml>
+                    <h3 class="popover-header">
+                      Confirm Delete
+                    </h3>
+                    <div class="popover-body">
+                      <p>Are you sure you want to delete this file? This action is permanent and cannot be reversed!</p>
+                      <div style="text-align: end">
+                        <c-button-group size="sm" style="text-align: end">
+                          <button cButton color="secondary">Cancel</button>
+                          <button cButton color="danger">Proceed</button>
+                        </c-button-group>
+                      </div>
+                    </div>
+                  </ng-template>
+                </td>
+              </tr>
+            </ng-container>
+            </tbody>
+          </table>
+        </ng-container>
+      </c-container>
+    </ng-container>
+  </ng-container>
+</div>

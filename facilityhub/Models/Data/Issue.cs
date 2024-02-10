@@ -28,7 +28,7 @@ public class Issue : Entity
 
     public IssueStatus Status { get; private set; }
 
-    public List<Document> Evidence { get; set; } = new();
+    public List<Document> Documents { get; set; } = new();
 
     public List<IssueLogEntry> Log { get; private set; } = new();
 
@@ -52,7 +52,7 @@ public class Issue : Entity
 
         Status = IssueStatus.Filed;
         FiledAt = DateTimeOffset.Now;
-        Evidence = new List<Document>();
+        Documents = new List<Document>();
         Code = ShortId.Generate(GenOptions);
         Log = new List<IssueLogEntry> { new(null, Status, null) };
     }

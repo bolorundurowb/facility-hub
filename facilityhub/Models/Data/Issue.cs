@@ -57,14 +57,22 @@ public class Issue : Entity
         Log = new List<IssueLogEntry> { new(null, Status, null) };
     }
 
-    public void Validate(User manager, string? notes) {
+    public void Validate(User manager, string? notes)
+    {
         if (Status is not IssueStatus.Filed)
-            throw new InvalidOperationException("Only freshly filed issues can be validated);
-                
-        TransitionToStatus(manager, IssueStatus.Validate, notes);
-        }
+            throw new InvalidOperationException("Only freshly filed issues can be validated");
 
-    public void ScheduleRepair(User manager, string? notes) => TransitionToStatus(manager, IssueStatus.RepairScheduled, notes);
+        TransitionToStatus(manager, IssueStatus.Validated, notes);
+    }
+
+    public void ScheduleRepair(User manager, string? notes) =>
+        TransitionToStatus(manager, IssueStatus.RepairScheduled, notes);
+
+    public void Repair(User manager, string? notes) =>
+        TransitionToStatus(manager, IssueStatus.Repaired, notes);
+
+    public void Close(User manager) =>
+        TransitionToStatus(manager, IssueStatus.Closed, null);
 
     #region Private Helpers
 

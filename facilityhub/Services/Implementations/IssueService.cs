@@ -1,6 +1,6 @@
 ﻿using FacilityHub.DataContext;
+using FacilityHub.Enums;
 using FacilityHub.Models.Data;
-using FacilityHub.Models.Response;
 using FacilityHub.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -80,6 +80,39 @@ public class IssueService : IIssueService
             .Where(x => x.Id == issueId)
             .SelectMany(x => x.Documents)
             .ToListAsync();
+    }
+
+    public async Task<Document?> FindDocument(Guid userId, Guid issueId, Guid documentId)
+    {
+        var managedFacilityIds = await GetManagedFacilityIds(userId);
+        return await _dbContext.Issues
+            .Where(x => x.Id == issueId)
+            .Where(x =>
+                // you are referenced in the issue
+                x.FiledBy.User!.Id == userId
+                // or you manage the facility the report is on
+                || managedFacilityIds.Contains(x.Facility.Id)
+            )
+            .SelectMany(x => x.Documents)
+            .FirstOrDefaultAsync(x => x.Id == documentId);
+    }
+
+    public async Task<Document> AddDocument(Issue issue, User user, DocumentType documentType,
+        IUploadResult details)
+    {
+        var document = new Document(
+            details.FileName,
+            documentType,
+            details.Size,
+            details.Id,
+            details.Url,
+            details.MimeType,
+            user
+        );
+        issue.AddDocument(document);
+        await _dbContext.SaveChangesAsync();
+
+        return document;
     }
 
     public async Task MarkAsValidated(Issue issue, User manager, string? notes)

@@ -57,6 +57,8 @@ public class Issue : Entity
         Log = new List<IssueLogEntry> { new(null, Status, null) };
     }
 
+    public void AddDocument(Document document) => Documents.Add(document);
+
     public void Validate(User manager, string? notes)
     {
         if (Status is not IssueStatus.Filed)

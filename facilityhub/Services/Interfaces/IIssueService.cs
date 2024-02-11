@@ -14,4 +14,6 @@ public interface IIssueService
         string location, string? remedialAction);
 
     Task<List<Document>> GetAllDocuments(Guid userId, Guid issueId);
+
+    Task MarkAsValidated(Issue issue, User manager, string? notes);
 }

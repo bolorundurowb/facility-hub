@@ -82,6 +82,14 @@ public class IssueService : IIssueService
             .ToListAsync();
     }
 
+    public async Task MarkAsValidated(Issue issue, User manager, string? notes)
+    {
+        issue.Validate(manager, notes);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    #region Private Helpers
+
     private Task<List<Guid>> GetManagedFacilityIds(Guid userId) => _dbContext.Facilities
         .AsNoTracking()
         .Where(x => x.Owners.Any(y => y.Id == userId)
@@ -89,4 +97,6 @@ public class IssueService : IIssueService
         )
         .Select(x => x.Id)
         .ToListAsync();
+
+    #endregion
 }

@@ -11,11 +11,18 @@ public class IssuesController : ApiController
 {
     private readonly IFacilityService _facilityService;
     private readonly IIssueService _issueService;
+    private readonly IUserService _userService;
+    private readonly IDocumentService _documentService;
+    private readonly IMediaHandlerService _mediaService;
 
-    public IssuesController(IMapper mapper, IFacilityService facilityService, IIssueService issueService) : base(mapper)
+    public IssuesController(IMapper mapper, IFacilityService facilityService, IIssueService issueService,
+        IUserService userService, IMediaHandlerService mediaService, IDocumentService documentService) : base(mapper)
     {
         _facilityService = facilityService;
         _issueService = issueService;
+        _userService = userService;
+        _mediaService = mediaService;
+        _documentService = documentService;
     }
 
     [HttpGet("")]
@@ -47,9 +54,75 @@ public class IssuesController : ApiController
     public async Task<IActionResult> GetOneDocuments(Guid issueId)
     {
         var userId = User.GetCallerId();
-        var evidence = await _issueService.GetAllDocuments(userId, issueId);
+        var documents = await _issueService.GetAllDocuments(userId, issueId);
 
-        return Ok(Mapper.Map<List<DocumentRes>>(evidence));
+        return Ok(Mapper.Map<List<DocumentRes>>(documents));
+    }
+
+    [HttpPost("{issueId:guid}/documents")]
+    [ProducesResponseType(typeof(DocumentRes), 201)]
+    [ProducesResponseType(typeof(GenericRes), 403)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> CreateDocument(Guid issueId, [FromForm] UploadDocumentReq req)
+    {
+        var userId = User.GetCallerId();
+        var user = await _userService.FindById(userId);
+
+        if (user == null)
+            return Forbidden("User account not found");
+
+        var issue = await _issueService.FindById(userId, issueId);
+
+        if (issue == null)
+            return NotFound("Issue not found");
+
+        await using var stream = req.File.OpenReadStream();
+        var result = await _mediaService.UploadAsync(req.File.FileName, stream);
+
+        if (result == null)
+            return BadRequest("Document upload failed.");
+
+        var document = await _issueService.AddDocument(issue, user, req.Type, result);
+
+        return Created(Mapper.Map<DocumentRes>(document));
+    }
+
+    [HttpDelete("{issueId:guid}/documents/{documentId:guid}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> DeleteDocument(Guid issueId, Guid documentId)
+    {
+        var userId = User.GetCallerId();
+        var document = await _issueService.FindDocument(userId, issueId, documentId);
+
+        if (document == null)
+            return NotFound("Document not found");
+
+        await _mediaService.DeleteAsync(document.ExternalId);
+        await _documentService.Delete(document);
+
+        return Ok("Document deleted successfully");
+    }
+
+    [HttpPatch("{issueId:guid}/validate")]
+    [ProducesResponseType(typeof(IssueRes), 200)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> ValidateIssue(Guid issueId, [FromBody] IssueStatusChangeReq req)
+    {
+        var userId = User.GetCallerId();
+        var user = await _userService.FindById(userId);
+
+        if (user == null)
+            return Forbidden("User account not found");
+
+        var issue = await _issueService.FindById(userId, issueId);
+
+        if (issue == null)
+            return NotFound("Issue not found");
+
+        await _issueService.MarkAsValidated(issue, user, req.Notes);
+
+        return Ok(Mapper.Map<IssueRes>(issue));
     }
 
     [HttpPost("report")]

@@ -8,5 +8,7 @@ public enum DocumentType
 
     Affidavit = 20,
 
-    TenantInformationSheet = 30
+    TenantInformationSheet = 30,
+
+    IssueEvidence = 40
 }

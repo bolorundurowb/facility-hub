@@ -14,14 +14,16 @@ public class FacilitiesController : ApiController
     private readonly IIssueService _issueService;
     private readonly IUserService _userService;
     private readonly IMediaHandlerService _mediaService;
+    private readonly IDocumentService _documentService;
 
     public FacilitiesController(IMapper mapper, IFacilityService facilityService, IUserService userService,
-        IMediaHandlerService mediaService, IIssueService issueService) : base(mapper)
+        IMediaHandlerService mediaService, IIssueService issueService, IDocumentService documentService) : base(mapper)
     {
         _facilityService = facilityService;
         _userService = userService;
         _mediaService = mediaService;
         _issueService = issueService;
+        _documentService = documentService;
     }
 
     [HttpGet("")]
@@ -113,18 +115,13 @@ public class FacilitiesController : ApiController
     public async Task<IActionResult> DeleteDocument(Guid facilityId, Guid documentId)
     {
         var userId = User.GetCallerId();
-        var facility = await _facilityService.FindById(userId, facilityId);
-
-        if (facility == null)
-            return NotFound("Facility not found");
-
         var document = await _facilityService.FindDocument(userId, facilityId, documentId);
 
         if (document == null)
             return NotFound("Document not found");
 
         await _mediaService.DeleteAsync(document.ExternalId);
-        await _facilityService.DeleteDocument(facility, document);
+        await _documentService.Delete(document);
 
         return Ok("Document deleted successfully");
     }

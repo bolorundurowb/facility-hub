@@ -8,7 +8,7 @@ namespace FacilityHub.DataContext;
 public class FacilityHubDbContext : DbContext
 {
     public DbSet<Document> Documents => Set<Document>();
-    
+
     public DbSet<Facility> Facilities => Set<Facility>();
 
     public DbSet<FacilityInvitation> FacilityInvitations => Set<FacilityInvitation>();

@@ -1,4 +1,5 @@
-﻿using FacilityHub.Models.Data;
+﻿using FacilityHub.Enums;
+using FacilityHub.Models.Data;
 
 namespace FacilityHub.Services.Interfaces;
 
@@ -14,4 +15,11 @@ public interface IIssueService
         string location, string? remedialAction);
 
     Task<List<Document>> GetAllDocuments(Guid userId, Guid issueId);
+
+    Task<Document?> FindDocument(Guid userId, Guid issueId, Guid documentId);
+
+    Task<Document> AddDocument(Issue issue, User user, DocumentType documentType,
+        IUploadResult details);
+
+    Task MarkAsValidated(Issue issue, User manager, string? notes);
 }

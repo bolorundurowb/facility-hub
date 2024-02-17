@@ -28,10 +28,10 @@ public static class EmailTemplateHelpers
         await using var rootStream = assembly.GetManifestResourceStream(rootTemplateNamespace);
         await using var templateStream = assembly.GetManifestResourceStream(templateNamespace);
 
-        if (rootStream == null) 
+        if (rootStream == null)
             return string.Empty;
 
-        if (templateStream == null) 
+        if (templateStream == null)
             return string.Empty;
 
         using StreamReader rootStreamReader = new(rootStream),

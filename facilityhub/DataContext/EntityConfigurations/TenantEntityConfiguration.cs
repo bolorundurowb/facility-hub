@@ -8,6 +8,7 @@ public class TenantEntityConfiguration : BaseEntityConfiguration<Tenant>
 {
     public override void Configure(EntityTypeBuilder<Tenant> builder)
     {
+        builder.ToTable("Tenants");
         builder.Property(x => x.History)
             .HasColumnType("jsonb");
 

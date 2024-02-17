@@ -85,12 +85,6 @@ public class FacilityService : IFacilityService
         return document;
     }
 
-    public async Task DeleteDocument(Facility facility, Document document)
-    {
-        facility.DeleteDocument(document);
-        await _dbContext.SaveChangesAsync();
-    }
-
     public Task<FacilityInvitation?> FindInvitationById(Guid invitationId)
     {
         return _dbContext.FacilityInvitations

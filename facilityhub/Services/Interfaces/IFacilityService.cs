@@ -19,8 +19,6 @@ public interface IFacilityService
     Task<Document> AddDocument(Facility facility, User user, DocumentType documentType,
         IUploadResult details);
 
-    Task DeleteDocument(Facility facility, Document document);
-
     Task<FacilityInvitation?> FindInvitationById(Guid invitationId);
 
     Task<Tenant> SetTenant(Facility facility, User inviter, User? user, string name, string emailAddress,

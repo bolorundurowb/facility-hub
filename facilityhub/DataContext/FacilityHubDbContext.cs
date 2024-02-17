@@ -7,11 +7,15 @@ namespace FacilityHub.DataContext;
 
 public class FacilityHubDbContext : DbContext
 {
+    public DbSet<Document> Documents => Set<Document>();
+    
     public DbSet<Facility> Facilities => Set<Facility>();
 
     public DbSet<FacilityInvitation> FacilityInvitations => Set<FacilityInvitation>();
 
     public DbSet<Issue> Issues => Set<Issue>();
+
+    public DbSet<Tenant> Tenants => Set<Tenant>();
 
     public DbSet<User> Users => Set<User>();
 

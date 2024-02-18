@@ -38,3 +38,8 @@ export interface IssueRes {
   filedByName?: string;
   filedAt: string;
 }
+
+export interface DocumentUploadPayload {
+  type?: DocumentType,
+  file?: any;
+}

@@ -63,7 +63,7 @@ public class IssuesController : ApiController
     [ProducesResponseType(typeof(DocumentRes), 201)]
     [ProducesResponseType(typeof(GenericRes), 403)]
     [ProducesResponseType(typeof(GenericRes), 404)]
-    public async Task<IActionResult> CreateDocument(Guid issueId, [FromForm] UploadDocumentReq req)
+    public async Task<IActionResult> CreateDocument(Guid issueId, [FromForm] UploadIssueDocumentReq req)
     {
         var userId = User.GetCallerId();
         var user = await _userService.FindById(userId);

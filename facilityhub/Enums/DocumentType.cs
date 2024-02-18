@@ -10,5 +10,7 @@ public enum DocumentType
 
     TenantInformationSheet = 30,
 
-    IssueEvidence = 40
+    IssueEvidence = 40,
+
+    RefundProof = 50
 }

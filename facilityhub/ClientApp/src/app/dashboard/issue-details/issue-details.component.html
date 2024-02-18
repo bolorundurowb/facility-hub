@@ -78,7 +78,7 @@
             <ng-container *ngFor="let document of documents">
               <tr>
                 <td>{{ document.fileName }}</td>
-                <td>{{ document.type }}</td>
+                <td>{{ mapDocumentTypeToText(document.type) }}</td>
                 <td>{{ document.fileSize | filesize }}</td>
                 <td>{{ document.createdAt | date : 'MMM d, y h:mma' }}</td>
                 <td>

@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { AuthService, FileDownloadService, IssuesService, NotificationService } from '../../services';
 import { cilArrowLeft, cilCloudDownload, cilCloudUpload, cilNoteAdd, cilTrash, cilUserPlus } from '@coreui/icons';
-import { getIssueColour } from '../../utils';
+import { mapDocumentTypeToText, mapIssueStatusToColour } from '../../utils';
 import { HttpEventType } from '@angular/common/http';
 
 @Component({
@@ -35,6 +35,10 @@ export  class IssueDetailsComponent implements OnInit {
     title.setTitle('Issue Details | Facility Hub');
   }
 
+  protected readonly mapDocumentTypeToText = mapDocumentTypeToText;
+
+  protected readonly getIssueColour = mapIssueStatusToColour;
+
   async ngOnInit() {
     this.isLoading = true;
 
@@ -54,8 +58,6 @@ export  class IssueDetailsComponent implements OnInit {
   goBack() {
     this.location.back();
   }
-
-  protected readonly getIssueColour = getIssueColour;
 
   showDocumentModal() {
     this.isNewDocModalVisible = true;

@@ -9,7 +9,7 @@ import {
 } from '../../services';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as Leaflet from 'leaflet';
-import { getLayers } from '../../utils';
+import { getLayers, mapDocumentTypeToText } from '../../utils';
 import { Location } from '@angular/common';
 import { cilArrowLeft, cilCloudDownload, cilCloudUpload, cilNoteAdd, cilTrash, cilUserPlus } from '@coreui/icons';
 import { DocumentRes, DocumentType, IssueRes, LocationRes, TenantRes } from '../../components';
@@ -81,6 +81,8 @@ export class FacilityDetailsComponent implements OnInit {
               private issueService: IssuesService, private router: Router) {
     title.setTitle('Facility Details | Facility Hub');
   }
+
+  protected readonly mapDocumentTypeToText = mapDocumentTypeToText;
 
   async ngOnInit() {
     this.isLoading = true;

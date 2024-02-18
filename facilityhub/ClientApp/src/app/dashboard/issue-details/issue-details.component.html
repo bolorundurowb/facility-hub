@@ -46,7 +46,7 @@
         </c-header>
 
         <div class="action-row">
-          <button cButton>
+          <button cButton (click)="showDocumentModal()">
             <svg [cIcon]="icons.cilCloudUpload"></svg>
             <ng-container *ngIf="isTenant">
               Provide Evidence
@@ -123,3 +123,58 @@
     </ng-container>
   </ng-container>
 </div>
+
+
+<c-modal backdrop="static" [(visible)]="isNewDocModalVisible">
+  <c-modal-header>
+    <h5 cModalTitle>Add Issue Document</h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <form cForm>
+      <c-alert
+        fade
+        dismissible
+        color="danger"
+        [(visible)]="hasError">
+        {{ errorMessage }}
+      </c-alert>
+
+      <div class="mb-3">
+        <label cLabel>Document Type</label>
+        <select cSelect name="document-type" class="mb-3" [(ngModel)]="newDocPayload.type">
+          <option value="IssueEvidence">Issue Evidence</option>
+          <ng-container *ngIf="!isTenant">
+            <option value="RefundProof">Refund Proof</option>
+          </ng-container>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label cLabel>File</label>
+        <input cFormControl
+               type="file"
+               name="document-file"
+               accept=".pdf, .doc, .docx, .xls, .xlsx, .jpeg, .jpg, .png, .mp4, .hevc, .avi"
+               (change)="documentSelected($event)"/>
+        <div cFormText>
+          <small>We only support PDF, DOCX, JPG, PNG, MP4, HEVC, AVI and XLSX files</small>
+        </div>
+      </div>
+    </form>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton
+            color="secondary"
+            [disabled]="isUploadingDoc"
+            (click)="dismissDocumentModal()">
+      Close
+    </button>
+    <button cButton color="success"
+            [disabled]="isUploadingDoc"
+            (click)="uploadDocument()">
+      Upload Document
+    </button>
+  </c-modal-footer>
+</c-modal>

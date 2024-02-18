@@ -41,4 +41,8 @@ export class IssuesService {
       responseType: 'json'
     });
   }
+
+  deleteDocument(issueId: string, documentId: string): Promise<any> {
+    return asPromise(this.http.delete<any>(`${this.apiBaseUrl}/${issueId}/documents/${documentId}`));
+  }
 }

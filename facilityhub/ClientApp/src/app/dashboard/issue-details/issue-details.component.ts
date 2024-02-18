@@ -94,4 +94,26 @@ export  class IssueDetailsComponent implements OnInit {
         }
       });
   }
+
+  async downloadFile(document: DocumentRes) {
+    this.downloadService.downloadFile(
+      document.url,
+      `${document.id}-${document.fileName}`
+    );
+  }
+
+  async deleteDocument(document: DocumentRes) {
+    try {
+      const response = await this.issueService.deleteDocument(this.issueId!, document.id);
+
+      const documentIndex = this.documents.findIndex((doc) => {
+        return doc.id === document.id;
+      });
+      this.documents.splice(documentIndex, 1);
+
+      this.notificationService.showSuccess(response.message);
+    } catch (e) {
+      this.notificationService.showError(e as string);
+    }
+  }
 }

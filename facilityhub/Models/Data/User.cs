@@ -37,7 +37,8 @@ public class User : Entity
         LastName = lastName;
         EmailAddress = emailAddress.Trim().ToLowerInvariant();
         JoinedAt = DateTimeOffset.Now;
-        PasswordHash = HashText(password);
+
+        UpdatePassword(password);
     }
 
     public bool VerifyPassword(string password) =>
@@ -56,6 +57,8 @@ public class User : Entity
     public void ResetResetCode() => ResetCode = null;
 
     public bool ValidateResetCode(string resetCode) => ResetCode == resetCode;
+
+    public void UpdatePassword(string password) => PasswordHash = HashText(password);
 
     private string HashText(string password)
     {

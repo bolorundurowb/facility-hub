@@ -45,8 +45,16 @@ public class UserService : IUserService
             user.SetResetCode();
             await _dbContext.SaveChangesAsync();
 
-            // TODO: send email to the user
+            // TODO: send email to the user (include the user id and reset code)
         }
+    }
+
+    public async Task ResetPassword(User user, string password)
+    {
+        user.UpdatePassword(password);
+        await _dbContext.SaveChangesAsync();
+
+        // TODO: send email to the user letting them know their password has changed
     }
 
     public async Task<User> Update(User user, string? firstName, string? lastName, string? phoneNumber)

@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { asPromise } from '../utils';
 import { Observable } from 'rxjs';
+import { IssueTransitions } from '../components';
 
 @Injectable({
   providedIn: 'root'
@@ -44,5 +45,9 @@ export class IssuesService {
 
   deleteDocument(issueId: string, documentId: string): Promise<any> {
     return asPromise(this.http.delete<any>(`${this.apiBaseUrl}/${issueId}/documents/${documentId}`));
+  }
+
+  transition(issueId: string, nextStatus: IssueTransitions, payload: any): Promise<any> {
+    return asPromise(this.http.patch(`${this.apiBaseUrl}/${issueId}/${nextStatus}`, payload));
   }
 }

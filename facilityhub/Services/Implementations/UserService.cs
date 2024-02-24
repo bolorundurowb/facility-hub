@@ -51,7 +51,7 @@ public class UserService : IUserService
 
     public async Task ResetPassword(User user, string password)
     {
-        user.UpdatePassword(password);
+        user.ResetPassword(password);
         await _dbContext.SaveChangesAsync();
 
         // TODO: send email to the user letting them know their password has changed

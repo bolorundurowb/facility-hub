@@ -63,6 +63,21 @@ public class AuthController : ApiController
         return NoContent();
     }
 
+    [AllowAnonymous]
+    [HttpPost("reset-password")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(GenericRes), 400)]
+    public async Task<IActionResult> ResetPassword([FromBody] PasswordResetReq req)
+    {
+        var user = await _userService.FindById(req.UserId);
+
+        if (user is null || !user.ValidateResetCode(req.ResetCode))
+            return BadRequest("Invalid request");
+
+        await _userService.ResetPassword(user, req.Password);
+        return NoContent();
+    }
+
     private (string, DateTime) GenerateToken(User user)
     {
         var claims = new List<Claim>

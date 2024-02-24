@@ -40,8 +40,8 @@
             <td>{{ issue.facilityName }}</td>
             <td>{{ issue.location | truncate: 25 : { trailingString: '...' } }}</td>
             <td>
-              <c-badge [color]="issue.status === 'Repaired' ? 'success' : 'info'">
-                {{ issue.status }}
+              <c-badge [color]="getIssueColour(issue.status)">
+                {{ issue.status.toUpperCase() }}
               </c-badge>
             </td>
             <td>{{ issue.filedByName || 'N/A' }}</td>

@@ -43,3 +43,8 @@ export interface DocumentUploadPayload {
   type?: DocumentType,
   file?: any;
 }
+
+export enum IssueTransitions {
+  VALIDATE = "validate",
+  SCHEDULE_REPAIR = "schedule-repair",
+}

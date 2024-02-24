@@ -9,7 +9,7 @@ import {
 } from '../../services';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as Leaflet from 'leaflet';
-import { getLayers, mapDocumentTypeToText } from '../../utils';
+import { getLayers, mapDocumentTypeToText, mapIssueStatusToColour } from '../../utils';
 import { Location } from '@angular/common';
 import { cilArrowLeft, cilCloudDownload, cilCloudUpload, cilNoteAdd, cilTrash, cilUserPlus } from '@coreui/icons';
 import { DocumentRes, DocumentType, IssueRes, LocationRes, TenantRes } from '../../components';
@@ -117,7 +117,6 @@ export class FacilityDetailsComponent implements OnInit {
         next: (event) => {
           if (event.type === HttpEventType.Response) {
             const document = event.body as DocumentRes;
-            console.log(document);
             this.documents.unshift(document);
 
             this.dismissDocumentModal();
@@ -245,4 +244,6 @@ export class FacilityDetailsComponent implements OnInit {
   async goToDetails(issue: IssueRes) {
     await this.router.navigate([ 'dashboard', 'issues', issue.id ]);
   }
+
+  protected readonly getIssueColour = mapIssueStatusToColour;
 }

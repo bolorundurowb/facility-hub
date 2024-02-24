@@ -57,6 +57,12 @@ public class User : Entity
 
     public bool ValidateResetCode(string resetCode) => ResetCode == resetCode;
 
+    public void ResetPassword(string password)
+    {
+        PasswordHash = HashText(password);
+        ResetCode = null;
+    }
+
     private string HashText(string password)
     {
         var salt = BCrypt.Net.BCrypt.GenerateSalt();

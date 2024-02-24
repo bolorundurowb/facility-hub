@@ -9,8 +9,8 @@ interface ForgotPasswordPayload {
 
 @Component({
   selector: 'fh-auth-forgot-password',
-  templateUrl: './forgot.password.component.html',
-  styleUrl: './forgot.password.component.scss'
+  templateUrl: './forgot-password.component.html',
+  styleUrl: './forgot-password.component.scss'
 })
 export class ForgotPasswordComponent {
   emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -33,7 +33,7 @@ export class ForgotPasswordComponent {
 
       if (!hasError) {
         await this.authService.requestReset(this.payload);
-        this.notificationService.showSuccess("A reset code has been dispatched to your account");
+        this.notificationService.showSuccess('A reset code has been dispatched to your account');
         await this.router.navigate([ 'auth', 'reset-password' ]);
       }
     } catch (e: any) {

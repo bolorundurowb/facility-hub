@@ -12,14 +12,16 @@ import {
   FormTextDirective
 } from '@coreui/angular';
 import { AuthComponent } from './auth.component';
-import { ForgotPasswordComponent } from './forgot-password/forgot.password.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
     AuthComponent,
     LoginComponent,
     RegisterComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    ResetPasswordComponent
   ],
   imports: [
     AuthRoutingModule,

@@ -46,7 +46,16 @@ public class UserService : IUserService
             await _dbContext.SaveChangesAsync();
 
             // TODO: send email to the user
+            // the url should look like 'https://localhost:44485/auth/reset-password?user-ref=7c3eb470-b6b6-4f15-ab72-5a6bc450ccb6&reset-code=892398'
         }
+    }
+
+    public async Task ResetPassword(User user, string password)
+    {
+        user.ResetPassword(password);
+        await _dbContext.SaveChangesAsync();
+
+        // TODO: send email to the user letting them know their password has changed
     }
 
     public async Task<User> Update(User user, string? firstName, string? lastName, string? phoneNumber)

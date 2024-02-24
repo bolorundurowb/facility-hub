@@ -1,21 +1,33 @@
 import { Component, OnInit } from '@angular/core';
-import { DocumentRes, DocumentUploadPayload, IssueRes } from '../../components';
+import { DocumentRes, DocumentUploadPayload, IssueRes, IssueTransitions } from '../../components';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { AuthService, FileDownloadService, IssuesService, NotificationService } from '../../services';
-import { cilArrowLeft, cilCloudDownload, cilCloudUpload, cilNoteAdd, cilTrash, cilUserPlus } from '@coreui/icons';
+import {
+  cilArrowLeft,
+  cilChevronDoubleRight,
+  cilCloudDownload,
+  cilCloudUpload,
+  cilNoteAdd,
+  cilTrash,
+  cilUserPlus
+} from '@coreui/icons';
 import { mapDocumentTypeToText, mapIssueStatusToColour } from '../../utils';
 import { HttpEventType } from '@angular/common/http';
+
+interface TransitionIssuePayload {
+  notes?: string;
+}
 
 @Component({
   selector: 'fh-dashboard-issue-details',
   templateUrl: './issue-details.component.html',
   styleUrl: './issue-details.component.scss'
 })
-export  class IssueDetailsComponent implements OnInit {
+export class IssueDetailsComponent implements OnInit {
   isLoading = true;
-  icons = { cilCloudUpload, cilNoteAdd, cilCloudDownload, cilTrash, cilArrowLeft, cilUserPlus };
+  icons = { cilCloudUpload, cilNoteAdd, cilCloudDownload, cilTrash, cilArrowLeft, cilUserPlus, cilChevronDoubleRight };
 
   issueId?: string;
   issue?: IssueRes;
@@ -29,7 +41,11 @@ export  class IssueDetailsComponent implements OnInit {
   isUploadingDoc = false;
   newDocPayload: DocumentUploadPayload = {};
 
-  constructor(title: Title,  private route: ActivatedRoute, private location: Location, private authService: AuthService,
+  isTransitioning = false;
+  isTransitionModalVisible = false;
+  transitionPayload: TransitionIssuePayload = {};
+
+  constructor(title: Title, private route: ActivatedRoute, private location: Location, private authService: AuthService,
               private downloadService: FileDownloadService, private issueService: IssuesService,
               private notificationService: NotificationService) {
     title.setTitle('Issue Details | Facility Hub');
@@ -81,7 +97,6 @@ export  class IssueDetailsComponent implements OnInit {
         next: (event) => {
           if (event.type === HttpEventType.Response) {
             const document = event.body as DocumentRes;
-            console.log(document);
             this.documents.unshift(document);
 
             this.dismissDocumentModal();
@@ -117,5 +132,58 @@ export  class IssueDetailsComponent implements OnInit {
     } catch (e) {
       this.notificationService.showError(e as string);
     }
+  }
+
+  showTransitionModal() {
+    this.isTransitionModalVisible = true;
+  }
+
+  dismissTransitionModal() {
+    this.isTransitionModalVisible = false;
+    this.transitionPayload = {};
+  }
+
+  async transitionIssue() {
+    this.isTransitioning = true;
+
+    try {
+      const response = await this.issueService.transition(this.issueId!, this.getTransitionStatus(), this.transitionPayload);
+
+      this.dismissTransitionModal();
+      this.notificationService.showSuccess('Issue status successfully updated');
+
+      this.issue = response;
+    } catch (e) {
+      this.errorMessage = e as string;
+      this.hasError = true;
+    } finally {
+      this.isTransitioning = false;
+    }
+  }
+
+  getTransitionButtonText(): string {
+    const transition = this.getTransitionStatus();
+
+    if (transition === IssueTransitions.VALIDATE) {
+      return 'Mark As Validated';
+    }
+
+    if (transition === IssueTransitions.SCHEDULE_REPAIR) {
+      return 'Schedule Repair';
+    }
+
+    return 'Bleh';
+  }
+
+  private getTransitionStatus(): IssueTransitions {
+    if (this.issue?.status === 'Filed') {
+      return IssueTransitions.VALIDATE;
+    }
+
+    if (this.issue?.status === 'Validated') {
+      return IssueTransitions.SCHEDULE_REPAIR;
+    }
+
+    throw new Error();
   }
 }

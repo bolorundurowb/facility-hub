@@ -4,6 +4,7 @@ import { IssuesService } from '../../services';
 import { cilLightbulb } from '@coreui/icons';
 import { IssueRes } from '../../components';
 import { Router } from '@angular/router';
+import { mapIssueStatusToColour } from '../../utils';
 
 @Component({
   selector: 'fh-dashboard-issues',
@@ -19,6 +20,8 @@ export class IssuesComponent implements OnInit {
   constructor(title: Title, private issueService: IssuesService, private router: Router) {
     title.setTitle('Issues | Facility Hub');
   }
+
+  protected readonly getIssueColour = mapIssueStatusToColour;
 
   async ngOnInit() {
     this.issues = await this.issueService.getAll();

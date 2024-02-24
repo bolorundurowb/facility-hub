@@ -20,6 +20,10 @@ const routes: Routes = [
     component: ForgotPasswordComponent
   },
   {
+    path: 'reset-password',
+    component: ResetPasswordComponent
+  },
+  {
     path: '**',
     redirectTo: 'login'
   }

@@ -12,7 +12,7 @@ import {
   FormTextDirective
 } from '@coreui/angular';
 import { AuthComponent } from './auth.component';
-import { ForgotPasswordComponent } from './forgot-password/forgot.password.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [

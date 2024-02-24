@@ -9,8 +9,8 @@ interface ForgotPasswordPayload {
 
 @Component({
   selector: 'fh-auth-forgot-password',
-  templateUrl: './forgot.password.component.html',
-  styleUrl: './forgot.password.component.scss'
+  templateUrl: './forgot-password.component.html',
+  styleUrl: './forgot-password.component.scss'
 })
 export class ForgotPasswordComponent {
   emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

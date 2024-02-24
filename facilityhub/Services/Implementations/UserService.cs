@@ -45,7 +45,8 @@ public class UserService : IUserService
             user.SetResetCode();
             await _dbContext.SaveChangesAsync();
 
-            // TODO: send email to the user (include the user id and reset code)
+            // TODO: send email to the user
+            // the url should look like 'https://localhost:44485/auth/reset-password?user-ref=7c3eb470-b6b6-4f15-ab72-5a6bc450ccb6&reset-code=892398'
         }
     }
 

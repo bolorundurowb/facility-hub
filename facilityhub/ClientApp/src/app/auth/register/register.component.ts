@@ -64,7 +64,7 @@ export class RegisterComponent {
       message = 'A password is required';
     } else if (!this.payload.confirmPassword) {
       message = 'A password confirmation is required';
-    } else if (!this.passwordRegex.test(this.payload.confirmPassword)) {
+    } else if (!this.passwordRegex.test(this.payload.password)) {
       message = 'A password must be at least 8 chars long with a capital letter, number and special char';
     } else if (this.payload.password !== this.payload.confirmPassword) {
       message = 'Password and confirmation do not match';

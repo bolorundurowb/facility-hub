@@ -33,7 +33,7 @@ export class ForgotPasswordComponent {
 
       if (!hasError) {
         await this.authService.requestReset(this.payload);
-        this.notificationService.showSuccess("A reset code has been dispatched to your account");
+        this.notificationService.showSuccess('A reset code has been dispatched to your account');
         await this.router.navigate([ 'auth', 'reset-password' ]);
       }
     } catch (e: any) {

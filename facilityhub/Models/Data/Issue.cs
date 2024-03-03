@@ -30,7 +30,7 @@ public class Issue : Entity
 
     public List<Document> Documents { get; set; } = new();
 
-    public List<IssueLogEntry> Log { get; private set; } = new();
+    public List<IssueLogEntry> Log { get; private set; } = new(); 
 
     public Tenant FiledBy { get; private set; }
 

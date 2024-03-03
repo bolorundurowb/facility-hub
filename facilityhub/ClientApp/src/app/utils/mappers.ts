@@ -25,3 +25,11 @@ export const mapDocumentTypeToText = (type: string): string => {
 
   throw new Error('Unknown document type');
 };
+
+export const mapIssueStatusToText = (status: string): string => {
+  if (status === 'RepairScheduled') {
+    return 'Repair Scheduled';
+  } else {
+    return status;
+  }
+};

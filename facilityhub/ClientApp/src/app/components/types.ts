@@ -37,6 +37,10 @@ export interface IssueRes {
   filedById?: string;
   filedByName?: string;
   filedAt: string;
+  repairer?: {
+    name?: string;
+    phoneNumber: string;
+  }
 }
 
 export interface DocumentUploadPayload {
@@ -47,4 +51,5 @@ export interface DocumentUploadPayload {
 export enum IssueTransitions {
   VALIDATE = "validate",
   SCHEDULE_REPAIR = "schedule-repair",
+  MARK_REPAIRED = "mark-as-repaired",
 }

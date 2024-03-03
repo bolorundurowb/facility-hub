@@ -9,7 +9,7 @@ import {
 } from '../../services';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as Leaflet from 'leaflet';
-import { getLayers, mapDocumentTypeToText, mapIssueStatusToColour } from '../../utils';
+import { getLayers, mapDocumentTypeToText, mapIssueStatusToColour, mapIssueStatusToText } from '../../utils';
 import { Location } from '@angular/common';
 import { cilArrowLeft, cilCloudDownload, cilCloudUpload, cilNoteAdd, cilTrash, cilUserPlus } from '@coreui/icons';
 import { DocumentRes, DocumentType, IssueRes, LocationRes, TenantRes } from '../../components';
@@ -246,4 +246,5 @@ export class FacilityDetailsComponent implements OnInit {
   }
 
   protected readonly getIssueColour = mapIssueStatusToColour;
+  protected readonly mapIssueStatusToText = mapIssueStatusToText;
 }

@@ -13,11 +13,13 @@ import {
   cilTrash,
   cilUserPlus
 } from '@coreui/icons';
-import { mapDocumentTypeToText, mapIssueStatusToColour } from '../../utils';
+import { mapDocumentTypeToText, mapIssueStatusToColour, mapIssueStatusToText } from '../../utils';
 import { HttpEventType } from '@angular/common/http';
 
 interface TransitionIssuePayload {
   notes?: string;
+  repairerName?: string;
+  repairerPhoneNumber?: string;
 }
 
 @Component({
@@ -172,6 +174,10 @@ export class IssueDetailsComponent implements OnInit {
       return 'Schedule Repair';
     }
 
+    if (transition === IssueTransitions.MARK_REPAIRED) {
+      return 'Mark As Repaired';
+    }
+
     return 'Bleh';
   }
 
@@ -184,6 +190,12 @@ export class IssueDetailsComponent implements OnInit {
       return IssueTransitions.SCHEDULE_REPAIR;
     }
 
+    if (this.issue?.status === 'RepairScheduled') {
+      return IssueTransitions.MARK_REPAIRED;
+    }
+
     throw new Error();
   }
+
+  protected readonly mapIssueStatusToText = mapIssueStatusToText;
 }

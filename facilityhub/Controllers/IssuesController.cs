@@ -125,6 +125,27 @@ public class IssuesController : ApiController
         return Ok(Mapper.Map<IssueRes>(issue));
     }
 
+    [HttpPatch("{issueId:guid}/schedule-repair")]
+    [ProducesResponseType(typeof(IssueRes), 200)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> ScheduleRepair(Guid issueId, [FromBody] ReadyToRepairReq req)
+    {
+        var userId = User.GetCallerId();
+        var user = await _userService.FindById(userId);
+
+        if (user == null)
+            return Forbidden("User account not found");
+
+        var issue = await _issueService.FindById(userId, issueId);
+
+        if (issue == null)
+            return NotFound("Issue not found");
+
+        await _issueService.ScheduleRepair(issue, user, req.Notes, req.RepairerName, req.RepairerPhoneNumber);
+
+        return Ok(Mapper.Map<IssueRes>(issue));
+    }
+
     [HttpPost("report")]
     [ProducesResponseType(typeof(IssueRes), 201)]
     [ProducesResponseType(typeof(GenericRes), 404)]

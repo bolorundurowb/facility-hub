@@ -11,6 +11,9 @@ public class IssueEntityConfiguration : BaseEntityConfiguration<Issue>
         builder.Property(x => x.Log)
             .HasColumnType("jsonb");
 
+        builder.Property(x => x.Repairer)
+            .HasColumnType("jsonb");
+
         base.Configure(builder);
     }
 }

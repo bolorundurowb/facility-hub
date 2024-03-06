@@ -121,6 +121,13 @@ public class IssueService : IIssueService
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task ScheduleRepair(Issue issue, User manager, string? notes, string? repairerName,
+        string? repairerPhoneNumber)
+    {
+        issue.ScheduleRepair(manager, notes, repairerName, repairerPhoneNumber);
+        await _dbContext.SaveChangesAsync();
+    }
+
     #region Private Helpers
 
     private Task<List<Guid>> GetManagedFacilityIds(Guid userId) => _dbContext.Facilities

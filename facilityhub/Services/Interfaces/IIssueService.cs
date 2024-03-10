@@ -22,4 +22,6 @@ public interface IIssueService
         IUploadResult details);
 
     Task MarkAsValidated(Issue issue, User manager, string? notes);
+
+    Task MarkAsDuplicate(Issue issue, User manager, string? notes);
 }

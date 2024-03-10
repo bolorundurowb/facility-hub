@@ -78,6 +78,16 @@ public class Issue : Entity
     public void Close(User manager) =>
         TransitionToStatus(manager, IssueStatus.Closed, null);
 
+    public bool CanMarkAsDuplicate() => Status is IssueStatus.Filed;
+
+    public void MarkAsDuplicate(User manager, string? notes)
+    {
+        if (!CanMarkAsDuplicate())
+            throw new InvalidOperationException("Only freshly filed issues can be marked as duplicate");
+
+        TransitionToStatus(manager, IssueStatus.Duplicate, notes);
+    }
+
     #region Private Helpers
 
     private void TransitionToStatus(User manager, IssueStatus transitionTo, string? notes)

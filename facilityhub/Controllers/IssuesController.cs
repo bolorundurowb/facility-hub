@@ -129,6 +129,31 @@ public class IssuesController : ApiController
         return Ok(Mapper.Map<IssueRes>(issue));
     }
 
+    [HttpPatch("{issueId:guid}/mark-as-duplicate")]
+    [ProducesResponseType(typeof(IssueRes), 200)]
+    [ProducesResponseType(typeof(GenericRes), 400)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> MarkIssueAsDuplicate(Guid issueId, [FromBody] IssueStatusChangeReq req)
+    {
+        var userId = User.GetCallerId();
+        var user = await _userService.FindById(userId);
+
+        if (user == null)
+            return Forbidden("User account not found");
+
+        var issue = await _issueService.FindById(userId, issueId);
+
+        if (issue == null)
+            return NotFound("Issue not found");
+
+        if (!issue.CanMarkAsDuplicate())
+            return BadRequest("Issue cannot be marked as a suplidate");
+
+        await _issueService.MarkAsDuplicate(issue, user, req.Notes);
+
+        return Ok(Mapper.Map<IssueRes>(issue));
+    }
+
     [HttpPost("report")]
     [ProducesResponseType(typeof(IssueRes), 201)]
     [ProducesResponseType(typeof(GenericRes), 404)]

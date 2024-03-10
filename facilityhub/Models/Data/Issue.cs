@@ -59,9 +59,11 @@ public class Issue : Entity
 
     public void AddDocument(Document document) => Documents.Add(document);
 
+    public bool CanValidate() => Status is IssueStatus.Filed;
+
     public void Validate(User manager, string? notes)
     {
-        if (Status is not IssueStatus.Filed)
+        if (!CanValidate())
             throw new InvalidOperationException("Only freshly filed issues can be validated");
 
         TransitionToStatus(manager, IssueStatus.Validated, notes);

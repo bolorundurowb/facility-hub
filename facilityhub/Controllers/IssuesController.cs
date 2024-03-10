@@ -106,6 +106,7 @@ public class IssuesController : ApiController
 
     [HttpPatch("{issueId:guid}/validate")]
     [ProducesResponseType(typeof(IssueRes), 200)]
+    [ProducesResponseType(typeof(GenericRes), 400)]
     [ProducesResponseType(typeof(GenericRes), 404)]
     public async Task<IActionResult> ValidateIssue(Guid issueId, [FromBody] IssueStatusChangeReq req)
     {
@@ -119,6 +120,9 @@ public class IssuesController : ApiController
 
         if (issue == null)
             return NotFound("Issue not found");
+
+        if (!issue.CanValidate())
+            return BadRequest("Issue cannot be validated");
 
         await _issueService.MarkAsValidated(issue, user, req.Notes);
 

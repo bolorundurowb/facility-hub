@@ -121,6 +121,13 @@ public class IssueService : IIssueService
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task ScheduleRepair(Issue issue, User manager, string? notes, string? repairerName,
+        string? repairerPhoneNumber)
+    {
+        issue.ScheduleRepair(manager, notes, repairerName, repairerPhoneNumber);
+        await _dbContext.SaveChangesAsync();
+    }
+
     public async Task MarkAsDuplicate(Issue issue, User manager, string? notes)
     {
         issue.MarkAsDuplicate(manager, notes);

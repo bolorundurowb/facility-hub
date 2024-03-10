@@ -23,7 +23,10 @@
     <ng-container *ngIf="issue">
       <c-container>
         <div class="action-row" *ngIf="!isTenant">
-          <button cButton shape="rounded-pill" color="success"
+          <button cButton
+                  color="success"
+                  shape="rounded-pill"
+                  style="color: white"
                   (click)="showTransitionModal()">
             <svg [cIcon]="icons.cilChevronDoubleRight"></svg>
             {{ getTransitionButtonText() }}
@@ -34,7 +37,7 @@
           <div>Code: {{ issue.code }}</div>
           <div>Facility: <span>{{ issue.facilityName }}</span></div>
           <div>Status:
-            <c-badge [color]="getIssueColour(issue.status)">{{ issue.status.toUpperCase() }}</c-badge>
+            <c-badge [color]="getIssueColour(issue.status)">{{ mapIssueStatusToText(issue.status) | uppercase }}</c-badge>
           </div>
           <div>Description: <span>{{ issue.description }}</span></div>
           <div>Location: <span>{{ issue.location }}</span></div>
@@ -42,6 +45,19 @@
           <div>Occurred At: <span>{{ issue.occurredAt | date: 'dd MMM yyyy h:mm aa' }}</span></div>
         </div>
       </c-container>
+
+      <ng-container *ngIf="issue?.repairer">
+        <c-container>
+          <c-header>
+            <h5>Repairer</h5>
+          </c-header>
+
+          <div class="issue">
+            <div>Name: <span>{{ issue.repairer?.name || 'N/A' }}</span></div>
+            <div>Name: <span>{{ issue.repairer?.phoneNumber || 'N/A' }}</span></div>
+          </div>
+        </c-container>
+      </ng-container>
 
       <c-container>
         <c-header>
@@ -197,6 +213,22 @@
         [(visible)]="hasError">
         {{ errorMessage }}
       </c-alert>
+
+      <ng-container *ngIf="issue?.status === 'Validated'">
+        <div class="mb-3">
+          <label cLabel>Repairer Name:</label>
+          <input cFormControl
+                 name="issue-repairer-name"
+                 [(ngModel)]="transitionPayload.repairerName"/>
+        </div>
+        <div class="mb-3">
+          <label cLabel>Repairer Phone Number:</label>
+          <input cFormControl
+                 name="issue-repairer-name"
+                 type="tel"
+                 [(ngModel)]="transitionPayload.repairerPhoneNumber"/>
+        </div>
+      </ng-container>
 
       <div class="mb-3">
         <label cLabel>Notes:</label>

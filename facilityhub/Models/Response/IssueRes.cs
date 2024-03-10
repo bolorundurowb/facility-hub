@@ -1,4 +1,5 @@
 ﻿using FacilityHub.Enums;
+using FacilityHub.Models.Data;
 
 namespace FacilityHub.Models.Response;
 
@@ -27,4 +28,6 @@ public class IssueRes
     public string? FiledByName { get; set; }
 
     public DateTimeOffset FiledAt { get; set; }
+
+    public ContactInformation? Repairer { get;  set; }
 }

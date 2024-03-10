@@ -36,6 +36,8 @@ public class Issue : Entity
 
     public DateTimeOffset FiledAt { get; private set; }
 
+    public ContactInformation? Repairer { get; private set; }
+
 #pragma warning disable CS8618
     private Issue() { }
 #pragma warning restore CS8618
@@ -69,8 +71,11 @@ public class Issue : Entity
         TransitionToStatus(manager, IssueStatus.Validated, notes);
     }
 
-    public void ScheduleRepair(User manager, string? notes) =>
+    public void ScheduleRepair(User manager, string? notes, string? repairerName, string repairerPhoneNumber)
+    {
         TransitionToStatus(manager, IssueStatus.RepairScheduled, notes);
+        Repairer = new ContactInformation(repairerName, repairerPhoneNumber);
+    }
 
     public void Repair(User manager, string? notes) =>
         TransitionToStatus(manager, IssueStatus.Repaired, notes);

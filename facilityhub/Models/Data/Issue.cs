@@ -61,9 +61,11 @@ public class Issue : Entity
 
     public void AddDocument(Document document) => Documents.Add(document);
 
+    public bool CanValidate() => Status is IssueStatus.Filed;
+
     public void Validate(User manager, string? notes)
     {
-        if (Status is not IssueStatus.Filed)
+        if (!CanValidate())
             throw new InvalidOperationException("Only freshly filed issues can be validated");
 
         TransitionToStatus(manager, IssueStatus.Validated, notes);
@@ -80,6 +82,16 @@ public class Issue : Entity
 
     public void Close(User manager) =>
         TransitionToStatus(manager, IssueStatus.Closed, null);
+
+    public bool CanMarkAsDuplicate() => Status is IssueStatus.Filed;
+
+    public void MarkAsDuplicate(User manager, string? notes)
+    {
+        if (!CanMarkAsDuplicate())
+            throw new InvalidOperationException("Only freshly filed issues can be marked as duplicate");
+
+        TransitionToStatus(manager, IssueStatus.Duplicate, notes);
+    }
 
     #region Private Helpers
 

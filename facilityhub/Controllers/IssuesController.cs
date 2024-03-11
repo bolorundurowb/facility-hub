@@ -49,6 +49,23 @@ public class IssuesController : ApiController
         return Ok(Mapper.Map<IssueRes>(issue));
     }
 
+    [HttpPost("report")]
+    [ProducesResponseType(typeof(IssueRes), 201)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> Report([FromBody] ReportIssueReq req)
+    {
+        var userId = User.GetCallerId();
+        var facility = await _facilityService.FindById(userId, req.FacilityId);
+
+        if (facility == null || facility.Tenant?.User?.Id != userId)
+            return Forbidden("You cannot report issues on this facility");
+
+        var issue = await _issueService.Create(facility, req.OccurredAt, req.Description, req.Location,
+            req.RemedialAction);
+
+        return Created(Mapper.Map<IssueRes>(issue));
+    }
+
     [HttpGet("{issueId:guid}/documents")]
     [ProducesResponseType(typeof(List<DocumentRes>), 200)]
     public async Task<IActionResult> GetOneDocuments(Guid issueId)
@@ -106,6 +123,7 @@ public class IssuesController : ApiController
 
     [HttpPatch("{issueId:guid}/validate")]
     [ProducesResponseType(typeof(IssueRes), 200)]
+    [ProducesResponseType(typeof(GenericRes), 400)]
     [ProducesResponseType(typeof(GenericRes), 404)]
     public async Task<IActionResult> ValidateIssue(Guid issueId, [FromBody] IssueStatusChangeReq req)
     {
@@ -119,6 +137,9 @@ public class IssuesController : ApiController
 
         if (issue == null)
             return NotFound("Issue not found");
+
+        if (!issue.CanValidate())
+            return BadRequest("Issue cannot be validated");
 
         await _issueService.MarkAsValidated(issue, user, req.Notes);
 
@@ -146,20 +167,28 @@ public class IssuesController : ApiController
         return Ok(Mapper.Map<IssueRes>(issue));
     }
 
-    [HttpPost("report")]
-    [ProducesResponseType(typeof(IssueRes), 201)]
+    [HttpPatch("{issueId:guid}/mark-as-duplicate")]
+    [ProducesResponseType(typeof(IssueRes), 200)]
+    [ProducesResponseType(typeof(GenericRes), 400)]
     [ProducesResponseType(typeof(GenericRes), 404)]
-    public async Task<IActionResult> Report([FromBody] ReportIssueReq req)
+    public async Task<IActionResult> MarkIssueAsDuplicate(Guid issueId, [FromBody] IssueStatusChangeReq req)
     {
         var userId = User.GetCallerId();
-        var facility = await _facilityService.FindById(userId, req.FacilityId);
+        var user = await _userService.FindById(userId);
 
-        if (facility == null || facility.Tenant?.User?.Id != userId)
-            return Forbidden("You cannot report issues on this facility");
+        if (user == null)
+            return Forbidden("User account not found");
 
-        var issue = await _issueService.Create(facility, req.OccurredAt, req.Description, req.Location,
-            req.RemedialAction);
+        var issue = await _issueService.FindById(userId, issueId);
 
-        return Created(Mapper.Map<IssueRes>(issue));
+        if (issue == null)
+            return NotFound("Issue not found");
+
+        if (!issue.CanMarkAsDuplicate())
+            return BadRequest("Issue cannot be marked as a suplidate");
+
+        await _issueService.MarkAsDuplicate(issue, user, req.Notes);
+
+        return Ok(Mapper.Map<IssueRes>(issue));
     }
 }

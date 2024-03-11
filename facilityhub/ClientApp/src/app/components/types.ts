@@ -33,7 +33,7 @@ export interface IssueRes {
   description: string;
   location: string;
   remedialAction?: string;
-  status: string;
+  status: IssueStatus;
   filedById?: string;
   filedByName?: string;
   filedAt: string;
@@ -52,4 +52,14 @@ export enum IssueTransitions {
   VALIDATE = "validate",
   SCHEDULE_REPAIR = "schedule-repair",
   MARK_REPAIRED = "mark-as-repaired",
+  MARK_DUPLICATED = "mark-as-duplicate",
+}
+
+export enum IssueStatus {
+  FILED = 'Filed',
+  VALIDATED = 'Validated',
+  DUPLICATE = 'Duplicate',
+  REPAIR_SCHEDULED = 'RepairScheduled',
+  CLOSED = 'Closed',
+  REPAIRED = 'Repaired',
 }

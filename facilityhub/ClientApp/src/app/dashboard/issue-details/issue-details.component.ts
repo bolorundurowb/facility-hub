@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DocumentRes, DocumentUploadPayload, IssueRes, IssueTransitions } from '../../components';
+import { DocumentRes, DocumentUploadPayload, IssueRes, IssueStatus, IssueTransitions } from '../../components';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -10,6 +10,7 @@ import {
   cilCloudDownload,
   cilCloudUpload,
   cilNoteAdd,
+  cilObjectUngroup,
   cilTrash,
   cilUserPlus
 } from '@coreui/icons';
@@ -29,7 +30,7 @@ interface TransitionIssuePayload {
 })
 export class IssueDetailsComponent implements OnInit {
   isLoading = true;
-  icons = { cilCloudUpload, cilNoteAdd, cilCloudDownload, cilTrash, cilArrowLeft, cilUserPlus, cilChevronDoubleRight };
+  icons = { cilCloudUpload, cilNoteAdd, cilCloudDownload, cilTrash, cilArrowLeft, cilUserPlus, cilChevronDoubleRight, cilObjectUngroup };
 
   issueId?: string;
   issue?: IssueRes;
@@ -46,6 +47,8 @@ export class IssueDetailsComponent implements OnInit {
   isTransitioning = false;
   isTransitionModalVisible = false;
   transitionPayload: TransitionIssuePayload = {};
+
+  isDuplicateModalVisible = false;
 
   constructor(title: Title, private route: ActivatedRoute, private location: Location, private authService: AuthService,
               private downloadService: FileDownloadService, private issueService: IssuesService,
@@ -136,6 +139,14 @@ export class IssueDetailsComponent implements OnInit {
     }
   }
 
+  canTransition(): boolean {
+    if (this.isTenant) {
+      return false;
+    }
+
+    return !([IssueStatus.DUPLICATE, IssueStatus.CLOSED].includes(this.issue?.status!));
+  }
+
   showTransitionModal() {
     this.isTransitionModalVisible = true;
   }
@@ -181,16 +192,47 @@ export class IssueDetailsComponent implements OnInit {
     return 'Bleh';
   }
 
+  canBeMarkedAsDuplicated(): boolean {
+    return this.issue?.status === 'Filed';
+  }
+
+  showDuplicateModal() {
+    this.isDuplicateModalVisible = true;
+  }
+
+  dismissDuplicateModal() {
+    this.isDuplicateModalVisible = false;
+    this.transitionPayload = {};
+  }
+
+  async markAsDuplicate() {
+    this.isTransitioning = true;
+
+    try {
+      const response = await this.issueService.transition(this.issueId!, IssueTransitions.MARK_DUPLICATED, this.transitionPayload);
+
+      this.dismissTransitionModal();
+      this.notificationService.showSuccess('Issue marked as duplicate');
+
+      this.issue = response;
+    } catch (e) {
+      this.errorMessage = e as string;
+      this.hasError = true;
+    } finally {
+      this.isTransitioning = false;
+    }
+  }
+
   private getTransitionStatus(): IssueTransitions {
-    if (this.issue?.status === 'Filed') {
+    if (this.issue?.status === IssueStatus.FILED) {
       return IssueTransitions.VALIDATE;
     }
 
-    if (this.issue?.status === 'Validated') {
+    if (this.issue?.status === IssueStatus.VALIDATED) {
       return IssueTransitions.SCHEDULE_REPAIR;
     }
 
-    if (this.issue?.status === 'RepairScheduled') {
+    if (this.issue?.status === IssueStatus.REPAIR_SCHEDULED) {
       return IssueTransitions.MARK_REPAIRED;
     }
 

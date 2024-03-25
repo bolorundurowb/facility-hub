@@ -55,6 +55,7 @@ export enum IssueTransitions {
   MARK_REPAIRED = "mark-as-repaired",
   MARK_DUPLICATED = "mark-as-duplicate",
   CLOSE = "close",
+  REOPEN = "reopen",
 }
 
 export enum IssueStatus {

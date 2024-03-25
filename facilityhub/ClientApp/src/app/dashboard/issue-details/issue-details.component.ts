@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { AuthService, FileDownloadService, IssuesService, NotificationService } from '../../services';
 import {
-  cilArrowLeft,
+  cilArrowLeft, cilCheck, cilChevronDoubleLeft,
   cilChevronDoubleRight,
   cilCloudDownload,
   cilCloudUpload,
@@ -37,7 +37,9 @@ export class IssueDetailsComponent implements OnInit {
     cilTrash,
     cilArrowLeft,
     cilUserPlus,
+    cilCheck,
     cilChevronDoubleRight,
+    cilChevronDoubleLeft,
     cilObjectUngroup
   };
 
@@ -58,6 +60,8 @@ export class IssueDetailsComponent implements OnInit {
   transitionPayload: TransitionIssuePayload = {};
 
   isDuplicateModalVisible = false;
+  isCloseModalVisible = false;
+  isReopenModalVisible = false;
 
   constructor(title: Title, private route: ActivatedRoute, private location: Location, private authService: AuthService,
               private downloadService: FileDownloadService, private issueService: IssuesService,

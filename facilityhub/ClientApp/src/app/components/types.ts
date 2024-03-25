@@ -53,6 +53,7 @@ export enum IssueTransitions {
   SCHEDULE_REPAIR = "schedule-repair",
   MARK_REPAIRED = "mark-as-repaired",
   MARK_DUPLICATED = "mark-as-duplicate",
+  CLOSE = "close",
 }
 
 export enum IssueStatus {

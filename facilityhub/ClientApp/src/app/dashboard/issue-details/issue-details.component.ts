@@ -236,6 +236,10 @@ export class IssueDetailsComponent implements OnInit {
       return IssueTransitions.MARK_REPAIRED;
     }
 
+    if (this.issue?.status === IssueStatus.REPAIRED) {
+      return IssueTransitions.CLOSE;
+    }
+
     throw new Error();
   }
 

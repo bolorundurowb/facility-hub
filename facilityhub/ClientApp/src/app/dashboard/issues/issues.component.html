@@ -41,7 +41,7 @@
             <td>{{ issue.location | truncate: 25 : { trailingString: '...' } }}</td>
             <td>
               <c-badge [color]="getIssueColour(issue.status)">
-                {{ issue.status.toUpperCase() }}
+                {{ mapIssueStatusToText(issue.status).toUpperCase() }}
               </c-badge>
             </td>
             <td>{{ issue.filedByName || 'N/A' }}</td>

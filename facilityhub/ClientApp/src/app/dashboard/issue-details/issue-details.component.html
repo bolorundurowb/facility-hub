@@ -22,7 +22,7 @@
 
     <ng-container *ngIf="issue">
       <c-container>
-        <div class="action-row" *ngIf="canTransition()">
+        <div class="action-row" *ngIf="transitionAvailable()">
           <button cButton *ngIf="canBeMarkedAsDuplicated()"
                   color="secondary"
                   shape="rounded-pill"
@@ -31,14 +31,26 @@
             <svg [cIcon]="icons.cilObjectUngroup"></svg>
             Mark As Duplicate
           </button>
-          <button cButton
-                  color="success"
-                  shape="rounded-pill"
-                  style="color: white"
-                  (click)="showTransitionModal()">
-            <svg [cIcon]="icons.cilChevronDoubleRight"></svg>
-            {{ getTransitionButtonText() }}
-          </button>
+         <ng-container *ngIf="!isTenant">
+           <button cButton *ngIf="canAdminTransition()"
+                   color="success"
+                   shape="rounded-pill"
+                   style="color: white"
+                   (click)="showTransitionModal()">
+             <svg [cIcon]="icons.cilChevronDoubleRight"></svg>
+             {{ getTransitionButtonText() }}
+           </button>
+         </ng-container>
+         <ng-container *ngIf="isTenant">
+           <button cButton *ngIf="canTenantTransition()"
+                   color="success"
+                   shape="rounded-pill"
+                   style="color: white"
+                   (click)="showTransitionModal()">
+             <svg [cIcon]="icons.cilChevronDoubleRight"></svg>
+             {{ getTransitionButtonText() }}
+           </button>
+         </ng-container>
         </div>
 
         <div class="issue">

@@ -30,7 +30,16 @@ interface TransitionIssuePayload {
 })
 export class IssueDetailsComponent implements OnInit {
   isLoading = true;
-  icons = { cilCloudUpload, cilNoteAdd, cilCloudDownload, cilTrash, cilArrowLeft, cilUserPlus, cilChevronDoubleRight, cilObjectUngroup };
+  icons = {
+    cilCloudUpload,
+    cilNoteAdd,
+    cilCloudDownload,
+    cilTrash,
+    cilArrowLeft,
+    cilUserPlus,
+    cilChevronDoubleRight,
+    cilObjectUngroup
+  };
 
   issueId?: string;
   issue?: IssueRes;
@@ -139,12 +148,16 @@ export class IssueDetailsComponent implements OnInit {
     }
   }
 
-  canTransition(): boolean {
-    if (this.isTenant) {
-      return false;
-    }
+  transitionAvailable(): boolean {
+    return !([ IssueStatus.DUPLICATE, IssueStatus.CLOSED ].includes(this.issue?.status!));
+  }
 
-    return !([IssueStatus.DUPLICATE, IssueStatus.CLOSED].includes(this.issue?.status!));
+  canAdminTransition(): boolean {
+    return !([ IssueStatus.DUPLICATE, IssueStatus.REPAIRED, IssueStatus.CLOSED ].includes(this.issue?.status!));
+  }
+
+  canTenantTransition(): boolean {
+    return this.issue?.status === IssueStatus.REPAIRED;
   }
 
   showTransitionModal() {
@@ -189,7 +202,11 @@ export class IssueDetailsComponent implements OnInit {
       return 'Mark As Repaired';
     }
 
-    return 'Bleh';
+    if (transition === IssueTransitions.CLOSE) {
+      return 'Confirm Repair Done';
+    }
+
+    throw new Error('Unknown issue transition');
   }
 
   canBeMarkedAsDuplicated(): boolean {

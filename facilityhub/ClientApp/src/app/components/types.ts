@@ -34,8 +34,9 @@ export interface IssueRes {
   location: string;
   remedialAction?: string;
   status: IssueStatus;
-  filedById?: string;
-  filedByName?: string;
+  filerTenantId?: string;
+  filerUserId?: string;
+  filerName?: string;
   filedAt: string;
   repairer?: {
     name?: string;
@@ -53,6 +54,8 @@ export enum IssueTransitions {
   SCHEDULE_REPAIR = "schedule-repair",
   MARK_REPAIRED = "mark-as-repaired",
   MARK_DUPLICATED = "mark-as-duplicate",
+  CLOSE = "close",
+  REOPEN = "reopen",
 }
 
 export enum IssueStatus {

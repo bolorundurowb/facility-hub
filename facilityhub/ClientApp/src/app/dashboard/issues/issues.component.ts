@@ -4,7 +4,7 @@ import { IssuesService } from '../../services';
 import { cilLightbulb } from '@coreui/icons';
 import { IssueRes } from '../../components';
 import { Router } from '@angular/router';
-import { mapIssueStatusToColour } from '../../utils';
+import { mapIssueStatusToColour, mapIssueStatusToText } from '../../utils';
 
 @Component({
   selector: 'fh-dashboard-issues',
@@ -31,4 +31,6 @@ export class IssuesComponent implements OnInit {
   async goToDetails(issue: IssueRes) {
     await this.router.navigate([ 'dashboard', 'issues', issue.id ]);
   }
+
+  protected readonly mapIssueStatusToText = mapIssueStatusToText;
 }

@@ -185,9 +185,59 @@ public class IssuesController : ApiController
             return NotFound("Issue not found");
 
         if (!issue.CanMarkAsDuplicate())
-            return BadRequest("Issue cannot be marked as a suplidate");
+            return BadRequest("Issue cannot be marked as a duplicate");
 
         await _issueService.MarkAsDuplicate(issue, user, req.Notes);
+
+        return Ok(Mapper.Map<IssueRes>(issue));
+    }
+
+    [HttpPatch("{issueId:guid}/mark-as-repaired")]
+    [ProducesResponseType(typeof(IssueRes), 200)]
+    [ProducesResponseType(typeof(GenericRes), 400)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> MarkAsRepaired(Guid issueId, [FromBody] IssueStatusChangeReq req)
+    {
+        var userId = User.GetCallerId();
+        var user = await _userService.FindById(userId);
+
+        if (user == null)
+            return Forbidden("User account not found");
+
+        var issue = await _issueService.FindById(userId, issueId);
+
+        if (issue == null)
+            return NotFound("Issue not found");
+
+        if (!issue.CanMarkAsRepaired())
+            return BadRequest("Issue cannot be marked as repaired");
+
+        await _issueService.MarkAsRepaired(issue, user, req.Notes);
+
+        return Ok(Mapper.Map<IssueRes>(issue));
+    }
+
+    [HttpPatch("{issueId:guid}/close")]
+    [ProducesResponseType(typeof(IssueRes), 200)]
+    [ProducesResponseType(typeof(GenericRes), 400)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> MarkAsResolved(Guid issueId)
+    {
+        var userId = User.GetCallerId();
+        var user = await _userService.FindById(userId);
+
+        if (user == null)
+            return Forbidden("User account not found");
+
+        var issue = await _issueService.FindById(userId, issueId);
+
+        if (issue == null)
+            return NotFound("Issue not found");
+
+        if (!issue.CanClose(user))
+            return BadRequest("Issue cannot be closed/resolved");
+
+        await _issueService.MarkAsResolved(issue, user);
 
         return Ok(Mapper.Map<IssueRes>(issue));
     }

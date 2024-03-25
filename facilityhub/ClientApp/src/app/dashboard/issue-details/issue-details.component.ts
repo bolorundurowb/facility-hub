@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { AuthService, FileDownloadService, IssuesService, NotificationService } from '../../services';
 import {
-  cilArrowLeft,
+  cilArrowLeft, cilCheck, cilChevronDoubleLeft,
   cilChevronDoubleRight,
   cilCloudDownload,
   cilCloudUpload,
@@ -30,7 +30,18 @@ interface TransitionIssuePayload {
 })
 export class IssueDetailsComponent implements OnInit {
   isLoading = true;
-  icons = { cilCloudUpload, cilNoteAdd, cilCloudDownload, cilTrash, cilArrowLeft, cilUserPlus, cilChevronDoubleRight, cilObjectUngroup };
+  icons = {
+    cilCloudUpload,
+    cilNoteAdd,
+    cilCloudDownload,
+    cilTrash,
+    cilArrowLeft,
+    cilUserPlus,
+    cilCheck,
+    cilChevronDoubleRight,
+    cilChevronDoubleLeft,
+    cilObjectUngroup
+  };
 
   issueId?: string;
   issue?: IssueRes;
@@ -49,6 +60,8 @@ export class IssueDetailsComponent implements OnInit {
   transitionPayload: TransitionIssuePayload = {};
 
   isDuplicateModalVisible = false;
+  isCloseModalVisible = false;
+  isReopenModalVisible = false;
 
   constructor(title: Title, private route: ActivatedRoute, private location: Location, private authService: AuthService,
               private downloadService: FileDownloadService, private issueService: IssuesService,
@@ -60,6 +73,8 @@ export class IssueDetailsComponent implements OnInit {
 
   protected readonly getIssueColour = mapIssueStatusToColour;
 
+  protected readonly mapIssueStatusToText = mapIssueStatusToText;
+
   async ngOnInit() {
     this.isLoading = true;
 
@@ -70,7 +85,7 @@ export class IssueDetailsComponent implements OnInit {
       this.documents = await this.issueService.getOneDocuments(issueId);
 
       this.issueId = issueId;
-      this.isTenant = this.issue?.filedById === this.authService.getUser().id;
+      this.isTenant = this.issue?.filerUserId === this.authService.getUser().id;
     } finally {
       this.isLoading = false;
     }
@@ -139,12 +154,16 @@ export class IssueDetailsComponent implements OnInit {
     }
   }
 
-  canTransition(): boolean {
-    if (this.isTenant) {
-      return false;
-    }
+  transitionAvailable(): boolean {
+    return !([ IssueStatus.DUPLICATE, IssueStatus.CLOSED ].includes(this.issue?.status!));
+  }
 
-    return !([IssueStatus.DUPLICATE, IssueStatus.CLOSED].includes(this.issue?.status!));
+  canAdminTransition(): boolean {
+    return !([ IssueStatus.DUPLICATE, IssueStatus.REPAIRED, IssueStatus.CLOSED ].includes(this.issue?.status!));
+  }
+
+  canTenantTransition(): boolean {
+    return this.issue?.status === IssueStatus.REPAIRED;
   }
 
   showTransitionModal() {
@@ -160,7 +179,7 @@ export class IssueDetailsComponent implements OnInit {
     this.isTransitioning = true;
 
     try {
-      const response = await this.issueService.transition(this.issueId!, this.getTransitionStatus(), this.transitionPayload);
+      const response = await this.issueService.transition(this.issueId!, this.getTransitionStatus()!, this.transitionPayload);
 
       this.dismissTransitionModal();
       this.notificationService.showSuccess('Issue status successfully updated');
@@ -174,7 +193,7 @@ export class IssueDetailsComponent implements OnInit {
     }
   }
 
-  getTransitionButtonText(): string {
+  getTransitionButtonText(): string | null {
     const transition = this.getTransitionStatus();
 
     if (transition === IssueTransitions.VALIDATE) {
@@ -189,7 +208,11 @@ export class IssueDetailsComponent implements OnInit {
       return 'Mark As Repaired';
     }
 
-    return 'Bleh';
+    if (transition === IssueTransitions.CLOSE) {
+      return 'Confirm Repair Done';
+    }
+
+    return null;
   }
 
   canBeMarkedAsDuplicated(): boolean {
@@ -211,7 +234,7 @@ export class IssueDetailsComponent implements OnInit {
     try {
       const response = await this.issueService.transition(this.issueId!, IssueTransitions.MARK_DUPLICATED, this.transitionPayload);
 
-      this.dismissTransitionModal();
+      this.dismissDuplicateModal();
       this.notificationService.showSuccess('Issue marked as duplicate');
 
       this.issue = response;
@@ -223,7 +246,33 @@ export class IssueDetailsComponent implements OnInit {
     }
   }
 
-  private getTransitionStatus(): IssueTransitions {
+  showCloseModal() {
+    this.isCloseModalVisible = true;
+  }
+
+  dismissCloseModal() {
+    this.isCloseModalVisible = false;
+  }
+
+  async markAsClosed() {
+    this.isTransitioning = true;
+
+    try {
+      const response = await this.issueService.transition(this.issueId!, IssueTransitions.CLOSE, {});
+
+      this.dismissCloseModal();
+      this.notificationService.showSuccess('Issue closed');
+
+      this.issue = response;
+    } catch (e) {
+      this.errorMessage = e as string;
+      this.hasError = true;
+    } finally {
+      this.isTransitioning = false;
+    }
+  }
+
+  private getTransitionStatus(): IssueTransitions | null {
     if (this.issue?.status === IssueStatus.FILED) {
       return IssueTransitions.VALIDATE;
     }
@@ -236,8 +285,10 @@ export class IssueDetailsComponent implements OnInit {
       return IssueTransitions.MARK_REPAIRED;
     }
 
-    throw new Error();
-  }
+    if (this.issue?.status === IssueStatus.REPAIRED) {
+      return IssueTransitions.CLOSE;
+    }
 
-  protected readonly mapIssueStatusToText = mapIssueStatusToText;
+    return null;
+  }
 }

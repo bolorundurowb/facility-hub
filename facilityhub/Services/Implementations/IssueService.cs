@@ -49,6 +49,7 @@ public class IssueService : IIssueService
         return await _dbContext.Issues
             .Include(x => x.Facility)
             .Include(x => x.FiledBy)
+            .Include(x => x.FiledBy.User)
             .Where(x =>
                 // you are referenced in the issue
                 x.FiledBy.User!.Id == userId
@@ -131,6 +132,18 @@ public class IssueService : IIssueService
     public async Task MarkAsDuplicate(Issue issue, User manager, string? notes)
     {
         issue.MarkAsDuplicate(manager, notes);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task MarkAsRepaired(Issue issue, User manager, string? notes)
+    {
+        issue.MarkRepaired(manager, notes);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task MarkAsResolved(Issue issue, User tenantUser)
+    {
+        issue.Close(tenantUser);
         await _dbContext.SaveChangesAsync();
     }
 

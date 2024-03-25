@@ -22,7 +22,7 @@
 
     <ng-container *ngIf="issue">
       <c-container>
-        <div class="action-row" *ngIf="canTransition()">
+        <div class="action-row" *ngIf="transitionAvailable()">
           <button cButton *ngIf="canBeMarkedAsDuplicated()"
                   color="secondary"
                   shape="rounded-pill"
@@ -31,21 +31,41 @@
             <svg [cIcon]="icons.cilObjectUngroup"></svg>
             Mark As Duplicate
           </button>
-          <button cButton
-                  color="success"
-                  shape="rounded-pill"
-                  style="color: white"
-                  (click)="showTransitionModal()">
-            <svg [cIcon]="icons.cilChevronDoubleRight"></svg>
-            {{ getTransitionButtonText() }}
-          </button>
+          <ng-container *ngIf="!isTenant && canAdminTransition()">
+            <button cButton
+                    color="success"
+                    shape="rounded-pill"
+                    style="color: white"
+                    (click)="showTransitionModal()">
+              <svg [cIcon]="icons.cilChevronDoubleRight"></svg>
+              {{ getTransitionButtonText() }}
+            </button>
+          </ng-container>
+          <ng-container *ngIf="isTenant && canTenantTransition()">
+            <button cButton
+                    color="success"
+                    shape="rounded-pill"
+                    style="color: white"
+                    (click)="showCloseModal()">
+              <svg [cIcon]="icons.cilCheck"></svg>
+              Confirm Issue Resolved
+            </button>
+            <button cButton
+                    color="danger"
+                    shape="rounded-pill"
+                    style="color: white">
+              <svg [cIcon]="icons.cilChevronDoubleLeft"></svg>
+              Reopen Issue
+            </button>
+          </ng-container>
         </div>
 
         <div class="issue">
           <div>Code: {{ issue.code }}</div>
           <div>Facility: <span>{{ issue.facilityName }}</span></div>
           <div>Status:
-            <c-badge [color]="getIssueColour(issue.status)">{{ mapIssueStatusToText(issue.status) | uppercase }}</c-badge>
+            <c-badge [color]="getIssueColour(issue.status)">{{ mapIssueStatusToText(issue.status) | uppercase }}
+            </c-badge>
           </div>
           <div>Description: <span>{{ issue.description }}</span></div>
           <div>Location: <span>{{ issue.location }}</span></div>
@@ -209,7 +229,7 @@
 
 <c-modal backdrop="static" [(visible)]="isTransitionModalVisible">
   <c-modal-header>
-    <h5 cModalTitle>Change Issue Status</h5>
+    <h5 cModalTitle>{{getTransitionButtonText()}}</h5>
   </c-modal-header>
 
   <c-modal-body>
@@ -305,6 +325,42 @@
             [disabled]="isTransitioning"
             (click)="markAsDuplicate()">
       Mark As Duplicate
+    </button>
+  </c-modal-footer>
+</c-modal>
+
+<c-modal backdrop="static" [(visible)]="isCloseModalVisible">
+  <c-modal-header>
+    <h5 cModalTitle>Confirm Issue Resolved</h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <form cForm>
+      <c-alert
+        fade
+        dismissible
+        color="danger"
+        [(visible)]="hasError">
+        {{ errorMessage }}
+      </c-alert>
+
+      <div class="mb-3">
+        You are closing this issue indicating that the problems described have been resolved to your satisfaction
+      </div>
+    </form>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton
+            color="secondary"
+            [disabled]="isTransitioning"
+            (click)="dismissCloseModal()">
+      Cancel
+    </button>
+    <button cButton color="success"
+            [disabled]="isTransitioning"
+            (click)="markAsClosed()">
+      Mark As Resolved
     </button>
   </c-modal-footer>
 </c-modal>

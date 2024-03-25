@@ -41,8 +41,9 @@ public class Mappings : IRegister
                 vm.FacilityId = model.Facility?.Id;
                 vm.FacilityName = model.Facility?.Name;
 
-                vm.FiledById = model.FiledBy?.Id;
-                vm.FiledByName = model.FiledBy?.Name;
+                vm.FilerTenantId = model.FiledBy?.Id;
+                vm.FilerUserId = model.FiledBy?.User?.Id;
+                vm.FilerName = model.FiledBy?.User?.FullName() ?? model.FiledBy?.Name;
             })
             .Compile();
     }

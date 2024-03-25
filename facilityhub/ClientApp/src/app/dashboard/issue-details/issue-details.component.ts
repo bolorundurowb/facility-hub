@@ -234,8 +234,34 @@ export class IssueDetailsComponent implements OnInit {
     try {
       const response = await this.issueService.transition(this.issueId!, IssueTransitions.MARK_DUPLICATED, this.transitionPayload);
 
-      this.dismissTransitionModal();
+      this.dismissDuplicateModal();
       this.notificationService.showSuccess('Issue marked as duplicate');
+
+      this.issue = response;
+    } catch (e) {
+      this.errorMessage = e as string;
+      this.hasError = true;
+    } finally {
+      this.isTransitioning = false;
+    }
+  }
+
+  showCloseModal() {
+    this.isCloseModalVisible = true;
+  }
+
+  dismissCloseModal() {
+    this.isCloseModalVisible = false;
+  }
+
+  async markAsClosed() {
+    this.isTransitioning = true;
+
+    try {
+      const response = await this.issueService.transition(this.issueId!, IssueTransitions.CLOSE, {});
+
+      this.dismissCloseModal();
+      this.notificationService.showSuccess('Issue marked as resolved');
 
       this.issue = response;
     } catch (e) {

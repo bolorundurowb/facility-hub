@@ -46,7 +46,7 @@
                     color="success"
                     shape="rounded-pill"
                     style="color: white"
-                    (click)="showTransitionModal()">
+                    (click)="showCloseModal()">
               <svg [cIcon]="icons.cilCheck"></svg>
               Confirm Issue Resolved
             </button>
@@ -325,6 +325,42 @@
             [disabled]="isTransitioning"
             (click)="markAsDuplicate()">
       Mark As Duplicate
+    </button>
+  </c-modal-footer>
+</c-modal>
+
+<c-modal backdrop="static" [(visible)]="isCloseModalVisible">
+  <c-modal-header>
+    <h5 cModalTitle>Confirm Issue Resolved</h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <form cForm>
+      <c-alert
+        fade
+        dismissible
+        color="danger"
+        [(visible)]="hasError">
+        {{ errorMessage }}
+      </c-alert>
+
+      <div class="mb-3">
+        You are closing this issue indicating that the problems described have been resolved to your satisfaction
+      </div>
+    </form>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton
+            color="secondary"
+            [disabled]="isTransitioning"
+            (click)="dismissCloseModal()">
+      Cancel
+    </button>
+    <button cButton color="success"
+            [disabled]="isTransitioning"
+            (click)="markAsClosed()">
+      Mark As Resolved
     </button>
   </c-modal-footer>
 </c-modal>

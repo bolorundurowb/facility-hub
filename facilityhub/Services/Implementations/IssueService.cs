@@ -141,6 +141,12 @@ public class IssueService : IIssueService
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task MarkAsResolved(Issue issue, User tenantUser)
+    {
+        issue.Close(tenantUser);
+        await _dbContext.SaveChangesAsync();
+    }
+
     #region Private Helpers
 
     private Task<List<Guid>> GetManagedFacilityIds(Guid userId) => _dbContext.Facilities

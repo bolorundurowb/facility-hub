@@ -77,9 +77,6 @@ public class Issue : Entity
         Repairer = new ContactInformation(repairerName, repairerPhoneNumber);
     }
 
-    public void Close(User manager) =>
-        TransitionToStatus(manager, IssueStatus.Closed, null);
-
     public bool CanMarkAsDuplicate() => Status is IssueStatus.Filed;
 
     public void MarkAsDuplicate(User manager, string? notes)
@@ -94,6 +91,11 @@ public class Issue : Entity
 
     public void MarkRepaired(User manager, string? notes) =>
         TransitionToStatus(manager, IssueStatus.Repaired, notes);
+
+    public bool CanClose(User tenantUser) => Status is IssueStatus.Repaired && tenantUser.Id == FiledBy.User?.Id ;
+
+    public void Close(User tenantUser) =>
+        TransitionToStatus(tenantUser, IssueStatus.Closed, null);
 
     #region Private Helpers
 

@@ -28,4 +28,6 @@ public interface IIssueService
     Task MarkAsDuplicate(Issue issue, User manager, string? notes);
 
     Task MarkAsRepaired(Issue issue, User manager, string? notes);
+
+    Task MarkAsResolved(Issue issue, User tenantUser);
 }

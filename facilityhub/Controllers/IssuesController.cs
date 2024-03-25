@@ -216,4 +216,29 @@ public class IssuesController : ApiController
 
         return Ok(Mapper.Map<IssueRes>(issue));
     }
+
+    [HttpPatch("{issueId:guid}/close")]
+    [ProducesResponseType(typeof(IssueRes), 200)]
+    [ProducesResponseType(typeof(GenericRes), 400)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> MarkAsResolved(Guid issueId)
+    {
+        var userId = User.GetCallerId();
+        var user = await _userService.FindById(userId);
+
+        if (user == null)
+            return Forbidden("User account not found");
+
+        var issue = await _issueService.FindById(userId, issueId);
+
+        if (issue == null)
+            return NotFound("Issue not found");
+
+        if (!issue.CanClose(user))
+            return BadRequest("Issue cannot be closed/resolved");
+
+        await _issueService.MarkAsResolved(issue, user);
+
+        return Ok(Mapper.Map<IssueRes>(issue));
+    }
 }

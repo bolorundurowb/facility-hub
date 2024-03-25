@@ -25,5 +25,7 @@ public interface IIssueService
 
     Task ScheduleRepair(Issue issue, User manager, string? notes, string? repairerName, string? repairerPhoneNumber);
 
+    Task MarkAsDuplicate(Issue issue, User manager, string? notes);
+
     Task MarkAsRepaired(Issue issue, User manager, string? notes);
 }

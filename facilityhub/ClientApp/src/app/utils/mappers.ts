@@ -1,9 +1,11 @@
-export const mapIssueStatusToColour = (status: string): string => {
-  if (status === 'Repaired' || status === 'Closed') {
+import { IssueStatus } from '../components';
+
+export const mapIssueStatusToColour = (status: IssueStatus): string => {
+  if (status === IssueStatus.REPAIRED || status === IssueStatus.CLOSED) {
     return 'success';
-  } else if (status === 'Duplicate') {
+  } else if (status === IssueStatus.DUPLICATE) {
     return 'secondary';
-  } else if (status === 'Validated' || status === 'RepairScheduled') {
+  } else if (status === IssueStatus.VALIDATED || status === IssueStatus.REPAIR_SCHEDULED) {
     return 'primary';
   } else {
     return 'info';

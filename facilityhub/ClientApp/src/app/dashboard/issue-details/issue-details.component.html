@@ -22,7 +22,15 @@
 
     <ng-container *ngIf="issue">
       <c-container>
-        <div class="action-row" *ngIf="!isTenant">
+        <div class="action-row" *ngIf="canTransition()">
+          <button cButton *ngIf="canBeMarkedAsDuplicated()"
+                  color="secondary"
+                  shape="rounded-pill"
+                  style="margin-right: 10px"
+                  (click)="showDuplicateModal()">
+            <svg [cIcon]="icons.cilObjectUngroup"></svg>
+            Mark As Duplicate
+          </button>
           <button cButton
                   color="success"
                   shape="rounded-pill"
@@ -254,6 +262,49 @@
             [disabled]="isTransitioning"
             (click)="transitionIssue()">
       Update Status
+    </button>
+  </c-modal-footer>
+</c-modal>
+
+<c-modal backdrop="static" [(visible)]="isDuplicateModalVisible">
+  <c-modal-header>
+    <h5 cModalTitle>Mark As Duplicate</h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <form cForm>
+      <c-alert
+        fade
+        dismissible
+        color="danger"
+        [(visible)]="hasError">
+        {{ errorMessage }}
+      </c-alert>
+
+      <div class="mb-3">
+        <label cLabel>Notes:</label>
+        <textarea cFormControl
+                  rows="4"
+                  name="issue-notes"
+                  [(ngModel)]="transitionPayload.notes"></textarea>
+        <div cFormText>
+          <small>Any details you'd like to associate with this status change</small>
+        </div>
+      </div>
+    </form>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton
+            color="secondary"
+            [disabled]="isTransitioning"
+            (click)="dismissDuplicateModal()">
+      Cancel
+    </button>
+    <button cButton color="success"
+            [disabled]="isTransitioning"
+            (click)="markAsDuplicate()">
+      Mark As Duplicate
     </button>
   </c-modal-footer>
 </c-modal>

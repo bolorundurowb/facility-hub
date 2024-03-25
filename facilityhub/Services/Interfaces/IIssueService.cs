@@ -24,4 +24,6 @@ public interface IIssueService
     Task MarkAsValidated(Issue issue, User manager, string? notes);
 
     Task ScheduleRepair(Issue issue, User manager, string? notes, string? repairerName, string? repairerPhoneNumber);
+
+    Task MarkAsRepaired(Issue issue, User manager, string? notes);
 }

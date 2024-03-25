@@ -75,7 +75,7 @@ public class Issue : Entity
         Repairer = new ContactInformation(repairerName, repairerPhoneNumber);
     }
 
-    public void Repair(User manager, string? notes) =>
+    public void MarkRepaired(User manager, string? notes) =>
         TransitionToStatus(manager, IssueStatus.Repaired, notes);
 
     public void Close(User manager) =>

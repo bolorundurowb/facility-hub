@@ -23,9 +23,11 @@ public class IssueRes
 
     public IssueStatus Status { get; set; }
 
-    public Guid? FiledById { get; set; }
+    public Guid? FilerUserId { get; set; }
 
-    public string? FiledByName { get; set; }
+    public Guid? FilerTenantId { get; set; }
+
+    public string? FilerName { get; set; }
 
     public DateTimeOffset FiledAt { get; set; }
 

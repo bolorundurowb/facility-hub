@@ -261,7 +261,7 @@ export class IssueDetailsComponent implements OnInit {
       const response = await this.issueService.transition(this.issueId!, IssueTransitions.CLOSE, {});
 
       this.dismissCloseModal();
-      this.notificationService.showSuccess('Issue marked as resolved');
+      this.notificationService.showSuccess('Issue closed');
 
       this.issue = response;
     } catch (e) {

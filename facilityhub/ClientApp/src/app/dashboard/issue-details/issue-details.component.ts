@@ -69,6 +69,8 @@ export class IssueDetailsComponent implements OnInit {
 
   protected readonly getIssueColour = mapIssueStatusToColour;
 
+  protected readonly mapIssueStatusToText = mapIssueStatusToText;
+
   async ngOnInit() {
     this.isLoading = true;
 
@@ -79,7 +81,7 @@ export class IssueDetailsComponent implements OnInit {
       this.documents = await this.issueService.getOneDocuments(issueId);
 
       this.issueId = issueId;
-      this.isTenant = this.issue?.filedById === this.authService.getUser().id;
+      this.isTenant = this.issue?.filerUserId === this.authService.getUser().id;
     } finally {
       this.isLoading = false;
     }
@@ -173,7 +175,7 @@ export class IssueDetailsComponent implements OnInit {
     this.isTransitioning = true;
 
     try {
-      const response = await this.issueService.transition(this.issueId!, this.getTransitionStatus(), this.transitionPayload);
+      const response = await this.issueService.transition(this.issueId!, this.getTransitionStatus()!, this.transitionPayload);
 
       this.dismissTransitionModal();
       this.notificationService.showSuccess('Issue status successfully updated');
@@ -187,7 +189,7 @@ export class IssueDetailsComponent implements OnInit {
     }
   }
 
-  getTransitionButtonText(): string {
+  getTransitionButtonText(): string | null {
     const transition = this.getTransitionStatus();
 
     if (transition === IssueTransitions.VALIDATE) {
@@ -206,7 +208,7 @@ export class IssueDetailsComponent implements OnInit {
       return 'Confirm Repair Done';
     }
 
-    throw new Error('Unknown issue transition');
+    return null;
   }
 
   canBeMarkedAsDuplicated(): boolean {
@@ -240,7 +242,7 @@ export class IssueDetailsComponent implements OnInit {
     }
   }
 
-  private getTransitionStatus(): IssueTransitions {
+  private getTransitionStatus(): IssueTransitions | null {
     if (this.issue?.status === IssueStatus.FILED) {
       return IssueTransitions.VALIDATE;
     }
@@ -257,8 +259,6 @@ export class IssueDetailsComponent implements OnInit {
       return IssueTransitions.CLOSE;
     }
 
-    throw new Error();
+    return null;
   }
-
-  protected readonly mapIssueStatusToText = mapIssueStatusToText;
 }

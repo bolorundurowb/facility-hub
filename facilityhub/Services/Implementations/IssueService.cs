@@ -49,6 +49,7 @@ public class IssueService : IIssueService
         return await _dbContext.Issues
             .Include(x => x.Facility)
             .Include(x => x.FiledBy)
+            .Include(x => x.FiledBy.User)
             .Where(x =>
                 // you are referenced in the issue
                 x.FiledBy.User!.Id == userId

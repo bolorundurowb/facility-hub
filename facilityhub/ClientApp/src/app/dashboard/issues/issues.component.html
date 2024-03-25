@@ -44,7 +44,7 @@
                 {{ mapIssueStatusToText(issue.status).toUpperCase() }}
               </c-badge>
             </td>
-            <td>{{ issue.filedByName || 'N/A' }}</td>
+            <td>{{ issue.filerName || 'N/A' }}</td>
             <td>{{ issue.filedAt | date : 'MMM d, y h:mma' }}</td>
           </tr>
         </ng-container>

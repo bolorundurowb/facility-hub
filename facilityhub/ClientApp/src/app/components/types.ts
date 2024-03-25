@@ -34,8 +34,9 @@ export interface IssueRes {
   location: string;
   remedialAction?: string;
   status: IssueStatus;
-  filedById?: string;
-  filedByName?: string;
+  filerTenantId?: string;
+  filerUserId?: string;
+  filerName?: string;
   filedAt: string;
   repairer?: {
     name?: string;

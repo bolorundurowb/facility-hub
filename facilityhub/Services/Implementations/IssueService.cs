@@ -147,6 +147,25 @@ public class IssueService : IIssueService
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task<List<IssueLogEntry>> GetLogs(Guid userId, Guid issueId)
+    {
+        var managedFacilityIds = await GetManagedFacilityIds(userId);
+        var issues = await _dbContext.Issues
+            .Where(x =>
+                // you are referenced in the issue
+                x.FiledBy.User!.Id == userId
+                // or you manage the facility the report is on
+                || managedFacilityIds.Contains(x.Facility.Id)
+            )
+            .Where(x => x.Id == issueId)
+            .ToListAsync();
+
+        return issues
+            .SelectMany(x => x.Log)
+            .OrderByDescending(x => x.LoggedAt)
+            .ToList();
+    }
+
     #region Private Helpers
 
     private Task<List<Guid>> GetManagedFacilityIds(Guid userId) => _dbContext.Facilities

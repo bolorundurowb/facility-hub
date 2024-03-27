@@ -23,6 +23,13 @@ interface TransitionIssuePayload {
   repairerPhoneNumber?: string;
 }
 
+interface IssueEntryRes {
+  transitionedFrom?: IssueStatus;
+  transitionedTo: IssueStatus;
+  notes?: string;
+  loggedAt: string;
+}
+
 @Component({
   selector: 'fh-dashboard-issue-details',
   templateUrl: './issue-details.component.html',
@@ -47,6 +54,7 @@ export class IssueDetailsComponent implements OnInit {
   issue?: IssueRes;
   isTenant = true;
   documents: Array<DocumentRes> = [];
+  logs: Array<IssueEntryRes> = [];
 
   hasError = false;
   errorMessage?: string;
@@ -83,6 +91,7 @@ export class IssueDetailsComponent implements OnInit {
 
       this.issue = await this.issueService.getOne(issueId);
       this.documents = await this.issueService.getOneDocuments(issueId);
+      this.logs = await this.issueService.getOneLogs(issueId);
 
       this.issueId = issueId;
       this.isTenant = this.issue?.filerUserId === this.authService.getUser().id;

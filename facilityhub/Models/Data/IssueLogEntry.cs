@@ -12,12 +12,16 @@ public class IssueLogEntry
     [StringLength(1024)]
     public string? Notes { get; private set; }
 
+    public DateTimeOffset LoggedAt { get; private set; }
+
 #pragma warning disable CS8618
     private IssueLogEntry() { }
 #pragma warning restore CS8618
 
     public IssueLogEntry(IssueStatus? transitionedFrom, IssueStatus transitionedTo, string? notes)
     {
+        LoggedAt = DateTimeOffset.UtcNow;
+
         TransitionedFrom = transitionedFrom;
         TransitionedTo = transitionedTo;
         Notes = notes;

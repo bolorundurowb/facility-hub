@@ -26,6 +26,10 @@ export class IssuesService {
     return asPromise(this.http.get<any[]>(`${this.apiBaseUrl}/${issueId}/documents`));
   }
 
+  getOneLogs(issueId: string): Promise<any[]> {
+    return asPromise(this.http.get<any[]>(`${this.apiBaseUrl}/${issueId}/logs`));
+  }
+
   report(facilityId: string, payload: any): Promise<any> {
     payload.facilityId = facilityId;
     return asPromise(this.http.post<any>(`${this.apiBaseUrl}/report`, payload));

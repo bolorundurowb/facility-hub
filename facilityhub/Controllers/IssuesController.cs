@@ -1,4 +1,5 @@
 ﻿using FacilityHub.Extensions;
+using FacilityHub.Models.Data;
 using FacilityHub.Models.Request;
 using FacilityHub.Models.Response;
 using FacilityHub.Services.Interfaces;
@@ -119,6 +120,28 @@ public class IssuesController : ApiController
         await _documentService.Delete(document);
 
         return Ok("Document deleted successfully");
+    }
+
+    [HttpGet("{issueId:guid}/logs")]
+    [ProducesResponseType(typeof(List<IssueLogEntry>), 200)]
+    [ProducesResponseType(typeof(GenericRes), 403)]
+    [ProducesResponseType(typeof(GenericRes), 404)]
+    public async Task<IActionResult> GetLogs(Guid issueId)
+    {
+        var userId = User.GetCallerId();
+        var user = await _userService.FindById(userId);
+
+        if (user == null)
+            return Forbidden("User account not found");
+
+        var issue = await _issueService.FindById(userId, issueId);
+
+        if (issue == null)
+            return NotFound("Issue not found");
+
+        var logs = await _issueService.GetLogs(userId, issueId);
+
+        return Ok(logs);
     }
 
     [HttpPatch("{issueId:guid}/validate")]

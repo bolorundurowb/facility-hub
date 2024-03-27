@@ -30,4 +30,6 @@ public interface IIssueService
     Task MarkAsRepaired(Issue issue, User manager, string? notes);
 
     Task MarkAsResolved(Issue issue, User tenantUser);
+
+    Task<List<IssueLogEntry>> GetLogs(Guid userId, Guid issueId);
 }

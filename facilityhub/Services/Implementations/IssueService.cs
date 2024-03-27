@@ -150,7 +150,7 @@ public class IssueService : IIssueService
     public async Task<List<IssueLogEntry>> GetLogs(Guid userId, Guid issueId)
     {
         var managedFacilityIds = await GetManagedFacilityIds(userId);
-        return await _dbContext.Issues
+        var issues = await _dbContext.Issues
             .Where(x =>
                 // you are referenced in the issue
                 x.FiledBy.User!.Id == userId
@@ -158,9 +158,12 @@ public class IssueService : IIssueService
                 || managedFacilityIds.Contains(x.Facility.Id)
             )
             .Where(x => x.Id == issueId)
+            .ToListAsync();
+
+        return issues
             .SelectMany(x => x.Log)
             .OrderByDescending(x => x.LoggedAt)
-            .ToListAsync();
+            .ToList();
     }
 
     #region Private Helpers

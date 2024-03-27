@@ -168,6 +168,45 @@
           </table>
         </ng-container>
       </c-container>
+
+      <c-container>
+        <c-header>
+          <h5>Logs</h5>
+        </c-header>
+
+        <ng-container *ngIf="!logs.length">
+          <c-callout color="success">
+            No logs have been entered for this issue.
+          </c-callout>
+        </ng-container>
+
+        <ng-container *ngIf="logs.length">
+          <table cTable [striped]="true">
+            <thead>
+            <tr>
+              <th scope="col">Previous Status</th>
+              <th scope="col">New Status</th>
+              <th scope="col">Logged At</th>
+              <ng-container *ngIf="!isTenant">
+                <th scope="col">Notes</th>
+              </ng-container>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let log of logs">
+              <tr>
+                <td>{{ log.transitionedFrom ? mapIssueStatusToText(log.transitionedFrom) : 'N/A' }}</td>
+                <td>{{ mapIssueStatusToText(log.transitionedTo) }}</td>
+                <td>{{ log.loggedAt | date : 'MMM d, y h:mma' }}</td>
+                <ng-container *ngIf="!isTenant">
+                  <td>{{ (log.notes || 'N/A') | truncate: 25 : { trailingString: '...' } }}</td>
+                </ng-container>
+              </tr>
+            </ng-container>
+            </tbody>
+          </table>
+        </ng-container>
+      </c-container>
     </ng-container>
   </ng-container>
 </div>
@@ -229,7 +268,7 @@
 
 <c-modal backdrop="static" [(visible)]="isTransitionModalVisible">
   <c-modal-header>
-    <h5 cModalTitle>{{getTransitionButtonText()}}</h5>
+    <h5 cModalTitle>{{ getTransitionButtonText() }}</h5>
   </c-modal-header>
 
   <c-modal-body>

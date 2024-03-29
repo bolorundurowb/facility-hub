@@ -59,9 +59,11 @@ public class User : Entity
 
     public void ResetPassword(string password)
     {
-        PasswordHash = HashText(password);
+        UpdatePassword(password);
         ResetCode = null;
     }
+
+    public void UpdatePassword(string password) => PasswordHash = HashText(password);
 
     private string HashText(string password)
     {

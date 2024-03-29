@@ -15,4 +15,6 @@ public interface IUserService
     Task ResetPassword(User user, string password);
 
     Task<User> Update(User user, string? firstName, string? lastName, string? phoneNumber);
+
+    Task UpdatePassword(User user, string password);
 }

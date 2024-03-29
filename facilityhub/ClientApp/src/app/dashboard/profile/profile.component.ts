@@ -79,6 +79,21 @@ export class ProfileComponent implements OnInit {
   }
 
   async updatePassword() {
+    if (!this.updatePasswordPayload.currentPassword) {
+      this.notificationService.showError('The current password is required');
+      return;
+    }
+
+    if (!this.updatePasswordPayload.password) {
+      this.notificationService.showError('A new password is required');
+      return;
+    }
+
+    if (this.updatePasswordPayload.password !== this.updatePasswordPayload.confirmPassword) {
+      this.notificationService.showError('The password does not match the confirmation');
+      return;
+    }
+
     this.isUpdatingPassword = true;
 
     await this.userService.updatePassword(this.updatePasswordPayload);

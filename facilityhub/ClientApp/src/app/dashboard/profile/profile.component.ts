@@ -16,7 +16,7 @@ interface UpdateUserPayload {
 })
 export class ProfileComponent implements OnInit {
   isLoading = true;
-  user: any;
+  user: any = {};
 
   isUpdateProfileModalVisible = false;
   isUpdatingProfile = false;

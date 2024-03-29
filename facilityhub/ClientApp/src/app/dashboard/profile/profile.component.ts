@@ -9,6 +9,12 @@ interface UpdateUserPayload {
   phoneNumber?: string;
 }
 
+interface UpdatePasswordPayload {
+  currentPassword?: string;
+  password?: string;
+  confirmPassword?: string;
+}
+
 @Component({
   selector: 'fh-dashboard-profile',
   templateUrl: './profile.component.html',
@@ -21,6 +27,10 @@ export class ProfileComponent implements OnInit {
   isUpdateProfileModalVisible = false;
   isUpdatingProfile = false;
   updateProfilePayload: UpdateUserPayload = {};
+
+  isUpdatePasswordModalVisible = false;
+  isUpdatingPassword = false;
+  updatePasswordPayload: UpdatePasswordPayload = {};
 
   constructor(title: Title, private userService: UsersService, private authService: AuthService
     , private notificationService: NotificationService) {
@@ -39,7 +49,7 @@ export class ProfileComponent implements OnInit {
       lastName: this.user.lastName,
       emailAddress: this.user.emailAddress,
       phoneNumber: this.user.phoneNumber,
-    }
+    };
     this.isUpdateProfileModalVisible = true;
   }
 
@@ -57,5 +67,24 @@ export class ProfileComponent implements OnInit {
 
     this.dismissUpdateProfileModal();
     this.isUpdatingProfile = false;
+  }
+
+  showUpdatePasswordModal() {
+    this.isUpdatePasswordModalVisible = true;
+  }
+
+  dismissUpdatePasswordModal() {
+    this.isUpdatePasswordModalVisible = false;
+    this.updatePasswordPayload = {};
+  }
+
+  async updatePassword() {
+    this.isUpdatingPassword = true;
+
+    await this.userService.updatePassword(this.updatePasswordPayload);
+    this.notificationService.showSuccess('Password updated successfully');
+
+    this.dismissUpdatePasswordModal();
+    this.isUpdatingPassword = false;
   }
 }

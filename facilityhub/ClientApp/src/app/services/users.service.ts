@@ -17,4 +17,8 @@ export class UsersService {
   updateProfile(user: any): Promise<any> {
     return asPromise(this.http.put<any>(`${this.apiBaseUrl}/current`, user));
   }
+
+  updatePassword(payload: any): Promise<any> {
+    return asPromise(this.http.put<any>(`${this.apiBaseUrl}/current/password`, payload));
+  }
 }

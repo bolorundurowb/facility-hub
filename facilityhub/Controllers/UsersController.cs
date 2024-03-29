@@ -42,4 +42,24 @@ public class UsersController : ApiController
 
         return Ok(Mapper.Map<UserRes>(user));
     }
+
+    [HttpPut("current/password")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(GenericRes), 400)]
+    [ProducesResponseType(typeof(GenericRes), 401)]
+    public async Task<IActionResult> UpdateCurrentUserPassword([FromBody] UpdatePasswordReq req)
+    {
+        var userId = User.GetCallerId();
+        var user = await _userService.FindById(userId);
+
+        if (user == null)
+            return Unauthorized("User account does not exist");
+
+        if (!user.VerifyPassword(req.CurrentPassword)) 
+            return BadRequest("Invalid current password");
+
+        await _userService.UpdatePassword(user, req.Password);
+
+        return NoContent();
+    }
 }

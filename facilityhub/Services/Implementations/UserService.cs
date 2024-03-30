@@ -67,4 +67,10 @@ public class UserService : IUserService
 
         return user;
     }
+
+    public async Task UpdatePassword(User user, string password)
+    {
+        user.UpdatePassword(password);
+        await _dbContext.SaveChangesAsync();
+    }
 }

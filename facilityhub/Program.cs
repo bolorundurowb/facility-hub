@@ -18,7 +18,7 @@ public class Program
 
                 webBuilder.UseSentry(opts =>
                 {
-                    opts.Dsn = Environment.GetEnvironmentVariable("SENTRY_DSN");
+                    opts.Dsn = Environment.GetEnvironmentVariable("SENTRY_DSN") ?? string.Empty;
                     opts.Debug = true;
                     opts.DiagnosticLevel = SentryLevel.Info;
                     opts.TracesSampleRate = 1.0;

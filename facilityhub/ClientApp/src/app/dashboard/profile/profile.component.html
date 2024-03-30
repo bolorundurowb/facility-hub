@@ -14,7 +14,8 @@
                 (click)="showUpdateProfileModal()">
           Update Profile
         </button>
-        <button cButton color="warning" variant="outline">
+        <button cButton color="warning" variant="outline"
+                (click)="showUpdatePasswordModal()">
           Change Password
         </button>
         <button cButton color="danger" variant="outline">
@@ -95,5 +96,43 @@
       Close
     </button>
     <button cButton color="success" [disabled]="isUpdatingProfile" (click)="updateProfile()">Update Profile</button>
+  </c-modal-footer>
+</c-modal>
+
+<c-modal [(visible)]="isUpdatePasswordModalVisible">
+  <c-modal-header>
+    <h5 cModalTitle>Change Password</h5>
+  </c-modal-header>
+
+  <c-modal-body>
+    <form cForm>
+      <c-alert
+        fade
+        dismissible
+        color="danger"
+        [(visible)]="hasError">
+        {{errorMessage}}
+      </c-alert>
+
+      <div class="mb-3">
+        <label cLabel>Current Password</label>
+        <input cFormControl name="current-password" type="password" [(ngModel)]="updatePasswordPayload.currentPassword">
+      </div>
+      <div class="mb-3">
+        <label cLabel>Current Password</label>
+        <input cFormControl name="password" type="password" [(ngModel)]="updatePasswordPayload.password">
+      </div>
+      <div class="mb-3">
+        <label cLabel>Current Password</label>
+        <input cFormControl name="confirm-password" type="password" [(ngModel)]="updatePasswordPayload.confirmPassword">
+      </div>
+    </form>
+  </c-modal-body>
+
+  <c-modal-footer>
+    <button cButton color="secondary" (click)="dismissUpdatePasswordModal()">
+      Close
+    </button>
+    <button cButton color="success" [disabled]="isUpdatingPassword" (click)="updatePassword()">Change Password</button>
   </c-modal-footer>
 </c-modal>

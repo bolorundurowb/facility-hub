@@ -21,15 +21,20 @@ interface UpdatePasswordPayload {
   styleUrl: './profile.component.scss'
 })
 export class ProfileComponent implements OnInit {
+  passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z\d\s]).{8,}$/;
+
   isLoading = true;
   user: any = {};
+
+  hasError = false;
+  errorMessage: string | undefined;
 
   isUpdateProfileModalVisible = false;
   isUpdatingProfile = false;
   updateProfilePayload: UpdateUserPayload = {};
 
-  isUpdatePasswordModalVisible = false;
   isUpdatingPassword = false;
+  isUpdatePasswordModalVisible = false;
   updatePasswordPayload: UpdatePasswordPayload = {};
 
   constructor(title: Title, private userService: UsersService, private authService: AuthService
@@ -79,27 +84,50 @@ export class ProfileComponent implements OnInit {
   }
 
   async updatePassword() {
-    if (!this.updatePasswordPayload.currentPassword) {
-      this.notificationService.showError('The current password is required');
-      return;
-    }
-
-    if (!this.updatePasswordPayload.password) {
-      this.notificationService.showError('A new password is required');
-      return;
-    }
-
-    if (this.updatePasswordPayload.password !== this.updatePasswordPayload.confirmPassword) {
-      this.notificationService.showError('The password does not match the confirmation');
-      return;
-    }
-
     this.isUpdatingPassword = true;
 
-    await this.userService.updatePassword(this.updatePasswordPayload);
-    this.notificationService.showSuccess('Password updated successfully');
+    try {
+      const hasError = this.validatePasswordPayload();
 
-    this.dismissUpdatePasswordModal();
-    this.isUpdatingPassword = false;
+      if (!hasError) {
+        await this.userService.updatePassword(this.updatePasswordPayload);
+        this.notificationService.showSuccess('Password updated successfully');
+        this.dismissUpdatePasswordModal();
+      }
+    } catch (e: any) {
+      this.errorMessage = e;
+      this.hasError = true;
+    } finally {
+      this.isUpdatingPassword = false;
+    }
+  }
+
+  dismissError(): void {
+    this.hasError = false;
+    this.errorMessage = undefined;
+  }
+
+  private validatePasswordPayload(): boolean {
+    let message = null;
+    if (!this.updatePasswordPayload.currentPassword) {
+      message = 'Your current password is required';
+    } else if (!this.updatePasswordPayload.password) {
+      message = 'A new password is required';
+    } else if (!this.updatePasswordPayload.confirmPassword) {
+      message = 'A password confirmation is required';
+    } else if (!this.passwordRegex.test(this.updatePasswordPayload.password)) {
+      message = 'A password must be at least 8 chars long with a capital letter, number and special char';
+    } else if (this.updatePasswordPayload.password !== this.updatePasswordPayload.confirmPassword) {
+      message = 'The new password and confirmation do not match';
+    }
+
+    if (message) {
+      this.errorMessage = message;
+      this.hasError = true;
+    } else {
+      this.dismissError();
+    }
+
+    return this.hasError;
   }
 }

@@ -106,6 +106,14 @@
 
   <c-modal-body>
     <form cForm>
+      <c-alert
+        fade
+        dismissible
+        color="danger"
+        [(visible)]="hasError">
+        {{errorMessage}}
+      </c-alert>
+
       <div class="mb-3">
         <label cLabel>Current Password</label>
         <input cFormControl name="current-password" type="password" [(ngModel)]="updatePasswordPayload.currentPassword">

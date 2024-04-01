@@ -23,6 +23,14 @@ export class AuthService {
     return asPromise(this.http.post<any>(`${this.apiBaseUrl}/login`, user));
   }
 
+  requestReset(payload: any): Promise<any> {
+    return asPromise(this.http.post<any>(`${this.apiBaseUrl}/request-password-reset`, payload));
+  }
+
+  resetPassword(payload: any): Promise<any> {
+    return asPromise(this.http.post<any>(`${this.apiBaseUrl}/reset-password`, payload));
+  }
+
   logout() {
     localStorage.removeItem(this.userKey);
     localStorage.removeItem(this.tokenKey);
@@ -36,9 +44,9 @@ export class AuthService {
   }
 
   persistAuth(user: any, token: string, expires: string): void {
-    localStorage.setItem(this.userKey, JSON.stringify(user));
     localStorage.setItem(this.tokenKey, token);
     localStorage.setItem(this.expiryKey, expires);
+    this.updateUser(user);
   }
 
   getToken(): string | null {
@@ -47,5 +55,9 @@ export class AuthService {
 
   getUser(): any {
     return JSON.parse(localStorage.getItem(this.userKey) || '{}');
+  }
+
+  updateUser(user: any): void {
+    localStorage.setItem(this.userKey, JSON.stringify(user));
   }
 }

@@ -1,23 +1,28 @@
-<h2 class="header">SIGN IN</h2>
+<h2 class="auth-header">SIGN IN</h2>
 <form cForm>
   <c-alert
     fade
     dismissible
     color="danger"
     [(visible)]="hasError">
-    {{errorMessage}}
+    {{ errorMessage }}
   </c-alert>
 
   <div class="mb-3">
-    <label cLabel for="emailAddress">Email Address</label>
-    <input cFormControl name="emailAddress" type="email" [(ngModel)]="payload.emailAddress">
+    <label cLabel>Email Address</label>
+    <input cFormControl name="emil-address" type="email" [(ngModel)]="payload.emailAddress">
   </div>
   <div class="mb-3">
-    <label cLabel for="password">Password</label>
+    <label cLabel>Password</label>
     <input cFormControl name="password" type="password" [(ngModel)]="payload.password">
+    <div cFormText style="text-align: end">
+      <a routerLink="/auth/forgot-password">forgot password?</a>
+    </div>
   </div>
-  <a routerLink="/auth/register">Don't have an account? Register!</a>
-  <div class="action">
+
+  <a class="auth-link" routerLink="/auth/register">Don't have an account? register now!</a>
+
+  <div class="auth-action-row">
     <button cButton
             color="primary"
             [disabled]="isBusy"

@@ -11,6 +11,10 @@ public class SetFacilityTenantReqValidator : AbstractValidator<SetFacilityTenant
             .NotEqual(x => Guid.Empty)
             .WithMessage("A facility ID is required");
 
+        RuleFor(x => x.Name)
+            .NotEmpty()
+            .WithMessage("A name is required");
+
         RuleFor(x => x.EmailAddress)
             .NotEmpty()
             .WithMessage("An email address is required")

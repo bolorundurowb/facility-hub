@@ -16,11 +16,16 @@ public class User : Entity
     [StringLength(2048)]
     public string PasswordHash { get; private set; }
 
+    [StringLength(25)]
+    public string? PhoneNumber { get; private set; }
+
     public DateTimeOffset JoinedAt { get; private set; }
 
     public List<Facility> Owned { get; private set; } = new();
 
     public List<Facility> Managed { get; private set; } = new();
+
+    public string? ResetCode { get; private set; }
 
 #pragma warning disable CS8618
     private User() { }
@@ -35,14 +40,34 @@ public class User : Entity
         PasswordHash = HashText(password);
     }
 
-    public string HashText(string password)
-    {
-        var salt = BCrypt.Net.BCrypt.GenerateSalt();
-        return BCrypt.Net.BCrypt.HashPassword(password, salt);
-    }
-
     public bool VerifyPassword(string password) =>
         !string.IsNullOrWhiteSpace(password) && BCrypt.Net.BCrypt.Verify(password, PasswordHash);
 
     public string FullName() => $"{FirstName} {LastName}".Trim();
+
+    public void UpdateFirstName(string? firstName) => FirstName = firstName;
+
+    public void UpdateLastName(string? lastName) => LastName = lastName;
+
+    public void UpdatePhoneNumber(string? phoneNumber) => PhoneNumber = phoneNumber;
+
+    public void SetResetCode() => ResetCode = Config.GenerateCode(8);
+
+    public void ResetResetCode() => ResetCode = null;
+
+    public bool ValidateResetCode(string resetCode) => ResetCode == resetCode;
+
+    public void ResetPassword(string password)
+    {
+        UpdatePassword(password);
+        ResetCode = null;
+    }
+
+    public void UpdatePassword(string password) => PasswordHash = HashText(password);
+
+    private string HashText(string password)
+    {
+        var salt = BCrypt.Net.BCrypt.GenerateSalt();
+        return BCrypt.Net.BCrypt.HashPassword(password, salt);
+    }
 }

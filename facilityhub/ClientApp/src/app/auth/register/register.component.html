@@ -1,4 +1,4 @@
-<h2 class="header">REGISTER</h2>
+<h2 class="auth-header">REGISTER</h2>
 <form cForm>
   <c-alert
     fade
@@ -10,15 +10,15 @@
 
   <div class="mb-3">
     <label cLabel>First Name</label>
-    <input cFormControl name="firstName" type="text" [(ngModel)]="payload.firstName">
+    <input cFormControl name="first-name" type="text" [(ngModel)]="payload.firstName">
   </div>
   <div class="mb-3">
     <label cLabel>Last Name</label>
-    <input cFormControl name="lastName" type="text" [(ngModel)]="payload.lastName">
+    <input cFormControl name="last-name" type="text" [(ngModel)]="payload.lastName">
   </div>
   <div class="mb-3">
     <label cLabel>Email Address</label>
-    <input cFormControl name="emailAddress" type="email" [(ngModel)]="payload.emailAddress">
+    <input cFormControl name="email-address" type="email" [(ngModel)]="payload.emailAddress">
     <div cFormText>
       We'll never share your email with anyone else
     </div>
@@ -33,10 +33,12 @@
   </div>
   <div class="mb-3">
     <label cLabel>Confirm Password</label>
-    <input cFormControl name="confirmPassword" type="password" [(ngModel)]="payload.confirmPassword">
+    <input cFormControl name="confirm-password" type="password" [(ngModel)]="payload.confirmPassword">
   </div>
-  <a routerLink="/auth/login">Already have an account? Sign in!</a>
-  <div class="action">
+
+  <a class="auth-link" routerLink="/auth/login">Already have an account? Sign in!</a>
+
+  <div class="auth-action-row">
     <button cButton
             color="primary"
             [disabled]="isBusy"

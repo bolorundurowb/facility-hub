@@ -20,7 +20,7 @@ namespace FacilityHub.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.14")
+                .HasAnnotation("ProductVersion", "7.0.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "postgis");
@@ -85,7 +85,7 @@ namespace FacilityHub.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("Document");
+                    b.ToTable("Documents", (string)null);
                 });
 
             modelBuilder.Entity("FacilityHub.Models.Data.Facility", b =>
@@ -118,7 +118,7 @@ namespace FacilityHub.Migrations
 
                     b.HasIndex("TenantId");
 
-                    b.ToTable("Facilities");
+                    b.ToTable("Facilities", (string)null);
                 });
 
             modelBuilder.Entity("FacilityHub.Models.Data.FacilityInvitation", b =>
@@ -160,7 +160,7 @@ namespace FacilityHub.Migrations
 
                     b.HasIndex("InvitedById");
 
-                    b.ToTable("FacilityInvitations");
+                    b.ToTable("FacilityInvitations", (string)null);
                 });
 
             modelBuilder.Entity("FacilityHub.Models.Data.Issue", b =>
@@ -175,12 +175,12 @@ namespace FacilityHub.Migrations
                         .HasMaxLength(8)
                         .HasColumnType("character varying(8)");
 
-                    b.Property<string>("Details")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(4096)
                         .HasColumnType("character varying(4096)");
 
-                    b.Property<Guid?>("FacilityId")
+                    b.Property<Guid>("FacilityId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTimeOffset>("FiledAt")
@@ -189,17 +189,27 @@ namespace FacilityHub.Migrations
                     b.Property<Guid>("FiledById")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
                     b.Property<List<IssueLogEntry>>("Log")
                         .IsRequired()
                         .HasColumnType("jsonb");
 
+                    b.Property<DateTimeOffset>("OccurredAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("RemedialAction")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
+
+                    b.Property<ContactInformation>("Repairer")
+                        .HasColumnType("jsonb");
+
                     b.Property<int>("Status")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
 
                     b.HasKey("Id");
 
@@ -207,7 +217,7 @@ namespace FacilityHub.Migrations
 
                     b.HasIndex("FiledById");
 
-                    b.ToTable("Issues");
+                    b.ToTable("Issues", (string)null);
                 });
 
             modelBuilder.Entity("FacilityHub.Models.Data.Tenant", b =>
@@ -223,9 +233,23 @@ namespace FacilityHub.Migrations
                     b.Property<Guid>("CreatedById")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("EmailAddress")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
                     b.Property<List<TenancyHistory>>("History")
                         .IsRequired()
                         .HasColumnType("jsonb");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uuid");
@@ -236,7 +260,7 @@ namespace FacilityHub.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Tenant");
+                    b.ToTable("Tenants", (string)null);
                 });
 
             modelBuilder.Entity("FacilityHub.Models.Data.User", b =>
@@ -267,9 +291,16 @@ namespace FacilityHub.Migrations
                         .HasMaxLength(2048)
                         .HasColumnType("character varying(2048)");
 
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(25)
+                        .HasColumnType("character varying(25)");
+
+                    b.Property<string>("ResetCode")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("FacilityManagers", b =>
@@ -284,7 +315,7 @@ namespace FacilityHub.Migrations
 
                     b.HasIndex("ManagersId");
 
-                    b.ToTable("FacilityManagers");
+                    b.ToTable("FacilityManagers", (string)null);
                 });
 
             modelBuilder.Entity("FacilityOwners", b =>
@@ -299,7 +330,7 @@ namespace FacilityHub.Migrations
 
                     b.HasIndex("OwnersId");
 
-                    b.ToTable("FacilityOwners");
+                    b.ToTable("FacilityOwners", (string)null);
                 });
 
             modelBuilder.Entity("FacilityHub.Models.Data.Document", b =>
@@ -353,15 +384,19 @@ namespace FacilityHub.Migrations
 
             modelBuilder.Entity("FacilityHub.Models.Data.Issue", b =>
                 {
-                    b.HasOne("FacilityHub.Models.Data.Facility", null)
+                    b.HasOne("FacilityHub.Models.Data.Facility", "Facility")
                         .WithMany("Issues")
-                        .HasForeignKey("FacilityId");
+                        .HasForeignKey("FacilityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("FacilityHub.Models.Data.Tenant", "FiledBy")
                         .WithMany()
                         .HasForeignKey("FiledById")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Facility");
 
                     b.Navigation("FiledBy");
                 });

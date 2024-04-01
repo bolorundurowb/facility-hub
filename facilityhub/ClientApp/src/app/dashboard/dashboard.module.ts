@@ -4,30 +4,65 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 import {
   AlertComponent,
+  BadgeComponent,
   ButtonCloseDirective,
-  ButtonDirective, CalloutComponent,
+  ButtonDirective,
+  ButtonGroupComponent,
+  CalloutComponent,
   CardBodyComponent,
-  CardComponent, CardHeaderComponent, CardImgDirective, CardTextDirective, CardTitleDirective,
-  ColComponent, ColDirective,
-  ContainerComponent, FormControlDirective, FormDirective, FormLabelDirective, FormTextDirective, GutterDirective,
-  HeaderComponent, ModalBodyComponent, ModalComponent, ModalFooterComponent, ModalHeaderComponent, ModalTitleDirective,
-  NavItemComponent, RowComponent,
+  CardComponent,
+  CardHeaderComponent,
+  CardImgDirective,
+  CardTextDirective,
+  CardTitleDirective,
+  ColComponent,
+  ColDirective,
+  ContainerComponent,
+  FormControlDirective,
+  FormDirective,
+  FormLabelDirective,
+  FormSelectDirective,
+  FormTextDirective,
+  GutterDirective,
+  HeaderComponent, InputGroupComponent,
+  ModalBodyComponent,
+  ModalComponent,
+  ModalFooterComponent,
+  ModalHeaderComponent,
+  ModalTitleDirective,
+  NavItemComponent,
+  PopoverDirective,
+  RowComponent,
   SidebarBrandComponent,
   SidebarComponent,
   SidebarNavComponent,
-  SidebarTogglerComponent
+  SidebarTogglerComponent,
+  SpinnerComponent,
+  TableDirective,
 } from '@coreui/angular';
 import { CommonModule } from '@angular/common';
 import { IconComponent, IconDirective } from '@coreui/icons-angular';
 import { HomeComponent } from './home/home.component';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { FormsModule } from '@angular/forms';
+import { FacilityDetailsComponent } from './facility-details/facility-details.component';
+import { NgxFilesizeModule } from 'ngx-filesize';
+import { TruncateModule } from '@yellowspot/ng-truncate';
+import { IssuesComponent } from './issues/issues.component';
+import { WidgetComponent } from '../components';
+import { ProfileComponent } from './profile/profile.component';
+import { IssueDetailsComponent } from './issue-details/issue-details.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     FacilitiesComponent,
+    FacilityDetailsComponent,
     HomeComponent,
+    IssuesComponent,
+    IssueDetailsComponent,
+    ProfileComponent,
+    WidgetComponent,
   ],
   imports: [
     CommonModule,
@@ -66,6 +101,15 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     FormTextDirective,
     AlertComponent,
+    SpinnerComponent,
+    TableDirective,
+    BadgeComponent,
+    PopoverDirective,
+    ButtonGroupComponent,
+    NgxFilesizeModule,
+    TruncateModule,
+    FormSelectDirective,
+    InputGroupComponent,
   ],
 })
 export class DashboardModule {

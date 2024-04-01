@@ -1,4 +1,5 @@
 ﻿using FacilityHub.DataContext;
+using FacilityHub.Enums;
 using FacilityHub.Models.Data;
 using FacilityHub.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -13,45 +14,167 @@ public class IssueService : IIssueService
 
     public async Task<List<Issue>> GetAll(Guid userId)
     {
-        var facilityIds = await GetAccessibleFacilityIds(userId);
-        return await _dbContext.Facilities
+        var managedFacilityIds = await GetManagedFacilityIds(userId);
+        return await _dbContext.Issues
             .AsNoTracking()
-            .Where(x => facilityIds.Contains(x.Id))
-            .SelectMany(x => x.Issues)
+            .Include(x => x.Facility)
+            .Include(x => x.FiledBy)
+            .Where(x =>
+                // you are referenced in the issue
+                x.FiledBy.User!.Id == userId
+                // or you manage the facility the report is on
+                || managedFacilityIds.Contains(x.Facility.Id)
+            )
             .ToListAsync();
     }
 
-    public Task<List<Issue>> GetAllForFacility(Guid userId, Guid facilityId)
+    public async Task<List<Issue>> GetAllForFacility(Guid userId, Guid facilityId)
     {
-        return _dbContext.Facilities
+        var managedFacilityIds = await GetManagedFacilityIds(userId);
+        return await _dbContext.Issues
             .AsNoTracking()
-            .Where(x => x.Id == facilityId)
+            .Where(x => x.Facility.Id == facilityId)
             .Where(x =>
-                x.Tenant!.User!.Id == userId
-                || x.Owners.Any(y => y.Id == userId)
-                || x.Managers.Any(y => y.Id == userId)
+                // you are referenced in the issue
+                x.FiledBy.User!.Id == userId
+                // or you manage the facility the report is on
+                || managedFacilityIds.Contains(x.Facility.Id)
             )
-            .SelectMany(x => x.Issues)
             .ToListAsync();
     }
 
     public async Task<Issue?> FindById(Guid userId, Guid issueId)
     {
-        var facilityIds = await GetAccessibleFacilityIds(userId);
-        return await _dbContext.Facilities
-            .AsNoTracking()
-            .Where(x => facilityIds.Contains(x.Id))
-            .SelectMany(x => x.Issues)
+        var managedFacilityIds = await GetManagedFacilityIds(userId);
+        return await _dbContext.Issues
+            .Include(x => x.Facility)
+            .Include(x => x.FiledBy)
+            .Include(x => x.FiledBy.User)
+            .Where(x =>
+                // you are referenced in the issue
+                x.FiledBy.User!.Id == userId
+                // or you manage the facility the report is on
+                || managedFacilityIds.Contains(x.Facility.Id)
+            )
             .FirstOrDefaultAsync(x => x.Id == issueId);
     }
 
-    private Task<List<Guid>> GetAccessibleFacilityIds(Guid userId) => _dbContext.Facilities
+    public async Task<Issue> Create(Facility facility, DateTimeOffset occurredAt, string description,
+        string location, string? remedialAction)
+    {
+        var issue = facility.ReportIssue(occurredAt, description, location, remedialAction);
+        await _dbContext.SaveChangesAsync();
+
+        return issue;
+    }
+
+    public async Task<List<Document>> GetAllDocuments(Guid userId, Guid issueId)
+    {
+        var managedFacilityIds = await GetManagedFacilityIds(userId);
+        return await _dbContext.Issues
+            .Where(x =>
+                // you are referenced in the issue
+                x.FiledBy.User!.Id == userId
+                // or you manage the facility the report is on
+                || managedFacilityIds.Contains(x.Facility.Id)
+            )
+            .Where(x => x.Id == issueId)
+            .SelectMany(x => x.Documents)
+            .ToListAsync();
+    }
+
+    public async Task<Document?> FindDocument(Guid userId, Guid issueId, Guid documentId)
+    {
+        var managedFacilityIds = await GetManagedFacilityIds(userId);
+        return await _dbContext.Issues
+            .Where(x => x.Id == issueId)
+            .Where(x =>
+                // you are referenced in the issue
+                x.FiledBy.User!.Id == userId
+                // or you manage the facility the report is on
+                || managedFacilityIds.Contains(x.Facility.Id)
+            )
+            .SelectMany(x => x.Documents)
+            .FirstOrDefaultAsync(x => x.Id == documentId);
+    }
+
+    public async Task<Document> AddDocument(Issue issue, User user, DocumentType documentType,
+        IUploadResult details)
+    {
+        var document = new Document(
+            details.FileName,
+            documentType,
+            details.Size,
+            details.Id,
+            details.Url,
+            details.MimeType,
+            user
+        );
+        issue.AddDocument(document);
+        await _dbContext.SaveChangesAsync();
+
+        return document;
+    }
+
+    public async Task MarkAsValidated(Issue issue, User manager, string? notes)
+    {
+        issue.Validate(manager, notes);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task ScheduleRepair(Issue issue, User manager, string? notes, string? repairerName,
+        string? repairerPhoneNumber)
+    {
+        issue.ScheduleRepair(manager, notes, repairerName, repairerPhoneNumber);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task MarkAsDuplicate(Issue issue, User manager, string? notes)
+    {
+        issue.MarkAsDuplicate(manager, notes);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task MarkAsRepaired(Issue issue, User manager, string? notes)
+    {
+        issue.MarkRepaired(manager, notes);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task MarkAsResolved(Issue issue, User tenantUser)
+    {
+        issue.Close(tenantUser);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<List<IssueLogEntry>> GetLogs(Guid userId, Guid issueId)
+    {
+        var managedFacilityIds = await GetManagedFacilityIds(userId);
+        var issues = await _dbContext.Issues
+            .Where(x =>
+                // you are referenced in the issue
+                x.FiledBy.User!.Id == userId
+                // or you manage the facility the report is on
+                || managedFacilityIds.Contains(x.Facility.Id)
+            )
+            .Where(x => x.Id == issueId)
+            .ToListAsync();
+
+        return issues
+            .SelectMany(x => x.Log)
+            .OrderByDescending(x => x.LoggedAt)
+            .ToList();
+    }
+
+    #region Private Helpers
+
+    private Task<List<Guid>> GetManagedFacilityIds(Guid userId) => _dbContext.Facilities
         .AsNoTracking()
-        .Where(x =>
-            x.Tenant!.User!.Id == userId
-            || x.Owners.Any(y => y.Id == userId)
-            || x.Managers.Any(y => y.Id == userId)
+        .Where(x => x.Owners.Any(y => y.Id == userId)
+                    || x.Managers.Any(y => y.Id == userId)
         )
         .Select(x => x.Id)
         .ToListAsync();
+
+    #endregion
 }

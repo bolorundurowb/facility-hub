@@ -14,13 +14,15 @@ public interface IFacilityService
 
     Task<List<Document>> GetAllDocuments(Guid userId, Guid facilityId);
 
+    Task<Document?> FindDocument(Guid userId, Guid facilityId, Guid documentId);
+
     Task<Document> AddDocument(Facility facility, User user, DocumentType documentType,
         IUploadResult details);
 
     Task<FacilityInvitation?> FindInvitationById(Guid invitationId);
 
-    Task<Tenant> SetTenant(Facility facility, User inviter, User? user, string emailAddress, DateOnly startsAt,
-        DateOnly endsAt, DateOnly paidAt);
+    Task<Tenant> SetTenant(Facility facility, User inviter, User? user, string name, string emailAddress,
+        string? phoneNumber, DateOnly startsAt, DateOnly endsAt, DateOnly paidAt);
 
     Task InviteContributor(Facility facility, User user, FacilityInvitationType invitationType, string emailAddress);
 

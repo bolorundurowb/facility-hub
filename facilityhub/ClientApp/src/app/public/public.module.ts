@@ -16,6 +16,7 @@ import {
 } from '@coreui/angular';
 import { CommonModule } from '@angular/common';
 import { PublicComponent } from './public.component';
+import { IconDirective } from '@coreui/icons-angular';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { PublicComponent } from './public.component';
     DropdownToggleDirective,
     NavLinkDirective,
     NavbarBrandDirective,
+    IconDirective,
   ]
 })
 export class PublicModule {

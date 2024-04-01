@@ -1,7 +1,7 @@
 @import "@coreui/coreui/scss/coreui";
 
 body {
-  font-family: 'Noto Sans Display', sans-serif;
+  font-family: 'Quicksand', sans-serif;
 }
 
 .form-label {
@@ -12,4 +12,42 @@ body {
 .brand-logo {
   width: 4rem;
   height: 4rem;
+}
+
+.action-row {
+  margin-top: 1rem;
+  margin-right: 0.5rem;
+  margin-bottom: 1rem;
+  text-align: end;
+}
+
+.auth-header {
+  text-align: center;
+  margin-top: 0.5rem;
+  margin-bottom: 1.75rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: block;
+  background-color: transparent;
+  border: none;
+}
+
+.auth-link {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.auth-action-row {
+  text-align: right;
+  margin-top: 1.5rem;
+}
+
+.loading {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.issue-table-row {
+  cursor: pointer;
 }

@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace FacilityHub.Models.Validators;
 
-public class InvitationHandliongReqValidator : AbstractValidator<InvitationHandlingReq>
+public class InvitationHandlingReqValidator : AbstractValidator<InvitationHandlingReq>
 {
-    public InvitationHandliongReqValidator()
+    public InvitationHandlingReqValidator()
     {
         RuleFor(x => x.ClaimToken)
             .NotEqual(x => Guid.Empty)

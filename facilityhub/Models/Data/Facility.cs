@@ -62,6 +62,20 @@ public class Facility : Entity
             Owners.Add(user);
     }
 
-    public Tenant SetTenant(User inviter, User? user, DateOnly startsAt, DateOnly endsAt, DateOnly paidAt) =>
-        Tenant = new Tenant(inviter, startsAt, endsAt, paidAt, user);
+    public Tenant SetTenant(User inviter, User? user, string name, string emailAddress, string? phoneNumber,
+        DateOnly startsAt,
+        DateOnly endsAt, DateOnly paidAt) =>
+        Tenant = new Tenant(inviter, name, emailAddress, phoneNumber, startsAt, endsAt, paidAt, user);
+
+    public void AddDocument(Document document) => Documents.Add(document);
+
+    public void DeleteDocument(Document document) => Documents.Remove(document);
+
+    public Issue ReportIssue(DateTimeOffset occurredAt, string description, string location, string? remedialAction)
+    {
+        var issue = new Issue(this, occurredAt, description, location, remedialAction);
+        Issues.Add(issue);
+
+        return issue;
+    }
 }

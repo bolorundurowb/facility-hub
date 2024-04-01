@@ -9,4 +9,12 @@ public interface IUserService
     Task<User?> FindById(Guid userId);
 
     Task<User> Create(string? firstName, string? lastName, string emailAddress, string password);
+
+    Task RequestPasswordReset(string emailAddress);
+
+    Task ResetPassword(User user, string password);
+
+    Task<User> Update(User user, string? firstName, string? lastName, string? phoneNumber);
+
+    Task UpdatePassword(User user, string password);
 }

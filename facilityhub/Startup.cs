@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using CredentialsInUrlParser;
 using FacilityHub.DataContext;
+using FacilityHub.Extensions;
 using FacilityHub.Services.Implementations;
 using FacilityHub.Services.Interfaces;
 using FluentValidation;
@@ -10,7 +12,6 @@ using Mapster;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using PostgresConnString.NET;
 
 namespace FacilityHub;
 
@@ -26,7 +27,11 @@ public class Startup
         services.AddCors();
         services.AddRouting(option => option.LowercaseUrls = true);
         services.AddControllers()
-            .AddJsonOptions(x => x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
+            .AddJsonOptions(x => x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()))
+            .ConfigureApiBehaviorOptions(opts =>
+            {
+                opts.InvalidModelStateResponseFactory = context => context.Format();
+            });
 
         services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
         services.AddFluentValidationAutoValidation(opts => opts.DisableDataAnnotationsValidation = true);
@@ -60,7 +65,7 @@ public class Startup
         services.AddDbContext<FacilityHubDbContext>(
             dbContextOptions => dbContextOptions
                 .UseNpgsql(
-                    ConnectionDetails.Parse(Config.DbUrl).ToNpgsqlConnectionString(),
+                    CIU.Parse(Config.DbUrl).ToNpgsqlConnectionString(),
                     opts => opts.UseNetTopologySuite()
                 )
 #if DEBUG
@@ -75,10 +80,13 @@ public class Startup
         config.Scan(Assembly.GetExecutingAssembly());
         services.AddMapster();
 
+        services.AddScoped<IDocumentService, DocumentService>();
+        services.AddScoped<IEmailService, MailgunEmailService>();
         services.AddScoped<IFacilityService, FacilityService>();
         services.AddScoped<IIssueService, IssueService>();
-        services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IStatisticService, StatisticService>();
         services.AddScoped<IMediaHandlerService, CloudinaryService>();
+        services.AddScoped<IUserService, UserService>();
     }
 
     public void Configure(IApplicationBuilder app)

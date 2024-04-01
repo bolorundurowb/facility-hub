@@ -17,7 +17,9 @@ public class Mappings : IRegister
         config.NewConfig<Tenant, TenantRes>()
             .AfterMapping((model, vm) =>
             {
-                vm.Name = model.User?.FullName();
+                vm.Name = model.User?.FullName() ?? model.Name;
+                vm.EmailAddress = model.User?.EmailAddress ?? model.EmailAddress;
+                vm.PhoneNumber = model.User?.PhoneNumber ?? model.PhoneNumber;
                 var currentTenancy = model.History.MaxBy(x => x.CreatedAt);
 
                 if (currentTenancy == null)
@@ -31,6 +33,18 @@ public class Mappings : IRegister
         config.NewConfig<Point, LocationDto>()
             .Map(x => x.Longitude, y => y.X)
             .Map(x => x.Latitude, y => y.Y)
+            .Compile();
+
+        config.NewConfig<Issue, IssueRes>()
+            .AfterMapping((model, vm) =>
+            {
+                vm.FacilityId = model.Facility?.Id;
+                vm.FacilityName = model.Facility?.Name;
+
+                vm.FilerTenantId = model.FiledBy?.Id;
+                vm.FilerUserId = model.FiledBy?.User?.Id;
+                vm.FilerName = model.FiledBy?.User?.FullName() ?? model.FiledBy?.Name;
+            })
             .Compile();
     }
 }

@@ -1,6 +1,5 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../services';
 import { Router } from '@angular/router';
 
@@ -43,7 +42,7 @@ export class RegisterComponent {
         await this.router.navigate([ 'dashboard' ]);
       }
     } catch (e: any) {
-      this.errorMessage = e.message;
+      this.errorMessage = e;
       this.hasError = true;
     } finally {
       this.isBusy = false;
@@ -65,7 +64,7 @@ export class RegisterComponent {
       message = 'A password is required';
     } else if (!this.payload.confirmPassword) {
       message = 'A password confirmation is required';
-    } else if (!this.passwordRegex.test(this.payload.confirmPassword)) {
+    } else if (!this.passwordRegex.test(this.payload.password)) {
       message = 'A password must be at least 8 chars long with a capital letter, number and special char';
     } else if (this.payload.password !== this.payload.confirmPassword) {
       message = 'Password and confirmation do not match';

@@ -5,6 +5,7 @@ import { freeSet, brandSet } from '@coreui/icons';
 @Component({
   selector: 'fh-root',
   template: `
+    <fh-notifications></fh-notifications>
     <router-outlet></router-outlet>
   `
 })

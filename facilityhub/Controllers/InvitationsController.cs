@@ -53,8 +53,8 @@ public class InvitationsController : ApiController
             return NotFound("Facility not found");
 
         var user = await _userService.FindByEmail(req.EmailAddress);
-        var tenant = await _facilityService.SetTenant(facility, inviter, user, req.EmailAddress, req.StartsAt, req.EndsAt,
-             req.PaidAt);
+        var tenant = await _facilityService.SetTenant(facility, inviter, user, req.Name, req.EmailAddress,
+            req.PhoneNumber, req.StartsAt, req.EndsAt, req.PaidAt);
 
         return Created(Mapper.Map<TenantRes>(tenant));
     }

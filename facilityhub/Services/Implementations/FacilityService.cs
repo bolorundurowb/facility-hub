@@ -1,5 +1,6 @@
 ﻿using FacilityHub.DataContext;
 using FacilityHub.Enums;
+using FacilityHub.Extensions;
 using FacilityHub.Models.Data;
 using FacilityHub.Models.DTOs;
 using FacilityHub.Services.Interfaces;
@@ -57,6 +58,15 @@ public class FacilityService : IFacilityService
             .ToListAsync();
     }
 
+    public Task<Document?> FindDocument(Guid userId, Guid facilityId, Guid documentId)
+    {
+        return _dbContext.Facilities
+            .Where(x => x.Id == facilityId)
+            .Where(x => x.Owners.Any(y => y.Id == userId) || x.Managers.Any(y => y.Id == userId))
+            .SelectMany(x => x.Documents)
+            .FirstOrDefaultAsync(x => x.Id == documentId);
+    }
+
     public async Task<Document> AddDocument(Facility facility, User user, DocumentType documentType,
         IUploadResult details)
     {
@@ -69,7 +79,7 @@ public class FacilityService : IFacilityService
             details.MimeType,
             user
         );
-        facility.Documents.Add(document);
+        facility.AddDocument(document);
         await _dbContext.SaveChangesAsync();
 
         return document;
@@ -82,11 +92,10 @@ public class FacilityService : IFacilityService
             .FirstOrDefaultAsync(x => x.Id == invitationId);
     }
 
-    public async Task<Tenant> SetTenant(Facility facility, User inviter, User? user, string emailAddress,
-        DateOnly startsAt,
-        DateOnly endsAt, DateOnly paidAt)
+    public async Task<Tenant> SetTenant(Facility facility, User inviter, User? user, string name, string emailAddress,
+        string? phoneNumber, DateOnly startsAt, DateOnly endsAt, DateOnly paidAt)
     {
-        var tenant = facility.SetTenant(inviter, user, startsAt, endsAt, paidAt);
+        var tenant = facility.SetTenant(inviter, user, name, emailAddress, phoneNumber, startsAt, endsAt, paidAt);
         await _dbContext.SaveChangesAsync();
 
         // if the tenant doesn't have a user account, invite them
@@ -137,6 +146,19 @@ public class FacilityService : IFacilityService
 
             if (facility.Tenant == null)
                 throw new ArgumentNullException(nameof(facility.Tenant), "No tenant set on facility to be claimed");
+
+            // update the user details if not set
+            var tenant = facility.Tenant;
+            var (firstName, lastName) = tenant.Name.SplitName();
+
+            if (string.IsNullOrWhiteSpace(user.FirstName))
+                user.UpdateFirstName(firstName);
+
+            if (string.IsNullOrWhiteSpace(user.LastName))
+                user.UpdateLastName(lastName);
+
+            if (string.IsNullOrWhiteSpace(user.PhoneNumber))
+                user.UpdatePhoneNumber(tenant.PhoneNumber);
 
             facility.Tenant!.SetUser(user);
         }

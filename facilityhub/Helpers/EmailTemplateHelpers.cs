@@ -42,9 +42,6 @@ public static class EmailTemplateHelpers
         var rootTemplate = Handlebars.Compile(await rootStreamReader.ReadToEndAsync());
         var subTemplate = Handlebars.Compile(await streamReader.ReadToEndAsync());
         var htmlToEmbed = subTemplate(data);
-        return rootTemplate(new
-        {
-            Body = htmlToEmbed
-        });
+        return rootTemplate(new { Body = htmlToEmbed });
     }
 }

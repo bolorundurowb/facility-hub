@@ -28,6 +28,7 @@ export class ForgotPasswordComponent {
 
   async requestReset() {
     this.isBusy = true;
+    this.isSuccess = false;
 
     try {
       const hasError = this.validatePayload();

@@ -129,7 +129,7 @@ public class InvitationsController : ApiController
         };
         
         var recipient = new EmailRecipient(req.EmailAddress);
-        var emailMessage = await EmailTemplateHelpers.GetFacilityContributorInvitationEmailAsync(user.FirstName,
+        var emailMessage = await EmailTemplateHelpers.GetFacilityContributorInvitationEmailAsync(null,
             user.FullName(), facility.Name, invitationTypeString);
         await _emailService.SendAsync(recipient, emailMessage);
 

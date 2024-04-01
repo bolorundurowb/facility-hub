@@ -7,26 +7,22 @@ using MimeKit;
 
 namespace FacilityHub.Services.Implementations;
 
-public class EmailService : IEmailService
+public class MailgunEmailService : IEmailService
 {
-    private readonly ILogger<EmailService> _logger;
-    private readonly SmtpClient _client;
+    private readonly ILogger<MailgunEmailService> _logger;
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly string _serviceEmail;
-    private readonly string _mailUsername;
-    private readonly string _mailPassword;
+    private readonly string _domain;
+    private readonly string _apiKey;
 
-    public EmailService(ILogger<EmailService> logger)
+    public MailgunEmailService(ILogger<MailgunEmailService> logger, IHttpClientFactory httpClientFactory)
     {
-        EnvReader.TryGetStringValue("MAIL_HOST", out var mailHost);
-        EnvReader.TryGetStringValue("MAIL_PORT", out var mailPort);
-        _mailUsername = EnvReader.GetStringValue("MAIL_USERNAME");
-        _mailPassword = EnvReader.GetStringValue("MAIL_PASSWORD");
+        EnvReader.TryGetStringValue("MAILGUN_DOMAIN", out _domain);
+        EnvReader.TryGetStringValue("MAILGUN_API_KEY", out _apiKey);
         _serviceEmail = EnvReader.GetStringValue("SERVICE_EMAIL");
 
         _logger = logger;
-        _client = new SmtpClient();
-        _logger.LogInformation("Connecting to mail server on {MailHost}:{MailPort}", mailHost, mailPort);
-        _client.Connect(mailHost, int.Parse(mailPort), SecureSocketOptions.StartTls);
+        _httpClientFactory = httpClientFactory;
     }
 
     public async Task<bool> SendAsync(EmailRecipient recipient, EmailMessage emailMessage)

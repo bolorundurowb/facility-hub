@@ -85,7 +85,7 @@ public class Startup
         services.AddScoped<IStatisticService, StatisticService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IMediaHandlerService, CloudinaryService>();
-        services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<IEmailService, MailgunEmailService>();
         services.AddScoped<IDocumentService, DocumentService>();
     }
 

@@ -74,8 +74,10 @@
 
     <ItemGroup>
       <None Remove="Templates\ForgotPassword.hbs" />
+      <EmbeddedResource Include="Templates\FacilityContributorInvitation.hbs" />
       <EmbeddedResource Include="Templates\ForgotPassword.hbs" />
       <None Remove="Templates\RootEmailTemplate.hbs" />
+      <EmbeddedResource Include="Templates\PasswordChanged.hbs" />
       <EmbeddedResource Include="Templates\RootEmailTemplate.hbs" />
     </ItemGroup>
 

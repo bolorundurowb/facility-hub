@@ -1,3 +1,5 @@
+using dotenv.net.Utilities;
+
 namespace FacilityHub.Models.Email;
 
 public class EmailMessage
@@ -12,13 +14,14 @@ public class EmailMessage
 
     public string? ReplyTo { get; }
 
-    public EmailMessage(string subject, string content, IEnumerable<EmailAttachment>? attachments, string? sender,
-        string? replyTo)
+    public EmailMessage(string subject, string content, IEnumerable<EmailAttachment>? attachments = null,
+        string? sender = null,
+        string? replyTo = null)
     {
         Subject = subject;
         Content = content;
         Attachments = attachments ?? Enumerable.Empty<EmailAttachment>();
-        Sender = sender ?? "no-reply@facilityhub.africa";
+        Sender = sender ?? EnvReader.GetStringValue("SERVICE_EMAIL");
         ReplyTo = replyTo;
     }
 }

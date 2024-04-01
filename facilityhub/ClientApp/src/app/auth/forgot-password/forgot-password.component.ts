@@ -16,6 +16,7 @@ export class ForgotPasswordComponent {
   emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   isBusy = false;
+  isSuccess = false;
   hasError = false;
   errorMessage: string | undefined;
   payload: ForgotPasswordPayload = {};
@@ -27,14 +28,14 @@ export class ForgotPasswordComponent {
 
   async requestReset() {
     this.isBusy = true;
+    this.isSuccess = false;
 
     try {
       const hasError = this.validatePayload();
 
       if (!hasError) {
         await this.authService.requestReset(this.payload);
-        this.notificationService.showSuccess('A reset code has been dispatched to your account');
-        await this.router.navigate([ 'auth', 'reset-password' ]);
+        this.isSuccess = true;
       }
     } catch (e: any) {
       this.errorMessage = e;

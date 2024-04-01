@@ -1,4 +1,5 @@
 using System.Reflection;
+using dotenv.net.Utilities;
 using FacilityHub.Models.Email;
 using HandlebarsDotNet;
 
@@ -6,17 +7,19 @@ namespace FacilityHub.Helpers;
 
 public static class EmailTemplateHelpers
 {
-    public static async Task<EmailMessage> GetForgotPasswordEmailAsync(string firstName, string resetCode)
+    private static readonly string FrontendUrl = EnvReader.GetStringValue("FRONTEND_URL");
+
+    public static async Task<EmailMessage> GetForgotPasswordEmailAsync(string? firstName, Guid userId, string resetCode)
     {
         const string templateName = "ForgotPassword";
         var payload = new
         {
-            FirstName = firstName,
-            ResetCode = resetCode
+            FirstName = firstName ?? "There",
+            ResetUrl = $"{FrontendUrl}/auth/reset-password?user-ref={userId:D}&reset-code={resetCode}"
         };
 
         var html = await GetTemplateAsync(templateName, payload);
-        return new EmailMessage("Your password reset code", html, null, null, null);
+        return new EmailMessage("Your password reset code", html);
     }
 
     private static async Task<string> GetTemplateAsync(string templateName, dynamic data)
@@ -39,9 +42,6 @@ public static class EmailTemplateHelpers
         var rootTemplate = Handlebars.Compile(await rootStreamReader.ReadToEndAsync());
         var subTemplate = Handlebars.Compile(await streamReader.ReadToEndAsync());
         var htmlToEmbed = subTemplate(data);
-        return rootTemplate(new
-        {
-            Body = htmlToEmbed
-        });
+        return rootTemplate(new { Body = htmlToEmbed });
     }
 }

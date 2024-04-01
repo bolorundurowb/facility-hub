@@ -80,13 +80,13 @@ public class Startup
         config.Scan(Assembly.GetExecutingAssembly());
         services.AddMapster();
 
+        services.AddScoped<IDocumentService, DocumentService>();
+        services.AddScoped<IEmailService, MailgunEmailService>();
         services.AddScoped<IFacilityService, FacilityService>();
         services.AddScoped<IIssueService, IssueService>();
         services.AddScoped<IStatisticService, StatisticService>();
-        services.AddScoped<IUserService, UserService>();
         services.AddScoped<IMediaHandlerService, CloudinaryService>();
-        services.AddScoped<IEmailService, EmailService>();
-        services.AddScoped<IDocumentService, DocumentService>();
+        services.AddScoped<IUserService, UserService>();
     }
 
     public void Configure(IApplicationBuilder app)

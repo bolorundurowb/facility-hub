@@ -2,6 +2,7 @@ using dotenv.net.Utilities;
 using FacilityHub.Models.Email;
 using FacilityHub.Services.Interfaces;
 using FluentEmail.Core;
+using FluentEmail.Core.Models;
 using FluentEmail.Mailgun;
 
 namespace FacilityHub.Services.Implementations;
@@ -9,13 +10,11 @@ namespace FacilityHub.Services.Implementations;
 public class MailgunEmailService : IEmailService
 {
     private readonly ILogger<MailgunEmailService> _logger;
-    private readonly string _serviceEmail;
 
     public MailgunEmailService(ILogger<MailgunEmailService> logger)
     {
         EnvReader.TryGetStringValue("MAILGUN_DOMAIN", out var domain);
         EnvReader.TryGetStringValue("MAILGUN_API_KEY", out var apiKey);
-        EnvReader.TryGetStringValue("SERVICE_EMAIL", out _serviceEmail);
 
         _logger = logger;
         var sender = new MailgunSender(domain, apiKey);
@@ -26,61 +25,33 @@ public class MailgunEmailService : IEmailService
     {
         try
         {
-            var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("FacilityHub", _serviceEmail));
-            message.To.Add(new MailboxAddress(recipient.Name, recipient.Email));
-            message.Subject = emailMessage.Subject;
+            var attachments = emailMessage.Attachments
+                .Select(x => new Attachment());
+            var message = Email
+                .From(emailMessage.Sender)
+                .To(recipient.Email, recipient.Name)
+                .Subject(emailMessage.Subject)
+                .Body(emailMessage.Content)
+                .Attach(attachments);
 
+            var response = await message.SendAsync();
 
-            if (emailMessage.Attachments.Any())
+            if (response?.Successful == true)
             {
-                foreach (var attachment in emailMessage.Attachments)
-                {
-                    var attachmentStream = new MemoryStream(attachment.Content);
-                    attachmentStream.Position = 0;
-                    var mimePart = new MimePart(attachment.MimeType)
-                    {
-                        Content = new MimeContent(attachmentStream, ContentEncoding.Default),
-                        ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
-                        ContentTransferEncoding = ContentEncoding.Base64,
-                        FileName = attachment.Name
-                    };
-                    message.Body = new Multipart("mixed")
-                    {
-                        mimePart,
-                        message.Body
-                    };
-                }
-            }
-            else
-            {
-                message.Body = new TextPart("html")
-                {
-                    Text = emailMessage.Content
-                };
+                _logger.LogInformation("Email with {Subject} successfully sent to '{Email}'", emailMessage.Subject,
+                    recipient.Email);
+                return true;
             }
 
-            await _client.AuthenticateAsync(_mailUsername, _mailPassword);
-            var result = await _client.SendAsync(message);
-
-            var emailSent = false;
-
-            _client.MessageSent += (sender, args) =>
-            {
-                _logger.LogInformation("Email sent successfully");
-                emailSent = true;
-            };
-
-            return emailSent;
+            _logger.LogError("Email with {Subject} failed to be sent to '{Email}'. Errors: {Errors}",
+                emailMessage.Subject, recipient.Email,
+                string.Join(",", response?.ErrorMessages ?? new List<string?>()));
+            return false;
         }
         catch (Exception e)
         {
             _logger.LogError(e, "Error sending email");
             return false;
-        }
-        finally
-        {
-            await _client.DisconnectAsync(true);
         }
     }
 }

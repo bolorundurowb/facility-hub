@@ -30,6 +30,7 @@ public class MailgunEmailService : IEmailService
             var message = Email
                 .From(emailMessage.Sender)
                 .To(recipient.Email, recipient.Name)
+                .ReplyTo(emailMessage.ReplyTo)
                 .Subject(emailMessage.Subject)
                 .Body(emailMessage.Content)
                 .Attach(attachments);

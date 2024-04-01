@@ -1,28 +1,25 @@
 using dotenv.net.Utilities;
 using FacilityHub.Models.Email;
 using FacilityHub.Services.Interfaces;
-using MailKit.Net.Smtp;
-using MailKit.Security;
-using MimeKit;
+using FluentEmail.Core;
+using FluentEmail.Mailgun;
 
 namespace FacilityHub.Services.Implementations;
 
 public class MailgunEmailService : IEmailService
 {
     private readonly ILogger<MailgunEmailService> _logger;
-    private readonly IHttpClientFactory _httpClientFactory;
     private readonly string _serviceEmail;
-    private readonly string _domain;
-    private readonly string _apiKey;
 
-    public MailgunEmailService(ILogger<MailgunEmailService> logger, IHttpClientFactory httpClientFactory)
+    public MailgunEmailService(ILogger<MailgunEmailService> logger)
     {
-        EnvReader.TryGetStringValue("MAILGUN_DOMAIN", out _domain);
-        EnvReader.TryGetStringValue("MAILGUN_API_KEY", out _apiKey);
-        _serviceEmail = EnvReader.GetStringValue("SERVICE_EMAIL");
+        EnvReader.TryGetStringValue("MAILGUN_DOMAIN", out var domain);
+        EnvReader.TryGetStringValue("MAILGUN_API_KEY", out var apiKey);
+        EnvReader.TryGetStringValue("SERVICE_EMAIL", out _serviceEmail);
 
         _logger = logger;
-        _httpClientFactory = httpClientFactory;
+        var sender = new MailgunSender(domain, apiKey);
+        Email.DefaultSender = sender;
     }
 
     public async Task<bool> SendAsync(EmailRecipient recipient, EmailMessage emailMessage)

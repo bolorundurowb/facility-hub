@@ -12,7 +12,11 @@ public class UserService : IUserService
     private readonly FacilityHubDbContext _dbContext;
     private readonly IEmailService _emailService;
 
-    public UserService(FacilityHubDbContext dbContext) => _dbContext = dbContext;
+    public UserService(FacilityHubDbContext dbContext, IEmailService emailService)
+    {
+        _dbContext = dbContext;
+        _emailService = emailService;
+    }
 
     public Task<User?> FindByEmail(string emailAddress)
     {
@@ -49,11 +53,8 @@ public class UserService : IUserService
             await _dbContext.SaveChangesAsync();
 
             var recipient = new EmailRecipient(user.EmailAddress, user.FullName());
-            var emailMessage = await EmailTemplateHelpers.GetForgotPasswordEmailAsync(user.FirstName, user.ResetCode!);
+            var emailMessage = await EmailTemplateHelpers.GetForgotPasswordEmailAsync(user.FirstName, user.Id, user.ResetCode!);
             await _emailService.SendAsync(recipient, emailMessage);
-
-            // TODO: send email to the user
-            // the url should look like 'https://localhost:44485/auth/reset-password?user-ref=7c3eb470-b6b6-4f15-ab72-5a6bc450ccb6&reset-code=892398'
         }
     }
 

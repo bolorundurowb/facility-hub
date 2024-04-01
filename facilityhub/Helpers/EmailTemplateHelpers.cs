@@ -1,4 +1,5 @@
 using System.Reflection;
+using dotenv.net.Utilities;
 using FacilityHub.Models.Email;
 using HandlebarsDotNet;
 
@@ -6,13 +7,15 @@ namespace FacilityHub.Helpers;
 
 public static class EmailTemplateHelpers
 {
-    public static async Task<EmailMessage> GetForgotPasswordEmailAsync(string? firstName, string resetCode)
+    private static readonly string FrontendUrl = EnvReader.GetStringValue("FRONTEND_URL");
+
+    public static async Task<EmailMessage> GetForgotPasswordEmailAsync(string? firstName, Guid userId, string resetCode)
     {
         const string templateName = "ForgotPassword";
         var payload = new
         {
             FirstName = firstName ?? "There",
-            ResetCode = resetCode
+            ResetUrl = $"{FrontendUrl}/auth/reset-password?user-ref={userId:D}&reset-code={resetCode}"
         };
 
         var html = await GetTemplateAsync(templateName, payload);

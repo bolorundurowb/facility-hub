@@ -6,17 +6,17 @@ namespace FacilityHub.Helpers;
 
 public static class EmailTemplateHelpers
 {
-    public static async Task<EmailMessage> GetForgotPasswordEmailAsync(string firstName, string resetCode)
+    public static async Task<EmailMessage> GetForgotPasswordEmailAsync(string? firstName, string resetCode)
     {
         const string templateName = "ForgotPassword";
         var payload = new
         {
-            FirstName = firstName,
+            FirstName = firstName ?? "There",
             ResetCode = resetCode
         };
 
         var html = await GetTemplateAsync(templateName, payload);
-        return new EmailMessage("Your password reset code", html, null, null, null);
+        return new EmailMessage("Your password reset code", html);
     }
 
     private static async Task<string> GetTemplateAsync(string templateName, dynamic data)

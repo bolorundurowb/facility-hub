@@ -53,7 +53,8 @@ public class UserService : IUserService
             await _dbContext.SaveChangesAsync();
 
             var recipient = new EmailRecipient(user.EmailAddress, user.FullName());
-            var emailMessage = await EmailTemplateHelpers.GetForgotPasswordEmailAsync(user.FirstName, user.Id, user.ResetCode!);
+            var emailMessage =
+                await EmailTemplateHelpers.GetForgotPasswordEmailAsync(user.FirstName, user.Id, user.ResetCode!);
             await _emailService.SendAsync(recipient, emailMessage);
         }
     }
@@ -63,7 +64,9 @@ public class UserService : IUserService
         user.ResetPassword(password);
         await _dbContext.SaveChangesAsync();
 
-        // TODO: send email to the user letting them know their password has changed
+        var recipient = new EmailRecipient(user.EmailAddress, user.FullName());
+        var emailMessage = await EmailTemplateHelpers.GetPasswordChangedEmailAsync(user.FirstName);
+        await _emailService.SendAsync(recipient, emailMessage);
     }
 
     public async Task<User> Update(User user, string? firstName, string? lastName, string? phoneNumber)

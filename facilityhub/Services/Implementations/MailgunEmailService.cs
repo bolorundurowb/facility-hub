@@ -4,6 +4,7 @@ using FacilityHub.Services.Interfaces;
 using FluentEmail.Core;
 using FluentEmail.Core.Models;
 using FluentEmail.Mailgun;
+using HandlebarsDotNet;
 
 namespace FacilityHub.Services.Implementations;
 
@@ -32,7 +33,7 @@ public class MailgunEmailService : IEmailService
                 .To(recipient.Email, recipient.Name)
                 .ReplyTo(emailMessage.ReplyTo)
                 .Subject(emailMessage.Subject)
-                .Body(emailMessage.Content)
+                .Body(emailMessage.Content, true)
                 .Attach(attachments);
 
             var response = await message.SendAsync();

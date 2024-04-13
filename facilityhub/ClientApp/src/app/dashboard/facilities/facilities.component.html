@@ -24,32 +24,34 @@
 
       <ng-container *ngIf="facilities.length">
         <c-row [gutter]="4">
-          <c-col [xs]="4" [sm]="6" *ngFor="let facility of facilities">
-            <c-card class="facility-card">
-              <ng-container *ngIf="facility.location">
-                <div cCardImg="top"
-                     class="map"
-                     leaflet
-                     [leafletOptions]="getMapOptions(facility)">
-                </div>
-              </ng-container>
-              <ng-container *ngIf="!facility.location">
-                <img cCardImg="top"
-                     class="no-location-img"
-                     src="/assets/images/no-location.png">
-              </ng-container>
+          <ng-container *ngFor="let facility of facilities">
+            <c-col [xs]="12" [sm]="6">
+              <c-card class="facility-card">
+                <ng-container *ngIf="facility.location">
+                  <div cCardImg="top"
+                       class="map"
+                       leaflet
+                       [leafletOptions]="getMapOptions(facility)">
+                  </div>
+                </ng-container>
+                <ng-container *ngIf="!facility.location">
+                  <img cCardImg="top"
+                       class="no-location-img"
+                       src="/assets/images/no-location.png">
+                </ng-container>
 
-              <c-card-header>
-                <h5>{{ facility.name }}</h5>
-              </c-card-header>
-              <c-card-body>
-                <p cCardText>
-                  <span style="font-weight: bold">Address:</span> {{ facility.address }}
-                </p>
-                <button cButton (click)="goToDetails(facility.id)">Details</button>
-              </c-card-body>
-            </c-card>
-          </c-col>
+                <c-card-header>
+                  <h5>{{ facility.name }}</h5>
+                </c-card-header>
+                <c-card-body>
+                  <p cCardText>
+                    <span style="font-weight: bold">Address:</span> {{ facility.address }}
+                  </p>
+                  <button cButton (click)="goToDetails(facility.id)">Details</button>
+                </c-card-body>
+              </c-card>
+            </c-col>
+          </ng-container>
         </c-row>
       </ng-container>
     </ng-container>

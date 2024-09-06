@@ -1,5 +1,7 @@
 ﻿using FacilityHub.Enums;
 using FacilityHub.Extensions;
+using FacilityHub.Helpers;
+using FacilityHub.Models.Email;
 using FacilityHub.Models.Request;
 using FacilityHub.Models.Response;
 using FacilityHub.Services.Interfaces;
@@ -13,12 +15,14 @@ public class InvitationsController : ApiController
 {
     private readonly IFacilityService _facilityService;
     private readonly IUserService _userService;
+    private readonly IEmailService _emailService;
 
-    public InvitationsController(IMapper mapper, IFacilityService facilityService, IUserService userService) :
+    public InvitationsController(IMapper mapper, IFacilityService facilityService, IUserService userService, IEmailService emailService) :
         base(mapper)
     {
         _facilityService = facilityService;
         _userService = userService;
+        _emailService = emailService;
     }
 
     [HttpPost("manager")]
@@ -117,7 +121,17 @@ public class InvitationsController : ApiController
 
         await _facilityService.InviteContributor(facility, user, invitationType, req.EmailAddress);
 
-        // TODO: send an email
+        var invitationTypeString = invitationType switch
+        {
+            FacilityInvitationType.FacilityManager => "Facility Manager",
+            FacilityInvitationType.FacilityOwner => "Facility Owner",
+            _ => "Facility Tenant"
+        };
+        
+        var recipient = new EmailRecipient(req.EmailAddress);
+        var emailMessage = await EmailTemplateHelpers.GetFacilityContributorInvitationEmailAsync(null,
+            user.FullName(), facility.Name, invitationTypeString);
+        await _emailService.SendAsync(recipient, emailMessage);
 
         return NoContent();
     }

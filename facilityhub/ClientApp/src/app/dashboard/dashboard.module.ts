@@ -39,6 +39,11 @@ import {
   SidebarTogglerComponent,
   SpinnerComponent,
   TableDirective,
+  NavbarComponent,
+  NavbarNavComponent,
+  NavbarBrandDirective,
+  NavbarTogglerDirective,
+  CollapseDirective
 } from '@coreui/angular';
 import { CommonModule } from '@angular/common';
 import { IconComponent, IconDirective } from '@coreui/icons-angular';
@@ -110,6 +115,11 @@ import { IssueDetailsComponent } from './issue-details/issue-details.component';
     TruncateModule,
     FormSelectDirective,
     InputGroupComponent,
+    NavbarComponent,
+    NavbarNavComponent,
+    NavbarBrandDirective,
+    NavbarTogglerDirective,
+    CollapseDirective
   ],
 })
 export class DashboardModule {

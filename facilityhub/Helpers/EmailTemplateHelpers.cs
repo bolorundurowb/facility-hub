@@ -21,6 +21,34 @@ public static class EmailTemplateHelpers
         var html = await GetTemplateAsync(templateName, payload);
         return new EmailMessage("Your password reset code", html);
     }
+    
+    public static async Task<EmailMessage> GetPasswordChangedEmailAsync(string? firstName)
+    {
+        const string templateName = "PasswordChanged";
+        var payload = new
+        {
+            FirstName = firstName ?? "There"
+        };
+
+        var html = await GetTemplateAsync(templateName, payload);
+        return new EmailMessage("Your password has been changed", html);
+    }
+    
+    public static async Task<EmailMessage> GetFacilityContributorInvitationEmailAsync(string? firstName, string? inviterName, string facilityName, string invitationType)
+    {
+        const string templateName = "FacilityContributorInvitation";
+        var payload = new
+        {
+            FirstName = firstName ?? "There",
+            InviterName = inviterName ?? "Someone",
+            FacilityName = facilityName,
+            InvitationType = invitationType,
+            AppUrl = FrontendUrl
+        };
+
+        var html = await GetTemplateAsync(templateName, payload);
+        return new EmailMessage("You have been invited to a facility", html);
+    }
 
     private static async Task<string> GetTemplateAsync(string templateName, dynamic data)
     {

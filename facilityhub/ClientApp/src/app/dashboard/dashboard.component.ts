@@ -94,6 +94,11 @@ export class DashboardComponent implements AfterViewInit {
       url: '/dashboard/profile',
       iconComponent: {name: 'cil-user'}
     },
+    {
+      name: 'Profile',
+      url: '/dashboard/profile',
+      iconComponent: { name: 'cil-user' }
+    },
   ];
   @ViewChild('sidebar') sidebar!: SidebarComponent;
 

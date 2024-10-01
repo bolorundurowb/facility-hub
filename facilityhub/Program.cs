@@ -21,7 +21,7 @@ public class Program
                     opts.Dsn = Environment.GetEnvironmentVariable("SENTRY_DSN") ?? string.Empty;
                     opts.Debug = true;
                     opts.DiagnosticLevel = SentryLevel.Info;
-                    opts.TracesSampleRate = 1.0;
+                    opts.TracesSampleRate = 0.5;
                 });
                 webBuilder.UseStartup<Startup>();
             })

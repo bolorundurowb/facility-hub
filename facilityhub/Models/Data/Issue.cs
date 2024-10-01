@@ -92,7 +92,7 @@ public class Issue : Entity
     public void MarkRepaired(User manager, string? notes) =>
         TransitionToStatus(manager, IssueStatus.Repaired, notes);
 
-    public bool CanClose(User tenantUser) => Status is IssueStatus.Repaired && tenantUser.Id == FiledBy.User?.Id ;
+    public bool CanClose(User tenantUser) => Status is IssueStatus.Repaired && tenantUser.Id == FiledBy.User?.Id;
 
     public void Close(User tenantUser) =>
         TransitionToStatus(tenantUser, IssueStatus.Closed, null);

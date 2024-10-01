@@ -21,7 +21,7 @@ public static class EmailTemplateHelpers
         var html = await GetTemplateAsync(templateName, payload);
         return new EmailMessage("Your password reset code", html);
     }
-    
+
     public static async Task<EmailMessage> GetPasswordChangedEmailAsync(string? firstName)
     {
         const string templateName = "PasswordChanged";
@@ -33,7 +33,7 @@ public static class EmailTemplateHelpers
         var html = await GetTemplateAsync(templateName, payload);
         return new EmailMessage("Your password has been changed", html);
     }
-    
+
     public static async Task<EmailMessage> GetFacilityContributorInvitationEmailAsync(string? firstName, string? inviterName, string facilityName, string invitationType)
     {
         const string templateName = "FacilityContributorInvitation";

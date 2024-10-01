@@ -59,7 +59,7 @@ public class Startup
             var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
             var xmlPath = Path.Combine(baseDirectory, "facilityhub.xml");
 
-            if (File.Exists(xmlPath)) 
+            if (File.Exists(xmlPath))
                 options.IncludeXmlComments(xmlPath);
         });
 

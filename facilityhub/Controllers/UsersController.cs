@@ -55,7 +55,7 @@ public class UsersController : ApiController
         if (user == null)
             return Unauthorized("User account does not exist");
 
-        if (!user.VerifyPassword(req.CurrentPassword)) 
+        if (!user.VerifyPassword(req.CurrentPassword))
             return BadRequest("Invalid current password");
 
         await _userService.UpdatePassword(user, req.Password);

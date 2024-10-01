@@ -127,7 +127,7 @@ public class InvitationsController : ApiController
             FacilityInvitationType.FacilityOwner => "Facility Owner",
             _ => "Facility Tenant"
         };
-        
+
         var recipient = new EmailRecipient(req.EmailAddress);
         var emailMessage = await EmailTemplateHelpers.GetFacilityContributorInvitationEmailAsync(null,
             user.FullName(), facility.Name, invitationTypeString);

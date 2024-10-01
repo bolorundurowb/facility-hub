@@ -9,11 +9,9 @@ namespace FacilityHub.Controllers;
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
-public abstract class ApiController : ControllerBase
+public abstract class ApiController(IMapper mapper) : ControllerBase
 {
-    protected readonly IMapper Mapper;
-
-    public ApiController(IMapper mapper) => Mapper = mapper;
+    protected readonly IMapper Mapper = mapper;
 
     protected BadRequestObjectResult BadRequest(string message) =>
         BadRequest(new GenericRes(message));

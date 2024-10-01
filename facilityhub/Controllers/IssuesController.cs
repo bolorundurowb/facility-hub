@@ -8,31 +8,22 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FacilityHub.Controllers;
 
-public class IssuesController : ApiController
+public class IssuesController(
+    IMapper mapper,
+    IFacilityService facilityService,
+    IIssueService issueService,
+    IUserService userService,
+    IMediaHandlerService mediaService,
+    IDocumentService documentService)
+    : ApiController(mapper)
 {
-    private readonly IFacilityService _facilityService;
-    private readonly IIssueService _issueService;
-    private readonly IUserService _userService;
-    private readonly IDocumentService _documentService;
-    private readonly IMediaHandlerService _mediaService;
-
-    public IssuesController(IMapper mapper, IFacilityService facilityService, IIssueService issueService,
-        IUserService userService, IMediaHandlerService mediaService, IDocumentService documentService) : base(mapper)
-    {
-        _facilityService = facilityService;
-        _issueService = issueService;
-        _userService = userService;
-        _mediaService = mediaService;
-        _documentService = documentService;
-    }
-
     [HttpGet("")]
     [ProducesResponseType(typeof(List<IssueRes>), 200)]
     [ProducesResponseType(typeof(GenericRes), 404)]
     public async Task<IActionResult> GetAll()
     {
         var userId = User.GetCallerId();
-        var issues = await _issueService.GetAll(userId);
+        var issues = await issueService.GetAll(userId);
         return Ok(Mapper.Map<List<IssueRes>>(issues));
     }
 
@@ -42,7 +33,7 @@ public class IssuesController : ApiController
     public async Task<IActionResult> GetOne(Guid issueId)
     {
         var userId = User.GetCallerId();
-        var issue = await _issueService.FindById(userId, issueId);
+        var issue = await issueService.FindById(userId, issueId);
 
         if (issue == null)
             return NotFound("Issue not found");
@@ -56,12 +47,12 @@ public class IssuesController : ApiController
     public async Task<IActionResult> Report([FromBody] ReportIssueReq req)
     {
         var userId = User.GetCallerId();
-        var facility = await _facilityService.FindById(userId, req.FacilityId);
+        var facility = await facilityService.FindById(userId, req.FacilityId);
 
         if (facility == null || facility.Tenant?.User?.Id != userId)
             return Forbidden("You cannot report issues on this facility");
 
-        var issue = await _issueService.Create(facility, req.OccurredAt, req.Description, req.Location,
+        var issue = await issueService.Create(facility, req.OccurredAt, req.Description, req.Location,
             req.RemedialAction);
 
         return Created(Mapper.Map<IssueRes>(issue));
@@ -72,7 +63,7 @@ public class IssuesController : ApiController
     public async Task<IActionResult> GetOneDocuments(Guid issueId)
     {
         var userId = User.GetCallerId();
-        var documents = await _issueService.GetAllDocuments(userId, issueId);
+        var documents = await issueService.GetAllDocuments(userId, issueId);
 
         return Ok(Mapper.Map<List<DocumentRes>>(documents));
     }
@@ -84,23 +75,23 @@ public class IssuesController : ApiController
     public async Task<IActionResult> CreateDocument(Guid issueId, [FromForm] UploadIssueDocumentReq req)
     {
         var userId = User.GetCallerId();
-        var user = await _userService.FindById(userId);
+        var user = await userService.FindById(userId);
 
         if (user == null)
             return Forbidden("User account not found");
 
-        var issue = await _issueService.FindById(userId, issueId);
+        var issue = await issueService.FindById(userId, issueId);
 
         if (issue == null)
             return NotFound("Issue not found");
 
         await using var stream = req.File.OpenReadStream();
-        var result = await _mediaService.UploadAsync(req.File.FileName, stream);
+        var result = await mediaService.UploadAsync(req.File.FileName, stream);
 
         if (result == null)
             return BadRequest("Document upload failed.");
 
-        var document = await _issueService.AddDocument(issue, user, req.Type, result);
+        var document = await issueService.AddDocument(issue, user, req.Type, result);
 
         return Created(Mapper.Map<DocumentRes>(document));
     }
@@ -111,13 +102,13 @@ public class IssuesController : ApiController
     public async Task<IActionResult> DeleteDocument(Guid issueId, Guid documentId)
     {
         var userId = User.GetCallerId();
-        var document = await _issueService.FindDocument(userId, issueId, documentId);
+        var document = await issueService.FindDocument(userId, issueId, documentId);
 
         if (document == null)
             return NotFound("Document not found");
 
-        await _mediaService.DeleteAsync(document.ExternalId);
-        await _documentService.Delete(document);
+        await mediaService.DeleteAsync(document.ExternalId);
+        await documentService.Delete(document);
 
         return Ok("Document deleted successfully");
     }
@@ -129,17 +120,17 @@ public class IssuesController : ApiController
     public async Task<IActionResult> GetLogs(Guid issueId)
     {
         var userId = User.GetCallerId();
-        var user = await _userService.FindById(userId);
+        var user = await userService.FindById(userId);
 
         if (user == null)
             return Forbidden("User account not found");
 
-        var issue = await _issueService.FindById(userId, issueId);
+        var issue = await issueService.FindById(userId, issueId);
 
         if (issue == null)
             return NotFound("Issue not found");
 
-        var logs = await _issueService.GetLogs(userId, issueId);
+        var logs = await issueService.GetLogs(userId, issueId);
 
         return Ok(logs);
     }
@@ -151,12 +142,12 @@ public class IssuesController : ApiController
     public async Task<IActionResult> ValidateIssue(Guid issueId, [FromBody] IssueStatusChangeReq req)
     {
         var userId = User.GetCallerId();
-        var user = await _userService.FindById(userId);
+        var user = await userService.FindById(userId);
 
         if (user == null)
             return Forbidden("User account not found");
 
-        var issue = await _issueService.FindById(userId, issueId);
+        var issue = await issueService.FindById(userId, issueId);
 
         if (issue == null)
             return NotFound("Issue not found");
@@ -164,7 +155,7 @@ public class IssuesController : ApiController
         if (!issue.CanValidate())
             return BadRequest("Issue cannot be validated");
 
-        await _issueService.MarkAsValidated(issue, user, req.Notes);
+        await issueService.MarkAsValidated(issue, user, req.Notes);
 
         return Ok(Mapper.Map<IssueRes>(issue));
     }
@@ -175,17 +166,17 @@ public class IssuesController : ApiController
     public async Task<IActionResult> ScheduleRepair(Guid issueId, [FromBody] ReadyToRepairReq req)
     {
         var userId = User.GetCallerId();
-        var user = await _userService.FindById(userId);
+        var user = await userService.FindById(userId);
 
         if (user == null)
             return Forbidden("User account not found");
 
-        var issue = await _issueService.FindById(userId, issueId);
+        var issue = await issueService.FindById(userId, issueId);
 
         if (issue == null)
             return NotFound("Issue not found");
 
-        await _issueService.ScheduleRepair(issue, user, req.Notes, req.RepairerName, req.RepairerPhoneNumber);
+        await issueService.ScheduleRepair(issue, user, req.Notes, req.RepairerName, req.RepairerPhoneNumber);
 
         return Ok(Mapper.Map<IssueRes>(issue));
     }
@@ -197,12 +188,12 @@ public class IssuesController : ApiController
     public async Task<IActionResult> MarkIssueAsDuplicate(Guid issueId, [FromBody] IssueStatusChangeReq req)
     {
         var userId = User.GetCallerId();
-        var user = await _userService.FindById(userId);
+        var user = await userService.FindById(userId);
 
         if (user == null)
             return Forbidden("User account not found");
 
-        var issue = await _issueService.FindById(userId, issueId);
+        var issue = await issueService.FindById(userId, issueId);
 
         if (issue == null)
             return NotFound("Issue not found");
@@ -210,7 +201,7 @@ public class IssuesController : ApiController
         if (!issue.CanMarkAsDuplicate())
             return BadRequest("Issue cannot be marked as a duplicate");
 
-        await _issueService.MarkAsDuplicate(issue, user, req.Notes);
+        await issueService.MarkAsDuplicate(issue, user, req.Notes);
 
         return Ok(Mapper.Map<IssueRes>(issue));
     }
@@ -222,12 +213,12 @@ public class IssuesController : ApiController
     public async Task<IActionResult> MarkAsRepaired(Guid issueId, [FromBody] IssueStatusChangeReq req)
     {
         var userId = User.GetCallerId();
-        var user = await _userService.FindById(userId);
+        var user = await userService.FindById(userId);
 
         if (user == null)
             return Forbidden("User account not found");
 
-        var issue = await _issueService.FindById(userId, issueId);
+        var issue = await issueService.FindById(userId, issueId);
 
         if (issue == null)
             return NotFound("Issue not found");
@@ -235,7 +226,7 @@ public class IssuesController : ApiController
         if (!issue.CanMarkAsRepaired())
             return BadRequest("Issue cannot be marked as repaired");
 
-        await _issueService.MarkAsRepaired(issue, user, req.Notes);
+        await issueService.MarkAsRepaired(issue, user, req.Notes);
 
         return Ok(Mapper.Map<IssueRes>(issue));
     }
@@ -247,12 +238,12 @@ public class IssuesController : ApiController
     public async Task<IActionResult> MarkAsResolved(Guid issueId)
     {
         var userId = User.GetCallerId();
-        var user = await _userService.FindById(userId);
+        var user = await userService.FindById(userId);
 
         if (user == null)
             return Forbidden("User account not found");
 
-        var issue = await _issueService.FindById(userId, issueId);
+        var issue = await issueService.FindById(userId, issueId);
 
         if (issue == null)
             return NotFound("Issue not found");
@@ -260,7 +251,7 @@ public class IssuesController : ApiController
         if (!issue.CanClose(user))
             return BadRequest("Issue cannot be closed/resolved");
 
-        await _issueService.MarkAsResolved(issue, user);
+        await issueService.MarkAsResolved(issue, user);
 
         return Ok(Mapper.Map<IssueRes>(issue));
     }

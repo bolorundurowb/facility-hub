@@ -6,16 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FacilityHub.Services.Implementations;
 
-public class StatisticService : IStatisticService
+public class StatisticService(FacilityHubDbContext dbContext) : IStatisticService
 {
-    private readonly FacilityHubDbContext _dbContext;
-
-    public StatisticService(FacilityHubDbContext dbContext) => _dbContext = dbContext;
-
     public async Task<StatisticsDto> Get(Guid userId)
     {
-        var facQuery = _dbContext.Facilities.AsNoTracking();
-        var issQuery = _dbContext.Issues.AsNoTracking();
+        var facQuery = dbContext.Facilities.AsNoTracking();
+        var issQuery = dbContext.Issues.AsNoTracking();
 
         var rented = await facQuery.Where(x => x.Tenant!.User!.Id == userId).CountAsync();
         var owned = await facQuery.Where(x => x.Owners.Any(y => y.Id == userId)).CountAsync();

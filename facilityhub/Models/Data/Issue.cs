@@ -28,9 +28,9 @@ public class Issue : Entity
 
     public IssueStatus Status { get; private set; }
 
-    public List<Document> Documents { get; set; } = new();
+    public List<Document> Documents { get; set; } = [];
 
-    public List<IssueLogEntry> Log { get; private set; } = new();
+    public List<IssueLogEntry> Log { get; private set; } = [];
 
     public Tenant FiledBy { get; private set; }
 
@@ -54,9 +54,9 @@ public class Issue : Entity
 
         Status = IssueStatus.Filed;
         FiledAt = DateTimeOffset.Now;
-        Documents = new List<Document>();
+        Documents = [];
         Code = ShortId.Generate(GenOptions);
-        Log = new List<IssueLogEntry> { new(null, Status, null) };
+        Log = [new(null, Status, null)];
     }
 
     public void AddDocument(Document document) => Documents.Add(document);
@@ -104,7 +104,7 @@ public class Issue : Entity
         var previousStatus = Status;
         Status = transitionTo;
 
-        Log ??= new List<IssueLogEntry>();
+        Log ??= [];
         Log.Add(new IssueLogEntry(previousStatus, Status, $"Transitioned By: {manager.FullName}\n{notes}"));
     }
 

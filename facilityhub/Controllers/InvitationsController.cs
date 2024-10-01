@@ -11,20 +11,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FacilityHub.Controllers;
 
-public class InvitationsController : ApiController
+public class InvitationsController(
+    IMapper mapper,
+    IFacilityService facilityService,
+    IUserService userService,
+    IEmailService emailService)
+    : ApiController(mapper)
 {
-    private readonly IFacilityService _facilityService;
-    private readonly IUserService _userService;
-    private readonly IEmailService _emailService;
-
-    public InvitationsController(IMapper mapper, IFacilityService facilityService, IUserService userService, IEmailService emailService) :
-        base(mapper)
-    {
-        _facilityService = facilityService;
-        _userService = userService;
-        _emailService = emailService;
-    }
-
     [HttpPost("manager")]
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(GenericRes), 403)]
@@ -46,18 +39,18 @@ public class InvitationsController : ApiController
     public async Task<IActionResult> InviteTenant([FromBody] SetFacilityTenantReq req)
     {
         var userId = User.GetCallerId();
-        var inviter = await _userService.FindById(userId);
+        var inviter = await userService.FindById(userId);
 
         if (inviter == null)
             return Forbidden("User account not found");
 
-        var facility = await _facilityService.FindById(userId, req.FacilityId);
+        var facility = await facilityService.FindById(userId, req.FacilityId);
 
         if (facility == null)
             return NotFound("Facility not found");
 
-        var user = await _userService.FindByEmail(req.EmailAddress);
-        var tenant = await _facilityService.SetTenant(facility, inviter, user, req.Name, req.EmailAddress,
+        var user = await userService.FindByEmail(req.EmailAddress);
+        var tenant = await facilityService.SetTenant(facility, inviter, user, req.Name, req.EmailAddress,
             req.PhoneNumber, req.StartsAt, req.EndsAt, req.PaidAt);
 
         return Created(Mapper.Map<TenantRes>(tenant));
@@ -70,7 +63,7 @@ public class InvitationsController : ApiController
     [ProducesResponseType(typeof(GenericRes), 404)]
     public async Task<IActionResult> ValidateInvitation(Guid invitationId, [FromBody] InvitationHandlingReq handlingReq)
     {
-        var invitation = await _facilityService.FindInvitationById(invitationId);
+        var invitation = await facilityService.FindInvitationById(invitationId);
 
         if (invitation == null || invitation.ClaimToken != handlingReq.ClaimToken || invitation.IsClaimed ||
             invitation.IsExpired())
@@ -86,18 +79,18 @@ public class InvitationsController : ApiController
     public async Task<IActionResult> ClaimInvitation(Guid invitationId, [FromBody] InvitationHandlingReq handlingReq)
     {
         var userId = User.GetCallerId();
-        var user = await _userService.FindById(userId);
+        var user = await userService.FindById(userId);
 
         if (user == null)
             return Forbidden("User account not found");
 
-        var invitation = await _facilityService.FindInvitationById(invitationId);
+        var invitation = await facilityService.FindInvitationById(invitationId);
 
         if (invitation == null || invitation.ClaimToken != handlingReq.ClaimToken || invitation.IsClaimed ||
             invitation.IsExpired())
             return BadRequest("Invalid invitation");
 
-        await _facilityService.ClaimInvitation(invitation, user);
+        await facilityService.ClaimInvitation(invitation, user);
 
         return NoContent();
     }
@@ -109,17 +102,17 @@ public class InvitationsController : ApiController
         FacilityInvitationType invitationType)
     {
         var userId = User.GetCallerId();
-        var user = await _userService.FindById(userId);
+        var user = await userService.FindById(userId);
 
         if (user == null)
             return Forbidden("User account not found");
 
-        var facility = await _facilityService.FindById(userId, req.FacilityId);
+        var facility = await facilityService.FindById(userId, req.FacilityId);
 
         if (facility == null)
             return NotFound("Facility not found");
 
-        await _facilityService.InviteContributor(facility, user, invitationType, req.EmailAddress);
+        await facilityService.InviteContributor(facility, user, invitationType, req.EmailAddress);
 
         var invitationTypeString = invitationType switch
         {
@@ -131,7 +124,7 @@ public class InvitationsController : ApiController
         var recipient = new EmailRecipient(req.EmailAddress);
         var emailMessage = await EmailTemplateHelpers.GetFacilityContributorInvitationEmailAsync(null,
             user.FullName(), facility.Name, invitationTypeString);
-        await _emailService.SendAsync(recipient, emailMessage);
+        await emailService.SendAsync(recipient, emailMessage);
 
         return NoContent();
     }

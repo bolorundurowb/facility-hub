@@ -12,19 +12,15 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace FacilityHub.Controllers;
 
-public class AuthController : ApiController
+public class AuthController(IMapper mapper, IUserService userService) : ApiController(mapper)
 {
-    private readonly IUserService _userService;
-
-    public AuthController(IMapper mapper, IUserService userService) : base(mapper) => _userService = userService;
-
     [AllowAnonymous]
     [HttpPost("login")]
     [ProducesResponseType(typeof(AuthRes), 200)]
     [ProducesResponseType(typeof(GenericRes), 400)]
     public async Task<IActionResult> Login([FromBody] LoginReq req)
     {
-        var user = await _userService.FindByEmail(req.EmailAddress);
+        var user = await userService.FindByEmail(req.EmailAddress);
 
         if (user == null)
             return NotFound("Invalid email address or password");
@@ -43,12 +39,12 @@ public class AuthController : ApiController
     [ProducesResponseType(typeof(GenericRes), 400)]
     public async Task<IActionResult> Register([FromBody] RegisterReq req)
     {
-        var user = await _userService.FindByEmail(req.EmailAddress);
+        var user = await userService.FindByEmail(req.EmailAddress);
 
         if (user != null)
             return Conflict("User account already exists");
 
-        user = await _userService.Create(req.FirstName, req.LastName, req.EmailAddress, req.Password);
+        user = await userService.Create(req.FirstName, req.LastName, req.EmailAddress, req.Password);
         var (token, expiry) = GenerateToken(user);
 
         return Created(new AuthRes(token, expiry, Mapper.Map<UserRes>(user)));
@@ -59,7 +55,7 @@ public class AuthController : ApiController
     [ProducesResponseType(204)]
     public async Task<IActionResult> RequestPasswordReset([FromBody] ForgotPasswordReq req)
     {
-        await _userService.RequestPasswordReset(req.EmailAddress);
+        await userService.RequestPasswordReset(req.EmailAddress);
         return NoContent();
     }
 
@@ -69,12 +65,12 @@ public class AuthController : ApiController
     [ProducesResponseType(typeof(GenericRes), 400)]
     public async Task<IActionResult> ResetPassword([FromBody] PasswordResetReq req)
     {
-        var user = await _userService.FindById(req.UserId);
+        var user = await userService.FindById(req.UserId);
 
         if (user is null || !user.ValidateResetCode(req.ResetCode))
             return BadRequest("Invalid request");
 
-        await _userService.ResetPassword(user, req.Password);
+        await userService.ResetPassword(user, req.Password);
         return NoContent();
     }
 

@@ -3,27 +3,17 @@ using FacilityHub.Services.Interfaces;
 
 namespace FacilityHub.Models.Service;
 
-public class CloudinaryResult : IUploadResult
+public class CloudinaryResult(string mimeType, RawUploadResult result) : IUploadResult
 {
-    public string Id { get; }
+    public string Id { get; } = result.PublicId;
 
-    public string Url { get; }
+    public string Url { get; } = result.SecureUrl.AbsoluteUri;
 
-    public long Size { get; }
+    public long Size { get; } = result.Bytes;
 
-    public string Format { get; }
+    public string Format { get; } = result.Format;
 
-    public string MimeType { get; }
+    public string MimeType { get; } = mimeType;
 
-    public string FileName { get; }
-
-    public CloudinaryResult(string mimeType, RawUploadResult result)
-    {
-        Id = result.PublicId;
-        Url = result.SecureUrl.AbsoluteUri;
-        Format = result.Format;
-        MimeType = mimeType;
-        Size = result.Bytes;
-        FileName = $"{result.OriginalFilename}.{result.Format}";
-    }
+    public string FileName { get; } = $"{result.OriginalFilename}.{result.Format}";
 }

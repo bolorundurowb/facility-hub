@@ -15,7 +15,7 @@ public class Tenant : Entity
 
     public User? User { get; private set; }
 
-    public List<Document> Documents { get; set; } = new();
+    public List<Document> Documents { get; set; } = [];
 
     public List<TenancyHistory> History { get; private set; }
 
@@ -35,7 +35,7 @@ public class Tenant : Entity
         Name = name;
         PhoneNumber = phoneNumber;
         EmailAddress = emailAddress;
-        History = new List<TenancyHistory> { new(periodStart, periodEnd, paidAt) };
+        History = [new(periodStart, periodEnd, paidAt)];
 
         CreatedBy = creator;
         CreatedAt = DateTimeOffset.Now;

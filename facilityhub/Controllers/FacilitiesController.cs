@@ -8,30 +8,21 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FacilityHub.Controllers;
 
-public class FacilitiesController : ApiController
+public class FacilitiesController(
+    IMapper mapper,
+    IFacilityService facilityService,
+    IUserService userService,
+    IMediaHandlerService mediaService,
+    IIssueService issueService,
+    IDocumentService documentService)
+    : ApiController(mapper)
 {
-    private readonly IFacilityService _facilityService;
-    private readonly IIssueService _issueService;
-    private readonly IUserService _userService;
-    private readonly IMediaHandlerService _mediaService;
-    private readonly IDocumentService _documentService;
-
-    public FacilitiesController(IMapper mapper, IFacilityService facilityService, IUserService userService,
-        IMediaHandlerService mediaService, IIssueService issueService, IDocumentService documentService) : base(mapper)
-    {
-        _facilityService = facilityService;
-        _userService = userService;
-        _mediaService = mediaService;
-        _issueService = issueService;
-        _documentService = documentService;
-    }
-
     [HttpGet("")]
     [ProducesResponseType(typeof(List<FacilitySummaryDto>), 200)]
     public async Task<IActionResult> GetAll()
     {
         var userId = User.GetCallerId();
-        var facilities = await _facilityService.GetAll(userId);
+        var facilities = await facilityService.GetAll(userId);
 
         return Ok(Mapper.Map<List<FacilitySummaryDto>>(facilities));
     }
@@ -42,12 +33,12 @@ public class FacilitiesController : ApiController
     public async Task<IActionResult> Create([FromBody] CreateFacilityReq req)
     {
         var userId = User.GetCallerId();
-        var user = await _userService.FindById(userId);
+        var user = await userService.FindById(userId);
 
         if (user == null)
             return Forbidden("User account not found");
 
-        var facility = await _facilityService.Create(user, req.Name, req.Address, req.Location);
+        var facility = await facilityService.Create(user, req.Name, req.Address, req.Location);
 
         return Created(Mapper.Map<FacilityRes>(facility));
     }
@@ -58,7 +49,7 @@ public class FacilitiesController : ApiController
     public async Task<IActionResult> GetOne(Guid facilityId)
     {
         var userId = User.GetCallerId();
-        var facility = await _facilityService.FindById(userId, facilityId);
+        var facility = await facilityService.FindById(userId, facilityId);
 
         if (facility == null)
             return NotFound("Facility not found");
@@ -76,7 +67,7 @@ public class FacilitiesController : ApiController
     public async Task<IActionResult> GetDocuments(Guid facilityId)
     {
         var userId = User.GetCallerId();
-        var documents = await _facilityService.GetAllDocuments(userId, facilityId);
+        var documents = await facilityService.GetAllDocuments(userId, facilityId);
 
         return Ok(Mapper.Map<List<DocumentRes>>(documents));
     }
@@ -88,23 +79,23 @@ public class FacilitiesController : ApiController
     public async Task<IActionResult> CreateDocument(Guid facilityId, [FromForm] UploadDocumentReq req)
     {
         var userId = User.GetCallerId();
-        var user = await _userService.FindById(userId);
+        var user = await userService.FindById(userId);
 
         if (user == null)
             return Forbidden("User account not found");
 
-        var facility = await _facilityService.FindById(userId, facilityId);
+        var facility = await facilityService.FindById(userId, facilityId);
 
         if (facility == null)
             return NotFound("Facility not found");
 
         await using var stream = req.File.OpenReadStream();
-        var result = await _mediaService.UploadAsync(req.File.FileName, stream);
+        var result = await mediaService.UploadAsync(req.File.FileName, stream);
 
         if (result == null)
             return BadRequest("Document upload failed.");
 
-        var document = await _facilityService.AddDocument(facility, user, req.Type, result);
+        var document = await facilityService.AddDocument(facility, user, req.Type, result);
 
         return Created(Mapper.Map<DocumentRes>(document));
     }
@@ -115,13 +106,13 @@ public class FacilitiesController : ApiController
     public async Task<IActionResult> DeleteDocument(Guid facilityId, Guid documentId)
     {
         var userId = User.GetCallerId();
-        var document = await _facilityService.FindDocument(userId, facilityId, documentId);
+        var document = await facilityService.FindDocument(userId, facilityId, documentId);
 
         if (document == null)
             return NotFound("Document not found");
 
-        await _mediaService.DeleteAsync(document.ExternalId);
-        await _documentService.Delete(document);
+        await mediaService.DeleteAsync(document.ExternalId);
+        await documentService.Delete(document);
 
         return Ok("Document deleted successfully");
     }
@@ -133,7 +124,7 @@ public class FacilitiesController : ApiController
     public async Task<IActionResult> GetIssues(Guid facilityId)
     {
         var userId = User.GetCallerId();
-        var issues = await _issueService.GetAllForFacility(userId, facilityId);
+        var issues = await issueService.GetAllForFacility(userId, facilityId);
 
         return Ok(Mapper.Map<List<IssueRes>>(issues));
     }

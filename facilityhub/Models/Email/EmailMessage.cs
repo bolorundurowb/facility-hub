@@ -2,26 +2,20 @@ using dotenv.net.Utilities;
 
 namespace FacilityHub.Models.Email;
 
-public class EmailMessage
+public class EmailMessage(
+    string subject,
+    string content,
+    IEnumerable<EmailAttachment>? attachments = null,
+    string? sender = null,
+    string? replyTo = null)
 {
-    public string Subject { get; }
+    public string Subject { get; } = subject;
 
-    public string Content { get; }
+    public string Content { get; } = content;
 
-    public IEnumerable<EmailAttachment> Attachments { get; }
+    public IEnumerable<EmailAttachment> Attachments { get; } = attachments ?? [];
 
-    public string Sender { get; }
+    public string Sender { get; } = sender ?? EnvReader.GetStringValue("SERVICE_EMAIL");
 
-    public string? ReplyTo { get; }
-
-    public EmailMessage(string subject, string content, IEnumerable<EmailAttachment>? attachments = null,
-        string? sender = null,
-        string? replyTo = null)
-    {
-        Subject = subject;
-        Content = content;
-        Attachments = attachments ?? Enumerable.Empty<EmailAttachment>();
-        Sender = sender ?? EnvReader.GetStringValue("SERVICE_EMAIL");
-        ReplyTo = replyTo;
-    }
+    public string? ReplyTo { get; } = replyTo;
 }

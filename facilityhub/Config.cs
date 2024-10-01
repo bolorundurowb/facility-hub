@@ -18,10 +18,10 @@ public static class Config
     public const long MaxDocumentSize = 10 * 1024 * 1024; // 10MB
 
     public static readonly string[] AcceptedIssueEvidenceFileExtensions =
-        { ".jpg", ".jpeg", ".png", ".svg", ".webp", ".hevc", ".pdf", ".mp4", ".avi" };
+        [".jpg", ".jpeg", ".png", ".svg", ".webp", ".hevc", ".pdf", ".mp4", ".avi"];
 
     public static readonly string[] AcceptedDocumentFileExtensions =
-        { ".jpg", ".jpeg", ".png", ".doc", ".docx", ".pdf", ".xls", ".xlsx" };
+        [".jpg", ".jpeg", ".png", ".doc", ".docx", ".pdf", ".xls", ".xlsx"];
 
     public static string GenerateCode(int length = 6)
     {

@@ -6,16 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FacilityHub.Services.Implementations;
 
-public class IssueService : IIssueService
+public class IssueService(FacilityHubDbContext dbContext) : IIssueService
 {
-    private readonly FacilityHubDbContext _dbContext;
-
-    public IssueService(FacilityHubDbContext dbContext) => _dbContext = dbContext;
-
     public async Task<List<Issue>> GetAll(Guid userId)
     {
         var managedFacilityIds = await GetManagedFacilityIds(userId);
-        return await _dbContext.Issues
+        return await dbContext.Issues
             .AsNoTracking()
             .Include(x => x.Facility)
             .Include(x => x.FiledBy)
@@ -31,7 +27,7 @@ public class IssueService : IIssueService
     public async Task<List<Issue>> GetAllForFacility(Guid userId, Guid facilityId)
     {
         var managedFacilityIds = await GetManagedFacilityIds(userId);
-        return await _dbContext.Issues
+        return await dbContext.Issues
             .AsNoTracking()
             .Where(x => x.Facility.Id == facilityId)
             .Where(x =>
@@ -46,7 +42,7 @@ public class IssueService : IIssueService
     public async Task<Issue?> FindById(Guid userId, Guid issueId)
     {
         var managedFacilityIds = await GetManagedFacilityIds(userId);
-        return await _dbContext.Issues
+        return await dbContext.Issues
             .Include(x => x.Facility)
             .Include(x => x.FiledBy)
             .Include(x => x.FiledBy.User)
@@ -63,7 +59,7 @@ public class IssueService : IIssueService
         string location, string? remedialAction)
     {
         var issue = facility.ReportIssue(occurredAt, description, location, remedialAction);
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
 
         return issue;
     }
@@ -71,7 +67,7 @@ public class IssueService : IIssueService
     public async Task<List<Document>> GetAllDocuments(Guid userId, Guid issueId)
     {
         var managedFacilityIds = await GetManagedFacilityIds(userId);
-        return await _dbContext.Issues
+        return await dbContext.Issues
             .Where(x =>
                 // you are referenced in the issue
                 x.FiledBy.User!.Id == userId
@@ -86,7 +82,7 @@ public class IssueService : IIssueService
     public async Task<Document?> FindDocument(Guid userId, Guid issueId, Guid documentId)
     {
         var managedFacilityIds = await GetManagedFacilityIds(userId);
-        return await _dbContext.Issues
+        return await dbContext.Issues
             .Where(x => x.Id == issueId)
             .Where(x =>
                 // you are referenced in the issue
@@ -111,7 +107,7 @@ public class IssueService : IIssueService
             user
         );
         issue.AddDocument(document);
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
 
         return document;
     }
@@ -119,38 +115,38 @@ public class IssueService : IIssueService
     public async Task MarkAsValidated(Issue issue, User manager, string? notes)
     {
         issue.Validate(manager, notes);
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task ScheduleRepair(Issue issue, User manager, string? notes, string? repairerName,
         string? repairerPhoneNumber)
     {
         issue.ScheduleRepair(manager, notes, repairerName, repairerPhoneNumber);
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task MarkAsDuplicate(Issue issue, User manager, string? notes)
     {
         issue.MarkAsDuplicate(manager, notes);
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task MarkAsRepaired(Issue issue, User manager, string? notes)
     {
         issue.MarkRepaired(manager, notes);
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task MarkAsResolved(Issue issue, User tenantUser)
     {
         issue.Close(tenantUser);
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task<List<IssueLogEntry>> GetLogs(Guid userId, Guid issueId)
     {
         var managedFacilityIds = await GetManagedFacilityIds(userId);
-        var issues = await _dbContext.Issues
+        var issues = await dbContext.Issues
             .Where(x =>
                 // you are referenced in the issue
                 x.FiledBy.User!.Id == userId
@@ -168,7 +164,7 @@ public class IssueService : IIssueService
 
     #region Private Helpers
 
-    private Task<List<Guid>> GetManagedFacilityIds(Guid userId) => _dbContext.Facilities
+    private Task<List<Guid>> GetManagedFacilityIds(Guid userId) => dbContext.Facilities
         .AsNoTracking()
         .Where(x => x.Owners.Any(y => y.Id == userId)
                     || x.Managers.Any(y => y.Id == userId)

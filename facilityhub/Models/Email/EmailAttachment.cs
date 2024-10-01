@@ -1,17 +1,10 @@
 namespace FacilityHub.Models.Email;
 
-public class EmailAttachment
+public class EmailAttachment(string name, string mimeType, byte[] content)
 {
-    public byte[] Content { get; }
+    public byte[] Content { get; } = content;
 
-    public string Name { get; }
+    public string Name { get; } = name;
 
-    public string MimeType { get; }
-
-    public EmailAttachment(string name, string mimeType, byte[] content)
-    {
-        Name = name;
-        MimeType = mimeType;
-        Content = content;
-    }
+    public string MimeType { get; } = mimeType;
 }

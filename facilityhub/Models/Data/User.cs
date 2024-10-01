@@ -21,9 +21,9 @@ public class User : Entity
 
     public DateTimeOffset JoinedAt { get; private set; }
 
-    public List<Facility> Owned { get; private set; } = new();
+    public List<Facility> Owned { get; private set; } = [];
 
-    public List<Facility> Managed { get; private set; } = new();
+    public List<Facility> Managed { get; private set; } = [];
 
     public string? ResetCode { get; private set; }
 

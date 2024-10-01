@@ -16,13 +16,13 @@ public class Facility : Entity
 
     public List<User> Managers { get; private set; }
 
-    public List<User> Owners { get; private set; } = new();
+    public List<User> Owners { get; private set; } = [];
 
     public Tenant? Tenant { get; private set; }
 
-    public List<Document> Documents { get; private set; } = new();
+    public List<Document> Documents { get; private set; } = [];
 
-    public List<Issue> Issues { get; private set; } = new();
+    public List<Issue> Issues { get; private set; } = [];
 
     public DateTimeOffset CreatedAt { get; private set; }
 
@@ -35,7 +35,7 @@ public class Facility : Entity
         Name = name;
         Address = address;
         CreatedAt = DateTimeOffset.Now;
-        Managers = new List<User> { creator };
+        Managers = [creator];
 
         if (location is not null)
             Location = new Point(location.Longitude, location.Latitude);

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FacilityHub.DataContext;
 
-public class FacilityHubDbContext : DbContext
+public class FacilityHubDbContext(DbContextOptions<FacilityHubDbContext> options) : DbContext(options)
 {
     public DbSet<Document> Documents => Set<Document>();
 
@@ -19,8 +19,6 @@ public class FacilityHubDbContext : DbContext
 
     public DbSet<User> Users => Set<User>();
 
-    public FacilityHubDbContext(DbContextOptions<FacilityHubDbContext> options) : base(options) { }
-    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasPostgresExtension("uuid-ossp");

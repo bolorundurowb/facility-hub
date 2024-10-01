@@ -8,15 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FacilityHub.Services.Implementations;
 
-public class FacilityService : IFacilityService
+public class FacilityService(FacilityHubDbContext dbContext) : IFacilityService
 {
-    private readonly FacilityHubDbContext _dbContext;
-
-    public FacilityService(FacilityHubDbContext dbContext) => _dbContext = dbContext;
-
     public Task<List<Facility>> GetAll(Guid userId)
     {
-        return _dbContext.Facilities
+        return dbContext.Facilities
             .AsNoTracking()
             .Where(x =>
                 x.Tenant!.User!.Id == userId
@@ -28,7 +24,7 @@ public class FacilityService : IFacilityService
 
     public Task<Facility?> FindById(Guid userId, Guid facilityId)
     {
-        return _dbContext.Facilities
+        return dbContext.Facilities
             .Include(x => x.Tenant)
             .Include(x => x.Tenant!.User)
             .Where(x =>
@@ -42,15 +38,15 @@ public class FacilityService : IFacilityService
     public async Task<Facility> Create(User manager, string name, string address, LocationDto? location)
     {
         var facility = new Facility(name, manager, address, location);
-        await _dbContext.Facilities.AddAsync(facility);
-        await _dbContext.SaveChangesAsync();
+        await dbContext.Facilities.AddAsync(facility);
+        await dbContext.SaveChangesAsync();
 
         return facility;
     }
 
     public Task<List<Document>> GetAllDocuments(Guid userId, Guid facilityId)
     {
-        return _dbContext.Facilities
+        return dbContext.Facilities
             .Where(x => x.Id == facilityId)
             .Where(x => x.Owners.Any(y => y.Id == userId) || x.Managers.Any(y => y.Id == userId))
             .SelectMany(x => x.Documents)
@@ -60,7 +56,7 @@ public class FacilityService : IFacilityService
 
     public Task<Document?> FindDocument(Guid userId, Guid facilityId, Guid documentId)
     {
-        return _dbContext.Facilities
+        return dbContext.Facilities
             .Where(x => x.Id == facilityId)
             .Where(x => x.Owners.Any(y => y.Id == userId) || x.Managers.Any(y => y.Id == userId))
             .SelectMany(x => x.Documents)
@@ -80,14 +76,14 @@ public class FacilityService : IFacilityService
             user
         );
         facility.AddDocument(document);
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
 
         return document;
     }
 
     public Task<FacilityInvitation?> FindInvitationById(Guid invitationId)
     {
-        return _dbContext.FacilityInvitations
+        return dbContext.FacilityInvitations
             .Include(x => x.Facility)
             .FirstOrDefaultAsync(x => x.Id == invitationId);
     }
@@ -96,7 +92,7 @@ public class FacilityService : IFacilityService
         string? phoneNumber, DateOnly startsAt, DateOnly endsAt, DateOnly paidAt)
     {
         var tenant = facility.SetTenant(inviter, user, name, emailAddress, phoneNumber, startsAt, endsAt, paidAt);
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
 
         // if the tenant doesn't have a user account, invite them
         if (user == null)
@@ -109,7 +105,7 @@ public class FacilityService : IFacilityService
         string emailAddress)
     {
         var normalizedEmailAddress = emailAddress.Trim().ToLowerInvariant();
-        var invitation = await _dbContext.FacilityInvitations
+        var invitation = await dbContext.FacilityInvitations
             .FirstOrDefaultAsync(x =>
                 x.Facility.Id == facility.Id
                 && x.EmailAddress == normalizedEmailAddress
@@ -119,7 +115,7 @@ public class FacilityService : IFacilityService
         if (invitation == null)
         {
             invitation = new FacilityInvitation(facility, user, invitationType, normalizedEmailAddress);
-            await _dbContext.FacilityInvitations.AddAsync(invitation);
+            await dbContext.FacilityInvitations.AddAsync(invitation);
         }
         else if (invitation.IsClaimed)
         {
@@ -130,7 +126,7 @@ public class FacilityService : IFacilityService
             invitation.GenerateClaimDetails();
         }
 
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task ClaimInvitation(FacilityInvitation invitation, User user)
@@ -140,7 +136,7 @@ public class FacilityService : IFacilityService
         var facility = invitation.Facility;
         if (invitation.Type == FacilityInvitationType.FacilityTenant)
         {
-            await _dbContext.Entry(facility)
+            await dbContext.Entry(facility)
                 .Reference(x => x.Tenant)
                 .LoadAsync();
 
@@ -164,10 +160,10 @@ public class FacilityService : IFacilityService
         }
         else
         {
-            await _dbContext.Entry(facility)
+            await dbContext.Entry(facility)
                 .Collection(x => x.Managers)
                 .LoadAsync();
-            await _dbContext.Entry(facility)
+            await dbContext.Entry(facility)
                 .Collection(x => x.Owners)
                 .LoadAsync();
 
@@ -177,6 +173,6 @@ public class FacilityService : IFacilityService
                 facility.AddOwner(user);
         }
 
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
     }
 }

@@ -15,12 +15,8 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace FacilityHub;
 
-public class Startup
+public class Startup(IWebHostEnvironment environment)
 {
-    private readonly IWebHostEnvironment _environment;
-
-    public Startup(IWebHostEnvironment environment) => _environment = environment;
-
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddLogging();
@@ -59,7 +55,8 @@ public class Startup
             var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
             var xmlPath = Path.Combine(baseDirectory, "facilityhub.xml");
 
-            options.IncludeXmlComments(xmlPath);
+            if (File.Exists(xmlPath))
+                options.IncludeXmlComments(xmlPath);
         });
 
         services.AddDbContext<FacilityHubDbContext>(
@@ -91,7 +88,7 @@ public class Startup
 
     public void Configure(IApplicationBuilder app)
     {
-        if (_environment.IsDevelopment())
+        if (environment.IsDevelopment())
             app.UseDeveloperExceptionPage();
 
         app.UseCors(options => options

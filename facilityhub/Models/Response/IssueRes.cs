@@ -31,5 +31,5 @@ public class IssueRes
 
     public DateTimeOffset FiledAt { get; set; }
 
-    public ContactInformation? Repairer { get;  set; }
+    public ContactInformation? Repairer { get; set; }
 }

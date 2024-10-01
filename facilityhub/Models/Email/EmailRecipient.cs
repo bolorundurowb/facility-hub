@@ -1,14 +1,8 @@
 namespace FacilityHub.Models.Email;
 
-public class EmailRecipient
+public class EmailRecipient(string email, string? name = null)
 {
-    public string? Name { get; }
+    public string? Name { get; } = name;
 
-    public string Email { get; }
-
-    public EmailRecipient(string email, string? name = null)
-    {
-        Email = email;
-        Name = name;
-    }
+    public string Email { get; } = email;
 }
